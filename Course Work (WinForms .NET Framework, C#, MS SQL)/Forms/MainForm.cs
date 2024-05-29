@@ -8,6 +8,8 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         public MainForm()
         {
             InitializeComponent();
+
+            initDash();
         }
 
         private void labelCloseApp_Click(object sender, EventArgs e)
@@ -29,7 +31,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void buttonDashboard_Click(object sender, EventArgs e)
+        private void initDash()
         {
             DBConnection.CloseConnection();
 
@@ -43,6 +45,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 dForm.RefreshData();
             }
+        }
+
+        private void buttonDashboard_Click(object sender, EventArgs e)
+        {
+            initDash();
         }
 
         private void buttonAddCategory_Click(object sender, EventArgs e)
