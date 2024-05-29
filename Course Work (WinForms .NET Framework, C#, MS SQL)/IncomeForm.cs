@@ -20,7 +20,18 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             InitializeComponent();
 
             DisplayIncomeCategories();
+            DisplayIncomeData();
+        }
 
+        public void RefreshData()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)RefreshData);
+                return;
+            }
+
+            DisplayIncomeCategories();
             DisplayIncomeData();
         }
 

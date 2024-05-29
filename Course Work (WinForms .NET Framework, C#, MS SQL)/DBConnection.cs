@@ -21,5 +21,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         {
             return sqlConnection.State == ConnectionState.Closed;
         }
+
+        public static void CloseConnection()
+        {
+            if (SqlConnection.State == ConnectionState.Open)
+            {
+                SqlConnection.Close();
+            }
+        }
     }
 }

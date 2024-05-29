@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
@@ -28,7 +20,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Вы уверены, что хотите выйти?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Вы уверены, что хотите выйти?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 AuthForm authForm = new AuthForm();
                 authForm.Show();
@@ -37,9 +29,68 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void incomeForm_Load(object sender, EventArgs e)
+        private void buttonDashboard_Click(object sender, EventArgs e)
         {
+            DBConnection.CloseConnection();
 
+            dashboardForm.Visible = true;
+            categoryForm.Visible = false;
+            incomeForm.Visible = false;
+            expensesForm.Visible = false;
+
+
+            if (dashboardForm is DashboardForm dForm)
+            {
+                dForm.RefreshData();
+            }
+        }
+
+        private void buttonAddCategory_Click(object sender, EventArgs e)
+        {
+            DBConnection.CloseConnection();
+
+            dashboardForm.Visible = false;
+            categoryForm.Visible = true;
+            incomeForm.Visible = false;
+            expensesForm.Visible = false;
+
+
+            if (categoryForm is CategoryForm cForm)
+            {
+                cForm.RefreshData();
+            }
+        }
+
+        private void buttonIncome_Click(object sender, EventArgs e)
+        {
+            DBConnection.CloseConnection();
+
+            dashboardForm.Visible = false;
+            categoryForm.Visible = false;
+            incomeForm.Visible = true;
+            expensesForm.Visible = false;
+
+
+            if (incomeForm is IncomeForm iForm)
+            {
+                iForm.RefreshData();
+            }
+        }
+
+        private void buttonExpenses_Click(object sender, EventArgs e)
+        {
+            DBConnection.CloseConnection();
+
+            dashboardForm.Visible = false;
+            categoryForm.Visible = false;
+            incomeForm.Visible = false;
+            expensesForm.Visible = true;
+
+
+            if (expensesForm is ExpensesForm eForm)
+            {
+                eForm.RefreshData();
+            }
         }
     }
 }

@@ -22,7 +22,19 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
-        private void DisplayExpensesCategories()
+        public void RefreshData()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)RefreshData);
+                return;
+            }
+
+            DisplayExpensesCategories();
+            DisplayExpensesData();
+        }
+
+            private void DisplayExpensesCategories()
         {
             if (DBConnection.CheckConnection())
             {

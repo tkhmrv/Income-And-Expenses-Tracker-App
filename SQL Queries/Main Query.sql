@@ -51,3 +51,16 @@ CREATE TABLE income_3nf (
 	creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 	FOREIGN KEY (category_id) REFERENCES categories(id_category)
 );
+
+SELECT * FROM expenses;
+
+CREATE TABLE expenses (
+	id_expenses INT PRIMARY KEY IDENTITY(1,1),
+	category_id INT NOT NULL,
+	item VARCHAR(50) NOT NULL,
+	amount FLOAT NOT NULL,
+	[description] TEXT NOT NULL,
+	expenses_date DATE NOT NULL,
+	creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+	FOREIGN KEY (category_id) REFERENCES categories(id_category)
+);	

@@ -40,7 +40,10 @@
             this.buttonDashboard = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.dashboardForm1 = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.DashboardForm();
+            this.expensesForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.ExpensesForm();
+            this.incomeForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.IncomeForm();
+            this.categoryForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.CategoryForm();
+            this.dashboardForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.DashboardForm();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -139,13 +142,14 @@
             this.buttonIncome.ForeColor = System.Drawing.Color.White;
             this.buttonIncome.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.income_24;
             this.buttonIncome.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonIncome.Location = new System.Drawing.Point(18, 369);
+            this.buttonIncome.Location = new System.Drawing.Point(18, 320);
             this.buttonIncome.Margin = new System.Windows.Forms.Padding(2);
             this.buttonIncome.Name = "buttonIncome";
             this.buttonIncome.Size = new System.Drawing.Size(208, 34);
             this.buttonIncome.TabIndex = 29;
             this.buttonIncome.Text = "Доходы";
             this.buttonIncome.UseVisualStyleBackColor = false;
+            this.buttonIncome.Click += new System.EventHandler(this.buttonIncome_Click);
             // 
             // buttonExpenses
             // 
@@ -156,13 +160,14 @@
             this.buttonExpenses.ForeColor = System.Drawing.Color.White;
             this.buttonExpenses.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.expenses_24;
             this.buttonExpenses.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExpenses.Location = new System.Drawing.Point(18, 319);
+            this.buttonExpenses.Location = new System.Drawing.Point(18, 368);
             this.buttonExpenses.Margin = new System.Windows.Forms.Padding(2);
             this.buttonExpenses.Name = "buttonExpenses";
             this.buttonExpenses.Size = new System.Drawing.Size(208, 34);
             this.buttonExpenses.TabIndex = 28;
             this.buttonExpenses.Text = "Расходы";
             this.buttonExpenses.UseVisualStyleBackColor = false;
+            this.buttonExpenses.Click += new System.EventHandler(this.buttonExpenses_Click);
             // 
             // buttonAddCategory
             // 
@@ -180,6 +185,7 @@
             this.buttonAddCategory.TabIndex = 27;
             this.buttonAddCategory.Text = "Добавить кат";
             this.buttonAddCategory.UseVisualStyleBackColor = false;
+            this.buttonAddCategory.Click += new System.EventHandler(this.buttonAddCategory_Click);
             // 
             // buttonDashboard
             // 
@@ -197,6 +203,7 @@
             this.buttonDashboard.TabIndex = 2;
             this.buttonDashboard.Text = "Dashboard";
             this.buttonDashboard.UseVisualStyleBackColor = false;
+            this.buttonDashboard.Click += new System.EventHandler(this.buttonDashboard_Click);
             // 
             // label1
             // 
@@ -221,19 +228,43 @@
             this.pictureBox2.TabIndex = 26;
             this.pictureBox2.TabStop = false;
             // 
-            // dashboardForm1
+            // expensesForm
             // 
-            this.dashboardForm1.Location = new System.Drawing.Point(243, 43);
-            this.dashboardForm1.Name = "dashboardForm1";
-            this.dashboardForm1.Size = new System.Drawing.Size(1055, 655);
-            this.dashboardForm1.TabIndex = 2;
+            this.expensesForm.Location = new System.Drawing.Point(243, 43);
+            this.expensesForm.Name = "expensesForm";
+            this.expensesForm.Size = new System.Drawing.Size(1055, 655);
+            this.expensesForm.TabIndex = 2;
+            // 
+            // incomeForm
+            // 
+            this.incomeForm.Location = new System.Drawing.Point(243, 43);
+            this.incomeForm.Name = "incomeForm";
+            this.incomeForm.Size = new System.Drawing.Size(1055, 655);
+            this.incomeForm.TabIndex = 3;
+            // 
+            // categoryForm
+            // 
+            this.categoryForm.Location = new System.Drawing.Point(243, 43);
+            this.categoryForm.Name = "categoryForm";
+            this.categoryForm.Size = new System.Drawing.Size(1055, 655);
+            this.categoryForm.TabIndex = 4;
+            // 
+            // dashboardForm
+            // 
+            this.dashboardForm.Location = new System.Drawing.Point(243, 43);
+            this.dashboardForm.Name = "dashboardForm";
+            this.dashboardForm.Size = new System.Drawing.Size(1055, 655);
+            this.dashboardForm.TabIndex = 5;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1300, 700);
-            this.Controls.Add(this.dashboardForm1);
+            this.Controls.Add(this.dashboardForm);
+            this.Controls.Add(this.categoryForm);
+            this.Controls.Add(this.incomeForm);
+            this.Controls.Add(this.expensesForm);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -265,6 +296,9 @@
         private System.Windows.Forms.Button buttonIncome;
         private System.Windows.Forms.Button buttonExpenses;
         private System.Windows.Forms.Button buttonAddCategory;
-        private DashboardForm dashboardForm1;
+        private ExpensesForm expensesForm;
+        private IncomeForm incomeForm;
+        private CategoryForm categoryForm;
+        private DashboardForm dashboardForm;
     }
 }
