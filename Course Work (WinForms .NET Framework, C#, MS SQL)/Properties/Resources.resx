@@ -124,11 +124,20 @@
   <data name="compass_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\compass-24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="day_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\day_50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="decline_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\decline_100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="expenses" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\expenses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="expenses_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\expenses-24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="growth_100" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\growth_100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="income" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\income.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,6 +151,9 @@
   <data name="logout_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logout-24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="month_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\month_50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="pay" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pay.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -153,5 +165,11 @@
   </data>
   <data name="round_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\round_back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="year_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\year_50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="yesterday_50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\yesterday_50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

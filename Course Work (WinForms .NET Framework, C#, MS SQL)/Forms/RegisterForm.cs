@@ -1,16 +1,7 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
@@ -21,12 +12,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             InitializeComponent();
         }
 
-        private void labelCloseApp_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void buttonBackToAuth_Click(object sender, EventArgs e)
+        private void LabelCloseApp_Click(object sender, EventArgs e)
         {
             AuthForm authForm = new AuthForm();
             authForm.ShowDialog();
@@ -34,88 +20,115 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             this.Close();
         }
 
-        private void checkboxShowRegPassword_CheckedChanged(object sender, EventArgs e)
+        private void ButtonBackToAuth_Click(object sender, EventArgs e)
+        {
+            AuthForm authForm = new AuthForm();
+            authForm.ShowDialog();
+
+            this.Close();
+        }
+
+        private void CheckboxShowRegPassword_CheckedChanged(object sender, EventArgs e)
         {
             textboxRegPassword.PasswordChar = checkboxShowRegPassword.Checked ? '\0' : '*';
             textboxConfirmPassword.PasswordChar = checkboxShowRegPassword.Checked ? '\0' : '*';
         }
 
-        private void buttonRegistration_Click(object sender, EventArgs e)
+        private void ButtonRegistration_Click(object sender, EventArgs e)
         {
-            if (textboxRegisterUsername.Text == "" || textboxRegPassword.Text == "" || textboxConfirmPassword.Text == "")
+            if (!ValidateRegistrationInputs())
+                return;
+
+            if (DBConnection.CheckConnection())
             {
-                MessageBox.Show("Пожалуйста, заполните все поля!", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (DBConnection.CheckConnection())
+                try
                 {
-                    try
+                    DBConnection.SqlConnection.Open();
+
+                    string selectUsername = "SELECT * FROM users WHERE username = @username";
+                    using (SqlCommand checkUser = new SqlCommand(selectUsername, DBConnection.SqlConnection))
                     {
-                        DBConnection.SqlConnection.Open();
+                        checkUser.Parameters.AddWithValue("@username", textboxRegisterUsername.Text.Trim());
 
-                        // проверка на существование введенного юзернейма
-                        string selectUsername = "SELECT * FROM users WHERE username = @usern";
+                        SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(checkUser);
+                        DataTable dataTable = new DataTable();
 
-                        using (SqlCommand checkUser = new SqlCommand(selectUsername, DBConnection.SqlConnection))
+                        sqlDataAdapter.Fill(dataTable);
+
+                        if (dataTable.Rows.Count != 0)
                         {
-                            checkUser.Parameters.AddWithValue("@usern", textboxRegisterUsername.Text.Trim());
-
-                            SqlDataAdapter adapter = new SqlDataAdapter(checkUser);
-                            DataTable dataTable = new DataTable();
-
-                            adapter.Fill(dataTable);
-
-                            if (dataTable.Rows.Count != 0)
-                            {
-
-                                string tempUsername = textboxRegisterUsername.Text.Substring(0, 1).ToUpper() + textboxRegisterUsername.Text.Substring(1);
-                                MessageBox.Show("Пользователь с именем " + tempUsername + " уже существует!", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                            }
-                            else if(textboxRegPassword.Text.Length < 8)
-                            {
-                                MessageBox.Show("Пароль ненадежный, введите не менее 8 символов", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                            }
-                            else if(textboxConfirmPassword.Text != textboxRegPassword.Text)
-                            {
-                                MessageBox.Show("Пароли не совпадают, повторите ввод", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                            }
-
-                            else
-                            {
-                                string insertData = "INSERT INTO users (username, password, register_date) VALUES(@usern, @pass, GETDATE())";
-
-                                using (SqlCommand insertUser = new SqlCommand(insertData, DBConnection.SqlConnection))
-                                {
-                                    insertUser.Parameters.AddWithValue("@usern", textboxRegisterUsername.Text.Trim());
-                                    insertUser.Parameters.AddWithValue("@pass", textboxRegPassword.Text.Trim());
-
-                                    insertUser.ExecuteNonQuery();
-
-                                    MessageBox.Show("Пользователь успешно добавлен!", "Информационное сообщение", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-
-                                    AuthForm authForm = new AuthForm();
-                                    authForm.Show();
-
-                                    this.Hide();
-                                }
-                            }
+                            string tempUsername = textboxRegisterUsername.Text.Substring(0, 1).ToUpper() + textboxRegisterUsername.Text.Substring(1);
+                            MessageBox.Show("Пользователь с именем " + tempUsername + " уже существует.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке!", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        if (!DBConnection.CheckConnection())
+                        else
                         {
-                            DBConnection.SqlConnection.Close();
+                            string insertData = "INSERT INTO users (username, password, register_date) VALUES(@username, @password, GETDATE())";
+                            using (SqlCommand insertUser = new SqlCommand(insertData, DBConnection.SqlConnection))
+                            {
+                                insertUser.Parameters.AddWithValue("@username", textboxRegisterUsername.Text.Trim());
+                                insertUser.Parameters.AddWithValue("@password", textboxRegPassword.Text.Trim());
+
+                                insertUser.ExecuteNonQuery();
+
+                                MessageBox.Show("Пользователь успешно добавлен!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                AuthForm authForm = new AuthForm();
+                                authForm.Show();
+
+                                this.Hide();
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    DBConnection.CloseConnection();
+                }
             }
+        }
+
+        private bool ValidateRegistrationInputs()
+        {
+            if (string.IsNullOrEmpty(textboxRegisterUsername.Text))
+            {
+                MessageBox.Show("Введите имя пользователя.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else if (string.IsNullOrEmpty(textboxRegPassword.Text))
+            {
+                MessageBox.Show("Введите пароль.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else if (textboxRegPassword.Text.Length < 8)
+            {
+                MessageBox.Show("Пароль ненадежный, введите не менее 8 символов.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textboxRegPassword.Text, @"(?=.*[A-Z])"))
+            {
+                MessageBox.Show("Пароль должен содержать хотя бы одну заглавную букву.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textboxRegPassword.Text, @"(?=.*\d)"))
+            {
+                MessageBox.Show("Пароль должен содержать хотя бы одну цифру.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textboxRegPassword.Text, @"(?=.*[\W])"))
+            {
+                MessageBox.Show("Пароль должен содержать хотя бы один специальный символ.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (textboxConfirmPassword.Text != textboxRegPassword.Text)
+            {
+                MessageBox.Show("Пароли не совпадают, повторите ввод.", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
     }
 }

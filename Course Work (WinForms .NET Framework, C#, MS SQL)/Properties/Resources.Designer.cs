@@ -83,6 +83,26 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap day_50 {
+            get {
+                object obj = ResourceManager.GetObject("day_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap decline_100 {
+            get {
+                object obj = ResourceManager.GetObject("decline_100", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap expenses {
             get {
                 object obj = ResourceManager.GetObject("expenses", resourceCulture);
@@ -96,6 +116,16 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
         internal static System.Drawing.Bitmap expenses_24 {
             get {
                 object obj = ResourceManager.GetObject("expenses_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap growth_100 {
+            get {
+                object obj = ResourceManager.GetObject("growth_100", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,6 +173,16 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap month_50 {
+            get {
+                object obj = ResourceManager.GetObject("month_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap pay {
             get {
                 object obj = ResourceManager.GetObject("pay", resourceCulture);
@@ -176,6 +216,26 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
         internal static System.Drawing.Bitmap round_back {
             get {
                 object obj = ResourceManager.GetObject("round_back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap year_50 {
+            get {
+                object obj = ResourceManager.GetObject("year_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap yesterday_50 {
+            get {
+                object obj = ResourceManager.GetObject("yesterday_50", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -183,6 +183,23 @@
   <ItemGroup>
     <None Include="Resources\round_back.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\day_50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yesterday_50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\month_50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\year_50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\growth_100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\decline_100.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

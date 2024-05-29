@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data;
 using System.Windows.Forms;
 using System;
 
@@ -14,7 +13,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         public string Status { get; set; }
         public string Date { get; set; }
 
-        public List<CategoryData> categoryListData()
+        public List<CategoryData> CategoryListData()
         {
             List<CategoryData> listData = new List<CategoryData>();
 
@@ -26,18 +25,18 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     string selectData = "SELECT * FROM categories";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
+                    using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
                     {
-                        while (reader.Read())
+                        while (sqlDataReader.Read())
                         {
                             CategoryData categoryData = new CategoryData
                             {
-                                ID = (int)reader["id_category"],
-                                Category = reader["category"].ToString(),
-                                Type = reader["type"].ToString(),
-                                Status = reader["status"].ToString(),
-                                Date = ((DateTime)reader["creation_date"]).ToString("MM-dd-yyyy")
+                                ID = (int)sqlDataReader["id_category"],
+                                Category = sqlDataReader["category"].ToString(),
+                                Type = sqlDataReader["type"].ToString(),
+                                Status = sqlDataReader["status"].ToString(),
+                                Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy")
                             };
 
                             listData.Add(categoryData);
@@ -47,17 +46,25 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                if (DBConnection.CheckConnection())
-                {
-                    DBConnection.SqlConnection.Close();
-                }
+                DBConnection.CloseConnection();
             }
 
             return listData;
+        }
+
+        public bool CategoryExists(TextBox textBoxName)
+        {
+            string checkCategoryQuery = "SELECT COUNT(*) FROM categories WHERE category = @category";
+            using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@category", textBoxName.Text.Trim());
+                int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                return count > 0;
+            }
         }
     }
 }

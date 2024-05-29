@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
@@ -17,7 +12,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         {
             InitializeComponent();
 
-            displayCategoryList();
+            DisplayCategoryList();
         }
 
         public void RefreshData()
@@ -28,17 +23,32 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            displayCategoryList();
+            DisplayCategoryList();
+
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(49, 121, 74);
+            dataGridViewCategory.EnableHeadersVisualStyles = false;
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewCategory.Font, FontStyle.Bold);
         }
 
-        private void displayCategoryList()
+        private void DisplayCategoryList()
         {
             CategoryData categoryData = new CategoryData();
-            List<CategoryData> listData = categoryData.categoryListData();
+            List<CategoryData> listData = categoryData.CategoryListData();
 
             if (listData != null && listData.Count > 0)
             {
                 dataGridViewCategory.DataSource = listData;
+
+                if (dataGridViewCategory.Columns["ID"] != null)
+                {
+                    dataGridViewCategory.Columns["ID"].Visible = false;
+                }
+
+                dataGridViewCategory.Columns["Category"].HeaderText = "Категория";
+                dataGridViewCategory.Columns["Type"].HeaderText = "Тип";
+                dataGridViewCategory.Columns["Status"].HeaderText = "Статус";
+                dataGridViewCategory.Columns["Date"].HeaderText = "Дата добавления";
             }
             else
             {
@@ -46,53 +56,46 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void category_buttonAdd_Click(object sender, EventArgs e)
+        private void Category_buttonAdd_Click(object sender, EventArgs e)
         {
-            if (category_textBoxCategory.Text == "" || category_comboBoxType.SelectedIndex == -1 || category_comboBoxStatus.SelectedIndex == -1)
+            if (!ValidateCategoryInputs())
+                return;
+
+            if (DBConnection.CheckConnection())
             {
-                MessageBox.Show("Пожалуйста, заполните все поля?", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (DBConnection.CheckConnection())
+                try
                 {
-                    try
+                    DBConnection.SqlConnection.Open();
+
+                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date)" + "VALUES (@category, @type, @status, GETDATE())";
+
+                    using (SqlCommand sqlCommand = new SqlCommand(insertData, DBConnection.SqlConnection))
                     {
-                        DBConnection.SqlConnection.Open();
+                        sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
+                        sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
+                        sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.Text.Trim());
 
-                        string insertData = "INSERT INTO categories (category, [type], [status], creation_date)" + "VALUES (@cat, @type, @status, GETDATE())";
+                        sqlCommand.ExecuteNonQuery();
 
-                        using (SqlCommand cmd = new SqlCommand(insertData, DBConnection.SqlConnection))
-                        {
-                            cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
-                            cmd.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
-                            cmd.Parameters.AddWithValue("@status", category_comboBoxStatus.Text.Trim());
-
-                            cmd.ExecuteNonQuery();
-
-                            MessageBox.Show("Категория успешно добавлена!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            clearFields();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        if (!DBConnection.CheckConnection())
-                        {
-                            DBConnection.SqlConnection.Close();
-                        }
+                        MessageBox.Show("Категория успешно добавлена!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ClearFields();
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    DBConnection.CloseConnection();
+                }
             }
-            displayCategoryList();
+            DisplayCategoryList();
         }
 
         private int getID = 0;
 
-        private void dataGridViewCategory_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewCategory_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex != -1)
             {
@@ -105,109 +108,143 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void category_buttonUpdate_Click(object sender, EventArgs e)
+        private void Category_buttonUpdate_Click(object sender, EventArgs e)
         {
-            if (category_textBoxCategory.Text == "" || category_comboBoxType.SelectedIndex == -1 || category_comboBoxStatus.SelectedIndex == -1)
+            if (!ValidateCategoryInputs())
+                return;
+
+            if (MessageBox.Show("Вы уверены, что хотите обновить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                MessageBox.Show("Пожалуйста, выберите категорию из таблицы", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (MessageBox.Show("Вы уверены, что хотите обновить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (DBConnection.CheckConnection())
                 {
-                    if (DBConnection.CheckConnection())
+                    try
                     {
-                        try
+                        DBConnection.SqlConnection.Open();
+
+                        /*CategoryData categoryData = new CategoryData();
+
+                        // Проверка существования категории
+                        if (!categoryData.CategoryExists(category_textBoxCategory))
                         {
-                            DBConnection.SqlConnection.Open();
+                            MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            
+                            DBConnection.CloseConnection();
+                            
+                            return;
 
-                            string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status WHERE id_category = @id";
+                        }*/
 
-                            using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
-                            {
-                                cmd.Parameters.AddWithValue("@id", getID);
-                                cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
-                                cmd.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
-                                cmd.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
+                        string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status WHERE id_category = @id";
 
-                                cmd.ExecuteNonQuery();
-
-                                MessageBox.Show("Категория успешно обновлена!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                clearFields();
-                            }
-                        }
-                        catch (Exception ex)
+                        using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
-                            MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                            cmd.Parameters.AddWithValue("@id", getID);
+                            cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
+                            cmd.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
+                            cmd.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
+
+                            cmd.ExecuteNonQuery();
+
+                            MessageBox.Show("Категория успешно обновлена!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ClearFields();
                         }
-                        finally
-                        {
-                            if (!DBConnection.CheckConnection())
-                            {
-                                DBConnection.SqlConnection.Close();
-                            }
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Не удалось провести соединие, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        DBConnection.CloseConnection();
                     }
                 }
             }
-            displayCategoryList();
+            DisplayCategoryList();
         }
 
-        public void clearFields()
+        public void ClearFields()
         {
             category_textBoxCategory.Text = "";
             category_comboBoxType.SelectedIndex = -1;
             category_comboBoxStatus.SelectedIndex = -1;
         }
 
-        private void category_buttonClear_Click(object sender, EventArgs e)
+        private void Category_buttonClear_Click(object sender, EventArgs e)
         {
-            clearFields();
+            ClearFields();
         }
 
-        private void category_buttonDelete_Click(object sender, EventArgs e)
+        private void Category_buttonDelete_Click(object sender, EventArgs e)
         {
-            if (category_textBoxCategory.Text == "" || category_comboBoxType.SelectedIndex == -1 || category_comboBoxStatus.SelectedIndex == -1)
+            if (!ValidateCategoryInputs())
+                return;
+
+            if (MessageBox.Show("Вы уверены, что хотите удалить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                MessageBox.Show("Пожалуйста, выберите категорию из таблицы", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (MessageBox.Show("Вы уверены, что хотите удалить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (DBConnection.CheckConnection())
                 {
-                    if (DBConnection.CheckConnection())
+                    try
                     {
-                        try
+                        DBConnection.SqlConnection.Open();
+
+                        CategoryData categoryData = new CategoryData();
+                        // Проверка существования категории
+                        if (!categoryData.CategoryExists(category_textBoxCategory))
                         {
-                            DBConnection.SqlConnection.Open();
+                            MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            
+                            DBConnection.CloseConnection();
 
-                            string updateData = "DELETE FROM categories WHERE id_category = @id";
-
-                            using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
-                            {
-                                cmd.Parameters.AddWithValue("@id", getID);
-
-                                cmd.ExecuteNonQuery();
-
-                                MessageBox.Show("Категория успешно удалена!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                clearFields();
-                            }
+                            return;
                         }
-                        catch (Exception ex)
+
+                        string updateData = "DELETE FROM categories WHERE id_category = @id";
+
+                        using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
-                            MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                            sqlCommand.Parameters.AddWithValue("@id", getID);
+
+                            sqlCommand.ExecuteNonQuery();
+
+                            MessageBox.Show("Категория успешно удалена!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ClearFields();
                         }
-                        finally
-                        {
-                            if (!DBConnection.CheckConnection())
-                            {
-                                DBConnection.SqlConnection.Close();
-                            }
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        DBConnection.CloseConnection();
                     }
                 }
             }
-            displayCategoryList();
+            DisplayCategoryList();
         }
+
+
+        private bool ValidateCategoryInputs()
+        {
+            if (string.IsNullOrEmpty(category_textBoxCategory.Text))
+
+            {
+                MessageBox.Show("Введите категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else if (category_comboBoxType.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите тип категории.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else if (category_comboBoxStatus.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите статус.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

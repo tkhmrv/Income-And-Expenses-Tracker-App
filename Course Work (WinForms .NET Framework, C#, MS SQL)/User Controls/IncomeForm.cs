@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
@@ -33,6 +26,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
             DisplayIncomeCategories();
             DisplayIncomeData();
+
+            dataGridViewIncome.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(49, 121, 74);
+            dataGridViewIncome.EnableHeadersVisualStyles = false;
+            dataGridViewIncome.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewIncome.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewIncome.Font, FontStyle.Bold);
         }
 
         private void DisplayIncomeData()
@@ -56,8 +54,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             // Переименовываем колонку CategoryName для удобства
             if (dataGridViewIncome.Columns["CategoryName"] != null)
             {
-                dataGridViewIncome.Columns["CategoryName"].HeaderText = "Category";
+                dataGridViewIncome.Columns["CategoryName"].HeaderText = "Категория";
             }
+
+            dataGridViewIncome.Columns["Item"].HeaderText = "Событие";
+            dataGridViewIncome.Columns["Amount"].HeaderText = "Количество";
+            dataGridViewIncome.Columns["Description"].HeaderText = "Описание";
+            dataGridViewIncome.Columns["IncomeDate"].HeaderText = "Дата добавления";
         }
 
 
@@ -71,42 +74,36 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
+                    using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        cmd.Parameters.AddWithValue("@type", "Доходы");
-                        cmd.Parameters.AddWithValue("@status", "Активный");
+                        sqlCommand.Parameters.AddWithValue("@type", "Доходы");
+                        sqlCommand.Parameters.AddWithValue("@status", "Активный");
 
                         income_comboBoxCategory.Items.Clear();
 
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
-                        while (reader.Read())
+                        while (sqlDataReader.Read())
                         {
-                            income_comboBoxCategory.Items.Add(reader["category"].ToString());
+                            income_comboBoxCategory.Items.Add(sqlDataReader["category"].ToString());
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
-                    if (!DBConnection.CheckConnection())
-                    {
-                        DBConnection.SqlConnection.Close();
-                    }
+                    DBConnection.CloseConnection();
                 }
             }
         }
 
-        private void income_buttonAdd_Click(object sender, EventArgs e)
+        private void Income_buttonAdd_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
-            {
-                MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
 
             if (DBConnection.CheckConnection())
             {
@@ -120,49 +117,42 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                         DBConnection.SqlConnection.Open();
 
                         string insertIncomeQuery = "INSERT INTO income_3nf (category_id, item, amount, [description], income_date) VALUES (@categoryId, @item, @amount, @description, @incomeDate)";
-                        using (SqlCommand insertCmd = new SqlCommand(insertIncomeQuery, DBConnection.SqlConnection))
+                        using (SqlCommand sqlCommand = new SqlCommand(insertIncomeQuery, DBConnection.SqlConnection))
                         {
-                            insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
-                            insertCmd.Parameters.AddWithValue("@item", income_textBoxItem.Text);
-                            insertCmd.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
-                            insertCmd.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
-                            insertCmd.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
+                            sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
+                            sqlCommand.Parameters.AddWithValue("@item", income_textBoxItem.Text);
+                            sqlCommand.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
+                            sqlCommand.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
+                            sqlCommand.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
 
-                            insertCmd.ExecuteNonQuery();
+                            sqlCommand.ExecuteNonQuery();
 
-                            MessageBox.Show("Новый источник дохода добавлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Новый источник дохода добавлен успешно!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             ClearFields();
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Категория не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Категория не найдена.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
-                    if (!DBConnection.CheckConnection())
-                    {
-                        DBConnection.SqlConnection.Close();
-                    }
+                    DBConnection.CloseConnection();
                 }
-                DisplayIncomeData();
             }
+            DisplayIncomeData();
         }
 
-        private void income_buttonUpdate_Click(object sender, EventArgs e)
+        private void Income_buttonUpdate_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
-            {
-                MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 return;
-            }
 
             if (DBConnection.CheckConnection())
             {
@@ -173,45 +163,104 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     DBConnection.SqlConnection.Open();
 
+                    /*// Проверка существования категории
+                    if (!incomeData.ItemExists(income_textBoxItem))
+                    {
+                        MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        DBConnection.CloseConnection();
+
+                        return;
+                    }*/
+
                     if (categoryId.HasValue)
                     {
                         // Запрос для добавления нового дохода
                         string updateIncomeQuery = "UPDATE income_3nf SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, income_date = @incomeDate WHERE id_income = @id_income";
-                        using (SqlCommand insertCmd = new SqlCommand(updateIncomeQuery, DBConnection.SqlConnection))
+                        using (SqlCommand sqlCommand = new SqlCommand(updateIncomeQuery, DBConnection.SqlConnection))
                         {
-                            insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
-                            insertCmd.Parameters.AddWithValue("@item", income_textBoxItem.Text);
-                            insertCmd.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
-                            insertCmd.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
-                            insertCmd.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
-                            insertCmd.Parameters.AddWithValue("@id_income", getID);
+                            sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
+                            sqlCommand.Parameters.AddWithValue("@item", income_textBoxItem.Text);
+                            sqlCommand.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
+                            sqlCommand.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
+                            sqlCommand.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
+                            sqlCommand.Parameters.AddWithValue("@id_income", getID);
 
-                            insertCmd.ExecuteNonQuery();
+                            sqlCommand.ExecuteNonQuery();
 
-                            MessageBox.Show("Источник дохода обновлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Источник дохода обновлен успешно!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             ClearFields();
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Категория не найдена: " + categoryId, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Категория не найдена: " + categoryId, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при обновлении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    DBConnection.CloseConnection();
+                }
+            }
+            DisplayIncomeData();
+        }
+
+        private void Income_buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (!ValidateInput())
+                return;
+
+            if (DBConnection.CheckConnection())
+            {
+                try
+                {
+                    DBConnection.SqlConnection.Open();
+
+                    IncomeData incomeData = new IncomeData();
+
+                    // Проверка существования категории
+                    if (!incomeData.ItemExists(income_textBoxItem))
+                    {
+                        MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        DBConnection.CloseConnection();
+
+                        return;
+                    }
+
+                    // Запрос для добавления нового дохода
+                    string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @id_income";
+                    using (SqlCommand sqlCommand = new SqlCommand(deleteIncomeQuery, DBConnection.SqlConnection))
+                    {
+                        sqlCommand.Parameters.AddWithValue("@id_income", getID);
+
+                        sqlCommand.ExecuteNonQuery();
+
+                        MessageBox.Show("Источник дохода удален успешно!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        ClearFields();
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при удалении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
-                    if (!DBConnection.CheckConnection())
-                    {
-                        DBConnection.SqlConnection.Close();
-                    }
+                    DBConnection.CloseConnection();
                 }
-                DisplayIncomeData();
             }
+        }
+
+        private void Income_buttonClear_Click(object sender, EventArgs e)
+        {
+            ClearFields();
         }
 
         private void ClearFields()
@@ -220,46 +269,38 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             income_textBoxIncome.Text = "";
             income_textBoxDescription.Text = "";
             income_comboBoxCategory.SelectedIndex = -1;
+            income_dateTimePicker.Value = DateTime.Now;
         }
 
         private bool ValidateInput()
         {
-            // Проверка, что выбран элемент в ComboBox
             if (income_comboBoxCategory.SelectedItem == null)
             {
-                MessageBox.Show("Пожалуйста, выберите категорию.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            // Проверка валидности входных данных
-            if (string.IsNullOrWhiteSpace(income_comboBoxCategory.SelectedItem.ToString()))
-            {
-                MessageBox.Show("Категория не может быть пустой.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, выберите категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(income_textBoxItem.Text))
             {
-                MessageBox.Show("Поле 'Наименование' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Поле 'Наименование' не может быть пустым.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(income_textBoxIncome.Text))
             {
-                MessageBox.Show("Поле 'Сумма' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Поле 'Сумма' не может быть пустым.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(income_textBoxDescription.Text))
             {
-                MessageBox.Show("Поле 'Описание' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Поле 'Описание' не может быть пустым.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
-            // Проверка, что поле 'Сумма' содержит числовое значение
-            if (!decimal.TryParse(income_textBoxIncome.Text, out decimal incomeAmount))
+            if (!decimal.TryParse(income_textBoxIncome.Text, out decimal expensesAmount))
             {
-                MessageBox.Show("Поле 'Сумма' должно содержать числовое значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Поле 'Сумма' должно содержать числовое значение.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -267,7 +308,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         }
 
         private int getID = 0;
-        private void dataGridViewIncome_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewIncome_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex != -1)
             {
@@ -280,55 +321,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 income_textBoxDescription.Text = row.Cells["Description"].Value.ToString();
                 income_dateTimePicker.Value = Convert.ToDateTime(row.Cells["IncomeDate"].Value.ToString());
             }
-        }
-
-        private void income_buttonDelete_Click(object sender, EventArgs e)
-        {
-            if (!ValidateInput())
-            {
-                MessageBox.Show("Пожалуйста, выберите сначала источник дохода!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return;
-            }
-
-            if (DBConnection.CheckConnection())
-            {
-                try
-                {
-                    DBConnection.SqlConnection.Open();
-
-                    // Запрос для добавления нового дохода
-                    string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @id_income";
-                    using (SqlCommand insertCmd = new SqlCommand(deleteIncomeQuery, DBConnection.SqlConnection))
-                    {
-                        insertCmd.Parameters.AddWithValue("@id_income", getID);
-
-                        insertCmd.ExecuteNonQuery();
-
-                        MessageBox.Show("Источник дохода удален успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        ClearFields();
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    if (!DBConnection.CheckConnection())
-                    {
-                        DBConnection.SqlConnection.Close();
-                    }
-                }
-                DisplayIncomeData();
-            }
-        }
-
-        private void income_buttonClear_Click(object sender, EventArgs e)
-        {
-            ClearFields();
         }
     }
 }

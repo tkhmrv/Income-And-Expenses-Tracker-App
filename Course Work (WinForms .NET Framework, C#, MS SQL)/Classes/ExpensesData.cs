@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
@@ -35,21 +30,21 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                                           FROM expenses e
                                           JOIN categories c ON e.category_id = c.id_category";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
+                    using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
-                        while (reader.Read())
+                        while (sqlDataReader.Read())
                         {
                             ExpensesData expensesData = new ExpensesData
                             {
-                                Id = (int)reader["id_expenses"],
-                                CategoryId = (int)reader["category_id"],
-                                CategoryName = reader["CategoryName"].ToString(),
-                                Item = reader["item"].ToString(),
-                                Amount = reader["amount"].ToString(),
-                                Description = reader["description"].ToString(),
-                                ExpensesDate = ((DateTime)reader["expenses_date"]).ToString("MM-dd-yyyy")
+                                Id = (int)sqlDataReader["id_expenses"],
+                                CategoryId = (int)sqlDataReader["category_id"],
+                                CategoryName = sqlDataReader["CategoryName"].ToString(),
+                                Item = sqlDataReader["item"].ToString(),
+                                Amount = sqlDataReader["amount"].ToString(),
+                                Description = sqlDataReader["description"].ToString(),
+                                ExpensesDate = ((DateTime)sqlDataReader["expenses_date"]).ToString("MM-dd-yyyy")
                             };
 
                             listData.Add(expensesData);
@@ -59,14 +54,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                if (!DBConnection.CheckConnection())
-                {
-                    DBConnection.SqlConnection.Close();
-                }
+                DBConnection.CloseConnection();
             }
 
             return listData;
@@ -96,24 +88,35 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                         }
                         else
                         {
-                            MessageBox.Show("Категория " + categoryName + " не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Категория " + categoryName + " не найдена.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
-
                     return categoryId;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при получении categoryId: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при получении categoryId: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
             finally
             {
-                if (!DBConnection.CheckConnection())
-                {
-                    DBConnection.SqlConnection.Close();
-                }
+                DBConnection.CloseConnection();
+            }
+        }
+
+        public bool ItemExists(TextBox textBoxName)
+        {
+            string query = "SELECT COUNT(*) FROM expenses WHERE item = @item";
+            using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@item", textBoxName.Text.Trim());
+
+                DBConnection.SqlConnection.Open();
+                int count = (int)sqlCommand.ExecuteScalar();
+                DBConnection.SqlConnection.Close();
+
+                return count > 0;
             }
         }
     }

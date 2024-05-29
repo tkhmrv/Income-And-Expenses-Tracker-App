@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
@@ -9,29 +10,18 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         {
             InitializeComponent();
 
-            initDash();
+            InitializeDash();
+            DisplayUsername();
         }
 
-        private void labelCloseApp_Click(object sender, EventArgs e)
+        public void DisplayUsername()
         {
-            if (MessageBox.Show("Вы уверены, что хотите закрыть программу?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            string getUsername = AuthForm.username;
+
+            labelDisplayUsername.Text += getUsername.Substring(0, 1).ToUpper() + getUsername.Substring(1);
         }
 
-        private void buttonLogout_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Вы уверены, что хотите выйти?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                AuthForm authForm = new AuthForm();
-                authForm.Show();
-
-                this.Hide();
-            }
-        }
-
-        private void initDash()
+        private void InitializeDash()
         {
             DBConnection.CloseConnection();
 
@@ -47,12 +37,31 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void buttonDashboard_Click(object sender, EventArgs e)
+        private void LabelCloseApp_Click(object sender, EventArgs e)
         {
-            initDash();
+            if (MessageBox.Show("Вы уверены, что хотите закрыть программу?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
 
-        private void buttonAddCategory_Click(object sender, EventArgs e)
+        private void ButtonLogout_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Вы уверены, что хотите выйти?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                AuthForm authForm = new AuthForm();
+                authForm.Show();
+
+                this.Hide();
+            }
+        }
+
+        private void ButtonDashboard_Click(object sender, EventArgs e)
+        {
+            InitializeDash();
+        }
+
+        private void ButtonAddCategory_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
 
@@ -68,7 +77,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void buttonIncome_Click(object sender, EventArgs e)
+        private void ButtonIncome_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
 
@@ -84,7 +93,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        private void buttonExpenses_Click(object sender, EventArgs e)
+        private void ButtonExpenses_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
 
@@ -99,5 +108,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 eForm.RefreshData();
             }
         }
+
     }
 }

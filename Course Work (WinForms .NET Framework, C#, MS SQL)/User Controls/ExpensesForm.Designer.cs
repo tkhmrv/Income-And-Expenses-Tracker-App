@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label6 = new System.Windows.Forms.Label();
             this.expenses_dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.expenses_textBoxDescription = new System.Windows.Forms.TextBox();
@@ -102,7 +102,7 @@
             this.expenses_buttonDelete.TabIndex = 16;
             this.expenses_buttonDelete.Text = "Удалить";
             this.expenses_buttonDelete.UseVisualStyleBackColor = false;
-            this.expenses_buttonDelete.Click += new System.EventHandler(this.expenses_buttonDelete_Click);
+            this.expenses_buttonDelete.Click += new System.EventHandler(this.Expenses_buttonDelete_Click);
             // 
             // expenses_buttonUpdate
             // 
@@ -117,7 +117,7 @@
             this.expenses_buttonUpdate.TabIndex = 15;
             this.expenses_buttonUpdate.Text = "Обновить";
             this.expenses_buttonUpdate.UseVisualStyleBackColor = false;
-            this.expenses_buttonUpdate.Click += new System.EventHandler(this.expenses_buttonUpdate_Click);
+            this.expenses_buttonUpdate.Click += new System.EventHandler(this.Expenses_buttonUpdate_Click);
             // 
             // expenses_buttonClear
             // 
@@ -132,7 +132,7 @@
             this.expenses_buttonClear.TabIndex = 14;
             this.expenses_buttonClear.Text = "Очистить";
             this.expenses_buttonClear.UseVisualStyleBackColor = false;
-            this.expenses_buttonClear.Click += new System.EventHandler(this.expenses_buttonClear_Click);
+            this.expenses_buttonClear.Click += new System.EventHandler(this.Expenses_buttonClear_Click);
             // 
             // expenses_buttonAdd
             // 
@@ -147,7 +147,7 @@
             this.expenses_buttonAdd.TabIndex = 13;
             this.expenses_buttonAdd.Text = "Добавить";
             this.expenses_buttonAdd.UseVisualStyleBackColor = false;
-            this.expenses_buttonAdd.Click += new System.EventHandler(this.expenses_buttonAdd_Click);
+            this.expenses_buttonAdd.Click += new System.EventHandler(this.Expenses_buttonAdd_Click);
             // 
             // expenses_textBoxExpenses
             // 
@@ -181,11 +181,11 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(81, 69);
+            this.label3.Location = new System.Drawing.Point(39, 69);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 16);
+            this.label3.Size = new System.Drawing.Size(109, 16);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Событие:";
+            this.label3.Text = "Наименование:";
             // 
             // expenses_comboBoxCategory
             // 
@@ -212,28 +212,29 @@
             this.dataGridViewExpenses.AllowUserToAddRows = false;
             this.dataGridViewExpenses.AllowUserToDeleteRows = false;
             this.dataGridViewExpenses.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewExpenses.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewExpenses.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewExpenses.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewExpenses.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewExpenses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewExpenses.Location = new System.Drawing.Point(16, 49);
+            this.dataGridViewExpenses.Location = new System.Drawing.Point(16, 44);
             this.dataGridViewExpenses.Name = "dataGridViewExpenses";
             this.dataGridViewExpenses.ReadOnly = true;
             this.dataGridViewExpenses.RowHeadersVisible = false;
-            this.dataGridViewExpenses.Size = new System.Drawing.Size(994, 335);
+            this.dataGridViewExpenses.Size = new System.Drawing.Size(994, 325);
             this.dataGridViewExpenses.TabIndex = 2;
-            this.dataGridViewExpenses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExpenses_CellClick);
+            this.dataGridViewExpenses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewExpenses_CellClick);
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(15, 13);
+            this.label1.Location = new System.Drawing.Point(15, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(290, 23);
             this.label1.TabIndex = 1;
@@ -267,9 +268,9 @@
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.dataGridViewExpenses);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(15, 1);
+            this.panel1.Location = new System.Drawing.Point(15, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1025, 400);
+            this.panel1.Size = new System.Drawing.Size(1025, 385);
             this.panel1.TabIndex = 4;
             // 
             // ExpensesForm

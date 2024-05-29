@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
@@ -35,21 +30,21 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                                       FROM income_3nf 
                                       INNER JOIN categories ON income_3nf.category_id = categories.id_category";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
+                    using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
-                        while (reader.Read())
+                        while (sqlDataReader.Read())
                         {
                             IncomeData incomeData = new IncomeData
                             {
-                                Id = (int)reader["id_income"],
-                                CategoryId = (int)reader["category_id"],
-                                CategoryName = reader["category_name"].ToString(),
-                                Item = reader["item"].ToString(),
-                                Amount = reader["amount"].ToString(),
-                                Description = reader["description"].ToString(),
-                                IncomeDate = ((DateTime)reader["income_date"]).ToString("MM-dd-yyyy")
+                                Id = (int)sqlDataReader["id_income"],
+                                CategoryId = (int)sqlDataReader["category_id"],
+                                CategoryName = sqlDataReader["category_name"].ToString(),
+                                Item = sqlDataReader["item"].ToString(),
+                                Amount = sqlDataReader["amount"].ToString(),
+                                Description = sqlDataReader["description"].ToString(),
+                                IncomeDate = ((DateTime)sqlDataReader["income_date"]).ToString("MM-dd-yyyy")
                             };
 
                             listData.Add(incomeData);
@@ -59,14 +54,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                if (!DBConnection.CheckConnection())
-                {
-                    DBConnection.SqlConnection.Close();
-                }
+                DBConnection.CloseConnection();
             }
 
             return listData;
@@ -87,15 +79,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                     getCategoryCmd.Parameters.AddWithValue("@category", categoryName);
 
                     int? categoryId = null;
-                    using (SqlDataReader reader = getCategoryCmd.ExecuteReader())
+                    using (SqlDataReader sqlDataReader = getCategoryCmd.ExecuteReader())
                     {
-                        if (reader.HasRows && reader.Read())
+                        if (sqlDataReader.HasRows && sqlDataReader.Read())
                         {
-                            categoryId = reader.GetInt32(0);
+                            categoryId = sqlDataReader.GetInt32(0);
                         }
                         else
                         {
-                            MessageBox.Show("Категория " + categoryName + " не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Категория " + categoryName + " не найдена.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
 
@@ -104,15 +96,27 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при получении categoryId: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при получении categoryId: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
             finally
             {
-                if (DBConnection.CheckConnection())
-                {
-                    DBConnection.SqlConnection.Close();
-                }
+                DBConnection.CloseConnection();
+            }
+        }
+
+        public bool ItemExists(TextBox textBoxName)
+        {
+            string query = "SELECT COUNT(*) FROM income_3nf WHERE item = @item";
+            using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@item", textBoxName.Text.Trim());
+
+                DBConnection.SqlConnection.Open();
+                int count = (int)sqlCommand.ExecuteScalar();
+                DBConnection.SqlConnection.Close();
+
+                return count > 0;
             }
         }
     }

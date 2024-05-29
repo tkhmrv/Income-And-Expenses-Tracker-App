@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.category_buttonDelete = new System.Windows.Forms.Button();
             this.category_buttonUpdate = new System.Windows.Forms.Button();
@@ -62,9 +62,9 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.category_textBoxCategory);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(13, 0);
+            this.panel1.Location = new System.Drawing.Point(14, 15);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(290, 640);
+            this.panel1.Size = new System.Drawing.Size(290, 625);
             this.panel1.TabIndex = 0;
             // 
             // category_buttonDelete
@@ -80,7 +80,7 @@
             this.category_buttonDelete.TabIndex = 12;
             this.category_buttonDelete.Text = "Удалить";
             this.category_buttonDelete.UseVisualStyleBackColor = false;
-            this.category_buttonDelete.Click += new System.EventHandler(this.category_buttonDelete_Click);
+            this.category_buttonDelete.Click += new System.EventHandler(this.Category_buttonDelete_Click);
             // 
             // category_buttonUpdate
             // 
@@ -95,7 +95,7 @@
             this.category_buttonUpdate.TabIndex = 11;
             this.category_buttonUpdate.Text = "Обновить";
             this.category_buttonUpdate.UseVisualStyleBackColor = false;
-            this.category_buttonUpdate.Click += new System.EventHandler(this.category_buttonUpdate_Click);
+            this.category_buttonUpdate.Click += new System.EventHandler(this.Category_buttonUpdate_Click);
             // 
             // category_buttonClear
             // 
@@ -110,7 +110,7 @@
             this.category_buttonClear.TabIndex = 10;
             this.category_buttonClear.Text = "Очистить";
             this.category_buttonClear.UseVisualStyleBackColor = false;
-            this.category_buttonClear.Click += new System.EventHandler(this.category_buttonClear_Click);
+            this.category_buttonClear.Click += new System.EventHandler(this.Category_buttonClear_Click);
             // 
             // category_buttonAdd
             // 
@@ -125,7 +125,7 @@
             this.category_buttonAdd.TabIndex = 8;
             this.category_buttonAdd.Text = "Добавить";
             this.category_buttonAdd.UseVisualStyleBackColor = false;
-            this.category_buttonAdd.Click += new System.EventHandler(this.category_buttonAdd_Click);
+            this.category_buttonAdd.Click += new System.EventHandler(this.Category_buttonAdd_Click);
             // 
             // category_comboBoxStatus
             // 
@@ -157,7 +157,7 @@
             this.category_comboBoxType.Items.AddRange(new object[] {
             "Доходы",
             "Расходы"});
-            this.category_comboBoxType.Location = new System.Drawing.Point(19, 119);
+            this.category_comboBoxType.Location = new System.Drawing.Point(19, 121);
             this.category_comboBoxType.Name = "category_comboBoxType";
             this.category_comboBoxType.Size = new System.Drawing.Size(252, 28);
             this.category_comboBoxType.TabIndex = 5;
@@ -165,7 +165,7 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(15, 93);
+            this.label2.Location = new System.Drawing.Point(15, 95);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(224, 23);
             this.label2.TabIndex = 4;
@@ -194,9 +194,9 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.Controls.Add(this.dataGridViewCategory);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(319, 0);
+            this.panel2.Location = new System.Drawing.Point(319, 15);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(721, 640);
+            this.panel2.Size = new System.Drawing.Size(720, 625);
             this.panel2.TabIndex = 1;
             // 
             // dataGridViewCategory
@@ -204,36 +204,37 @@
             this.dataGridViewCategory.AllowUserToAddRows = false;
             this.dataGridViewCategory.AllowUserToDeleteRows = false;
             this.dataGridViewCategory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewCategory.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewCategory.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewCategory.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewCategory.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewCategory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewCategory.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewCategory.Location = new System.Drawing.Point(16, 45);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewCategory.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridViewCategory.Location = new System.Drawing.Point(15, 46);
             this.dataGridViewCategory.Name = "dataGridViewCategory";
             this.dataGridViewCategory.ReadOnly = true;
             this.dataGridViewCategory.RowHeadersVisible = false;
-            this.dataGridViewCategory.Size = new System.Drawing.Size(691, 579);
+            this.dataGridViewCategory.Size = new System.Drawing.Size(690, 565);
             this.dataGridViewCategory.TabIndex = 14;
-            this.dataGridViewCategory.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCategory_CellClick);
+            this.dataGridViewCategory.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewCategory_CellClick);
             // 
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 10);
+            this.label4.Location = new System.Drawing.Point(12, 13);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(224, 23);
             this.label4.TabIndex = 13;

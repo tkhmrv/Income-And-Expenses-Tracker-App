@@ -79,7 +79,7 @@
             this.buttonBackToAuth.TabIndex = 22;
             this.buttonBackToAuth.Text = "← Вход в приложение";
             this.buttonBackToAuth.UseVisualStyleBackColor = false;
-            this.buttonBackToAuth.Click += new System.EventHandler(this.buttonBackToAuth_Click);
+            this.buttonBackToAuth.Click += new System.EventHandler(this.ButtonBackToAuth_Click);
             // 
             // appLabel
             // 
@@ -150,7 +150,7 @@
             this.checkboxShowRegPassword.TabIndex = 30;
             this.checkboxShowRegPassword.Text = "Показать пароль";
             this.checkboxShowRegPassword.UseVisualStyleBackColor = true;
-            this.checkboxShowRegPassword.CheckedChanged += new System.EventHandler(this.checkboxShowRegPassword_CheckedChanged);
+            this.checkboxShowRegPassword.CheckedChanged += new System.EventHandler(this.CheckboxShowRegPassword_CheckedChanged);
             // 
             // buttonRegistration
             // 
@@ -168,7 +168,7 @@
             this.buttonRegistration.TabIndex = 29;
             this.buttonRegistration.Text = "Зарегистрироваться";
             this.buttonRegistration.UseVisualStyleBackColor = false;
-            this.buttonRegistration.Click += new System.EventHandler(this.buttonRegistration_Click);
+            this.buttonRegistration.Click += new System.EventHandler(this.ButtonRegistration_Click);
             // 
             // textboxRegPassword
             // 
@@ -235,7 +235,7 @@
             this.labelCloseApp.Size = new System.Drawing.Size(20, 19);
             this.labelCloseApp.TabIndex = 23;
             this.labelCloseApp.Text = "X";
-            this.labelCloseApp.Click += new System.EventHandler(this.labelCloseApp_Click);
+            this.labelCloseApp.Click += new System.EventHandler(this.LabelCloseApp_Click);
             // 
             // pictureboxLogo
             // 

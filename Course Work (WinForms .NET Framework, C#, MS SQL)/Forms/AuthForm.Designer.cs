@@ -119,7 +119,7 @@
             this.labelCloseApp.Size = new System.Drawing.Size(20, 19);
             this.labelCloseApp.TabIndex = 1;
             this.labelCloseApp.Text = "X";
-            this.labelCloseApp.Click += new System.EventHandler(this.labelCloseApp_Click);
+            this.labelCloseApp.Click += new System.EventHandler(this.LabelCloseApp_Click);
             // 
             // labelAuth
             // 
@@ -163,7 +163,7 @@
             this.textboxPassword.PasswordChar = '*';
             this.textboxPassword.Size = new System.Drawing.Size(338, 26);
             this.textboxPassword.TabIndex = 7;
-            this.textboxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textboxPassword_KeyPress);
+            this.textboxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextboxPassword_KeyPress);
             // 
             // labelPass
             // 
@@ -192,7 +192,7 @@
             this.buttonAuth.TabIndex = 8;
             this.buttonAuth.Text = "Войти";
             this.buttonAuth.UseVisualStyleBackColor = false;
-            this.buttonAuth.Click += new System.EventHandler(this.buttonAuth_Click);
+            this.buttonAuth.Click += new System.EventHandler(this.ButtonAuth_Click);
             // 
             // checkboxShowAuthPassword
             // 
@@ -205,7 +205,7 @@
             this.checkboxShowAuthPassword.TabIndex = 9;
             this.checkboxShowAuthPassword.Text = "Показать пароль";
             this.checkboxShowAuthPassword.UseVisualStyleBackColor = true;
-            this.checkboxShowAuthPassword.CheckedChanged += new System.EventHandler(this.checkboxShowAuthPassword_CheckedChanged);
+            this.checkboxShowAuthPassword.CheckedChanged += new System.EventHandler(this.CheckboxShowAuthPassword_CheckedChanged);
             // 
             // labelCreateAccount
             // 
@@ -217,9 +217,9 @@
             this.labelCreateAccount.Size = new System.Drawing.Size(116, 13);
             this.labelCreateAccount.TabIndex = 10;
             this.labelCreateAccount.Text = " У меня нет аккаунта";
-            this.labelCreateAccount.Click += new System.EventHandler(this.labelCreateAccount_Click);
-            this.labelCreateAccount.MouseLeave += new System.EventHandler(this.createAccountLabel_MouseLeave);
-            this.labelCreateAccount.MouseHover += new System.EventHandler(this.createAccountLabel_MouseHover);
+            this.labelCreateAccount.Click += new System.EventHandler(this.LabelCreateAccount_Click);
+            this.labelCreateAccount.MouseLeave += new System.EventHandler(this.CreateAccountLabel_MouseLeave);
+            this.labelCreateAccount.MouseHover += new System.EventHandler(this.CreateAccountLabel_MouseHover);
             // 
             // AuthForm
             // 
@@ -242,7 +242,6 @@
             this.Name = "AuthForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Форма авторизации";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.panelNavigation.ResumeLayout(false);
             this.panelNavigation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogo)).EndInit();
