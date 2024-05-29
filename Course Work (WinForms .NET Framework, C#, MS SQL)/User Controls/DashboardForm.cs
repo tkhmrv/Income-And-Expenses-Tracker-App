@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма для отображения данных на панели управления.
+    /// </summary>
     public partial class DashboardForm : UserControl
     {
         private readonly string dailyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date = @income_date";
@@ -21,6 +24,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         private readonly string totalIncomeQuery = "SELECT SUM(amount) FROM income_3nf";
         private readonly string totalExpensesQuery = "SELECT SUM(amount) FROM expenses";
 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="DashboardForm"/>.
+        /// </summary>
         public DashboardForm()
         {
             InitializeComponent();
@@ -28,6 +34,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             RefreshData();
         }
 
+        /// <summary>
+        /// Обновляет данные на панели управления.
+        /// </summary>
         public void RefreshData()
         {
             if (InvokeRequired)
@@ -52,6 +61,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             ShowTotalUniversal(totalExpensesQuery, dash_labelTotalExpenses);
         }
 
+        /// <summary>
+        /// Показывает данные за текущий день.
+        /// </summary>
+        /// <param name="query">SQL-запрос для получения данных.</param>
+        /// <param name="columnName">Имя колонки для параметра даты.</param>
+        /// <param name="labelName">Имя метки для отображения результата.</param>
         public void ShowTodayUniversal(string query, string columnName, Label labelName)
         {
             if (DBConnection.CheckConnection())
@@ -90,6 +105,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Показывает данные за вчерашний день.
+        /// </summary>
+        /// <param name="query">SQL-запрос для получения данных.</param>
+        /// <param name="labelName">Имя метки для отображения результата.</param>
         public void ShowYesterdayUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
@@ -125,6 +145,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Показывает данные за текущий месяц.
+        /// </summary>
+        /// <param name="query">SQL-запрос для получения данных.</param>
+        /// <param name="labelName">Имя метки для отображения результата.</param>
         public void ShowMonthUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
@@ -167,6 +192,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Показывает данные за текущий год.
+        /// </summary>
+        /// <param name="query">SQL-запрос для получения данных.</param>
+        /// <param name="labelName">Имя метки для отображения результата.</param>
         public void ShowYearUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
@@ -209,6 +239,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Показывает общие данные.
+        /// </summary>
+        /// <param name="query">SQL-запрос для получения данных.</param>
+        /// <param name="labelName">Имя метки для отображения результата.</param>
         private void ShowTotalUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())

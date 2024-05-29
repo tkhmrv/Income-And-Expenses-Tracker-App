@@ -6,8 +6,19 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма для управления расходами.
+    /// </summary>
     public partial class ExpensesForm : UserControl
     {
+        /// <summary>
+        /// Переменная, в которую записывается ID расходов.
+        /// </summary>
+        private int getID = 0;
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="ExpensesForm"/>.
+        /// </summary>
         public ExpensesForm()
         {
             InitializeComponent();
@@ -17,6 +28,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
+        /// <summary>
+        /// Обновляет данные на форме расходов.
+        /// </summary>
         public void RefreshData()
         {
             if (InvokeRequired)
@@ -34,6 +48,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             dataGridViewExpenses.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewExpenses.Font, FontStyle.Bold);
         }
 
+        /// <summary>
+        /// Отображает категории расходов.
+        /// </summary>
         private void DisplayExpensesCategories()
         {
             if (DBConnection.CheckConnection())
@@ -70,6 +87,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Отображает данные о расходах.
+        /// </summary>
         private void DisplayExpensesData()
         {
             ExpensesData expensesData = new ExpensesData();
@@ -100,6 +120,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             dataGridViewExpenses.Columns["ExpensesDate"].HeaderText = "Дата добавления";
         }
 
+        /// <summary>
+        /// Обработчик события для добавления нового расхода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Expenses_buttonAdd_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -149,6 +174,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
+        /// <summary>
+        /// Обработчик события для обновления существующего расхода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Expenses_buttonUpdate_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -209,6 +239,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
+        /// <summary>
+        /// Обработчик события для удаления существующего расхода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Expenses_buttonDelete_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -264,11 +299,19 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
+        /// <summary>
+        /// Обработчик события для очистки полей ввода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Expenses_buttonClear_Click(object sender, EventArgs e)
         {
             ClearFields();
         }
 
+        /// <summary>
+        /// Очищает все поля ввода.
+        /// </summary>
         private void ClearFields()
         {
             expenses_textBoxItem.Text = "";
@@ -278,6 +321,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             expenses_dateTimePicker.Value = DateTime.Now;
         }
 
+        /// <summary>
+        /// Проверяет корректность введенных данных.
+        /// </summary>
+        /// <returns>Возвращает true, если все данные корректны, иначе false.</returns>
         private bool ValidateInput()
         {
             if (expenses_comboBoxCategory.SelectedItem == null)
@@ -313,7 +360,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             return true;
         }
 
-        private int getID = 0;
+        /// <summary>
+        /// Обработчик события для выбора строки в таблице расходов.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGridViewExpenses_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex != -1)

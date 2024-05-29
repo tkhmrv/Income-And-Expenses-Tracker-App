@@ -5,13 +5,22 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма для регистрации нового пользователя.
+    /// </summary>
     public partial class RegisterForm : Form
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="RegisterForm"/>.
+        /// </summary>
         public RegisterForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Обработчик события клика на метку закрытия приложения.
+        /// </summary>
         private void LabelCloseApp_Click(object sender, EventArgs e)
         {
             AuthForm authForm = new AuthForm();
@@ -20,20 +29,29 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             this.Close();
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку возврата к форме авторизации.
+        /// </summary>
         private void ButtonBackToAuth_Click(object sender, EventArgs e)
         {
             AuthForm authForm = new AuthForm();
-            authForm.ShowDialog();
+            authForm.Show();
 
             this.Close();
         }
 
+        /// <summary>
+        /// Обработчик изменения состояния чекбокса для показа/скрытия пароля.
+        /// </summary>
         private void CheckboxShowRegPassword_CheckedChanged(object sender, EventArgs e)
         {
             textboxRegPassword.PasswordChar = checkboxShowRegPassword.Checked ? '\0' : '*';
             textboxConfirmPassword.PasswordChar = checkboxShowRegPassword.Checked ? '\0' : '*';
         }
 
+        /// <summary>
+        /// Обработчик клика на кнопку регистрации.
+        /// </summary>
         private void ButtonRegistration_Click(object sender, EventArgs e)
         {
             if (!ValidateRegistrationInputs())
@@ -82,7 +100,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединение, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -91,6 +109,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Валидирует входные данные для регистрации.
+        /// </summary>
+        /// <returns>Возвращает true, если все входные данные валидны; в противном случае false.</returns>
         private bool ValidateRegistrationInputs()
         {
             if (string.IsNullOrEmpty(textboxRegisterUsername.Text))

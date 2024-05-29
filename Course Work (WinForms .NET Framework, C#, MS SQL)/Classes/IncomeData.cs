@@ -5,16 +5,50 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Класс для работы с данными доходов.
+    /// </summary>
     internal class IncomeData
     {
+        /// <summary>
+        /// Идентификатор дохода.
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Идентификатор категории.
+        /// </summary>
         public int CategoryId { get; set; }
+
+        /// <summary>
+        /// Название категории.
+        /// </summary>
         public string CategoryName { get; set; }
+
+        /// <summary>
+        /// Наименование дохода.
+        /// </summary>
         public string Item { get; set; }
+
+        /// <summary>
+        /// Сумма дохода.
+        /// </summary>
         public string Amount { get; set; }
+
+        /// <summary>
+        /// Описание дохода.
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Дата дохода.
+        /// </summary>
         public string IncomeDate { get; set; }
 
+        /// <summary>
+        /// Получает список всех доходов из базы данных.
+        /// </summary>
+        /// <returns>Список данных доходов.</returns>
         public List<IncomeData> IncomeListData()
         {
             List<IncomeData> listData = new List<IncomeData>();
@@ -64,6 +98,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             return listData;
         }
 
+        /// <summary>
+        /// Получает идентификатор категории по её названию.
+        /// </summary>
+        /// <param name="categoryName">Название категории.</param>
+        /// <returns>Идентификатор категории или null, если категория не найдена.</returns>
         public int? GetCategoryIdByName(string categoryName)
         {
             try
@@ -105,6 +144,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Проверяет, существует ли элемент в базе данных.
+        /// </summary>
+        /// <param name="textBoxName">TextBox с названием элемента для проверки.</param>
+        /// <returns>Возвращает true, если элемент существует; иначе false.</returns>
         public bool ItemExists(TextBox textBoxName)
         {
             string query = "SELECT COUNT(*) FROM income_3nf WHERE item = @item";

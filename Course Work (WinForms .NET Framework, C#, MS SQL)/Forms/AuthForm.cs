@@ -6,49 +6,90 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма авторизации пользователя.
+    /// </summary>
     public partial class AuthForm : Form
     {
+        /// <summary>
+        /// Имя пользователя, авторизованного в системе.
+        /// </summary>
         public static string username;
 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="AuthForm"/>.
+        /// </summary>
         public AuthForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///  Изменяет цвет текста при наведении мыши на метку создания аккаунта.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateAccountLabel_MouseHover(object sender, EventArgs e)
         {
             labelCreateAccount.ForeColor = Color.Blue;
         }
 
+        /// <summary>
+        /// Восстанавливает цвет текста при уходе мыши с метки создания аккаунта.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateAccountLabel_MouseLeave(object sender, EventArgs e)
         {
             labelCreateAccount.ForeColor = SystemColors.ControlText;
         }
 
+        /// <summary>
+        /// Закрывает приложение при нажатии на метку закрытия приложения.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LabelCloseApp_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        /// <summary>
+        /// Показывает или скрывает пароль в зависимости от состояния чекбокса.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckboxShowAuthPassword_CheckedChanged(object sender, EventArgs e)
         {
             textboxPassword.PasswordChar = checkboxShowAuthPassword.Checked ? '\0' : '*';
         }
 
+        /// <summary>
+        /// Открывает форму регистрации при нажатии на метку создания аккаунта.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LabelCreateAccount_Click(object sender, EventArgs e)
         {
             RegisterForm registerForm = new RegisterForm();
             registerForm.ShowDialog();
-
-            this.Close();
         }
 
+        /// <summary>
+        /// Логика авторизации при нажатии на кнопку авторизации.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonAuth_Click(object sender, EventArgs e)
         {
             ButtonAuthLogic();
         }
 
-        
+        /// <summary>
+        /// Обрабатывает нажатие клавиши Enter в поле пароля для вызова логики авторизации.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextboxPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -57,6 +98,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Логика авторизации пользователя.
+        /// </summary>
         private void ButtonAuthLogic()
         {
             if (DBConnection.CheckConnection())
@@ -98,7 +142,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие с базой данных, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединение с базой данных, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 }
                 finally
                 {

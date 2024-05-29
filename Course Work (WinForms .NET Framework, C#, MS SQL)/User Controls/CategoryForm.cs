@@ -6,8 +6,14 @@ using System.Data.SqlClient;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма для управления категориями.
+    /// </summary>
     public partial class CategoryForm : UserControl
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="CategoryForm"/>.
+        /// </summary>
         public CategoryForm()
         {
             InitializeComponent();
@@ -15,6 +21,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayCategoryList();
         }
 
+        /// <summary>
+        /// Обновляет данные на форме.
+        /// </summary>
         public void RefreshData()
         {
             if (InvokeRequired)
@@ -31,6 +40,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             dataGridViewCategory.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewCategory.Font, FontStyle.Bold);
         }
 
+        /// <summary>
+        /// Отображает список категорий.
+        /// </summary>
         private void DisplayCategoryList()
         {
             CategoryData categoryData = new CategoryData();
@@ -56,6 +68,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика по кнопке добавления категории.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Category_buttonAdd_Click(object sender, EventArgs e)
         {
             if (!ValidateCategoryInputs())
@@ -95,19 +112,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private int getID = 0;
 
-        private void DataGridViewCategory_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex != -1)
-            {
-                DataGridViewRow row = dataGridViewCategory.Rows[e.RowIndex];
-
-                getID = Convert.ToInt32(row.Cells["ID"].Value);
-                category_textBoxCategory.Text = row.Cells["category"].Value.ToString();
-                category_comboBoxType.SelectedItem = row.Cells["type"].Value.ToString();
-                category_comboBoxStatus.SelectedItem = row.Cells["status"].Value.ToString();
-            }
-        }
-
+        /// <summary>
+        /// Обработчик события клика по кнопке обновления категории.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Category_buttonUpdate_Click(object sender, EventArgs e)
         {
             if (!ValidateCategoryInputs())
@@ -162,6 +171,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayCategoryList();
         }
 
+        /// <summary>
+        /// Очищает поля ввода.
+        /// </summary>
         public void ClearFields()
         {
             category_textBoxCategory.Text = "";
@@ -169,11 +181,21 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             category_comboBoxStatus.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Обработчик события клика по кнопке очистки полей.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Category_buttonClear_Click(object sender, EventArgs e)
         {
             ClearFields();
         }
 
+        /// <summary>
+        /// Обработчик события клика по кнопке удаления категории.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Category_buttonDelete_Click(object sender, EventArgs e)
         {
             if (!ValidateCategoryInputs())
@@ -192,7 +214,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                         if (!categoryData.CategoryExists(category_textBoxCategory))
                         {
                             MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            
+
                             DBConnection.CloseConnection();
 
                             return;
@@ -223,7 +245,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayCategoryList();
         }
 
-
+        /// <summary>
+        /// Проверяет корректность введенных данных для категории.
+        /// </summary>
+        /// <returns>Возвращает true, если данные корректны; иначе false.</returns>
         private bool ValidateCategoryInputs()
         {
             if (string.IsNullOrEmpty(category_textBoxCategory.Text))
@@ -246,5 +271,22 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             return true;
         }
 
+        /// <summary>
+        /// Обработчик события клика по ячейке в DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridViewCategory_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != -1)
+            {
+                DataGridViewRow row = dataGridViewCategory.Rows[e.RowIndex];
+
+                getID = Convert.ToInt32(row.Cells["ID"].Value);
+                category_textBoxCategory.Text = row.Cells["category"].Value.ToString();
+                category_comboBoxType.SelectedItem = row.Cells["type"].Value.ToString();
+                category_comboBoxStatus.SelectedItem = row.Cells["status"].Value.ToString();
+            }
+        }
     }
 }

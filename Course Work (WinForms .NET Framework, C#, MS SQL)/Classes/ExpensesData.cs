@@ -5,17 +5,50 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Класс для работы с данными расходов.
+    /// </summary>
     internal class ExpensesData
     {
+        /// <summary>
+        /// Идентификатор расхода.
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Идентификатор категории.
+        /// </summary>
         public int CategoryId { get; set; }
+
+        /// <summary>
+        /// Название категории.
+        /// </summary>
         public string CategoryName { get; set; }
+
+        /// <summary>
+        /// Наименование расхода.
+        /// </summary>
         public string Item { get; set; }
+
+        /// <summary>
+        /// Сумма расхода.
+        /// </summary>
         public string Amount { get; set; }
+
+        /// <summary>
+        /// Описание расхода.
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Дата расхода.
+        /// </summary>
         public string ExpensesDate { get; set; }
 
-
+        /// <summary>
+        /// Получает список всех расходов из базы данных.
+        /// </summary>
+        /// <returns>Список данных расходов.</returns>
         public List<ExpensesData> ExpensesListData()
         {
             List<ExpensesData> listData = new List<ExpensesData>();
@@ -64,7 +97,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             return listData;
         }
 
-
+        /// <summary>
+        /// Получает идентификатор категории по её названию.
+        /// </summary>
+        /// <param name="categoryName">Название категории.</param>
+        /// <returns>Идентификатор категории или null, если категория не найдена.</returns>
         public int? GetCategoryIdByName(string categoryName)
         {
             try
@@ -105,6 +142,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Проверяет, существует ли элемент в базе данных.
+        /// </summary>
+        /// <param name="textBoxName">TextBox с названием элемента для проверки.</param>
+        /// <returns>Возвращает true, если элемент существует; иначе false.</returns>
         public bool ItemExists(TextBox textBoxName)
         {
             string query = "SELECT COUNT(*) FROM expenses WHERE item = @item";

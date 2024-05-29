@@ -6,8 +6,19 @@ using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Форма для управления доходами.
+    /// </summary>
     public partial class IncomeForm : UserControl
     {
+        /// <summary>
+        /// Переменная, в которую записывается ID расходов.
+        /// </summary>
+        private int getID = 0;
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="IncomeForm"/>.
+        /// </summary>
         public IncomeForm()
         {
             InitializeComponent();
@@ -16,6 +27,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayIncomeData();
         }
 
+        /// <summary>
+        /// Обновляет данные на форме доходов.
+        /// </summary>
         public void RefreshData()
         {
             if (InvokeRequired)
@@ -33,6 +47,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             dataGridViewIncome.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewIncome.Font, FontStyle.Bold);
         }
 
+        /// <summary>
+        /// Отображает категории доходов.
+        /// </summary>
         private void DisplayIncomeData()
         {
             IncomeData incomeData = new IncomeData();
@@ -63,7 +80,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             dataGridViewIncome.Columns["IncomeDate"].HeaderText = "Дата добавления";
         }
 
-
+        /// <summary>
+        /// Отображает данные о доходах.
+        /// </summary>
         private void DisplayIncomeCategories()
         {
             if (DBConnection.CheckConnection())
@@ -100,6 +119,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Обработчик события для добавления нового дохода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Income_buttonAdd_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -149,6 +173,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayIncomeData();
         }
 
+        /// <summary>
+        /// Обработчик события для обновления существующего дохода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Income_buttonUpdate_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -210,6 +239,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayIncomeData();
         }
 
+        /// <summary>
+        /// Обработчик события для удаления существующего дохода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Income_buttonDelete_Click(object sender, EventArgs e)
         {
             if (!ValidateInput())
@@ -258,11 +292,19 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Обработчик события для очистки полей ввода.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Income_buttonClear_Click(object sender, EventArgs e)
         {
             ClearFields();
         }
 
+        /// <summary>
+        /// Очищает все поля ввода.
+        /// </summary>
         private void ClearFields()
         {
             income_textBoxItem.Text = "";
@@ -272,6 +314,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             income_dateTimePicker.Value = DateTime.Now;
         }
 
+        /// <summary>
+        /// Проверяет корректность введенных данных.
+        /// </summary>
+        /// <returns>Возвращает true, если все данные корректны, иначе false.</returns>
         private bool ValidateInput()
         {
             if (income_comboBoxCategory.SelectedItem == null)
@@ -307,7 +353,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             return true;
         }
 
-        private int getID = 0;
+        /// <summary>
+        /// Обработчик события для выбора строки в таблице доходов.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGridViewIncome_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex != -1)

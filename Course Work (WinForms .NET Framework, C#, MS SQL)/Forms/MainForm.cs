@@ -1,11 +1,16 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
+    /// <summary>
+    /// Основная форма приложения.
+    /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="MainForm"/>.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -14,13 +19,18 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayUsername();
         }
 
+        /// <summary>
+        /// Отображает имя пользователя, вошедшего в систему.
+        /// </summary>
         public void DisplayUsername()
         {
             string getUsername = AuthForm.username;
-
             labelDisplayUsername.Text += getUsername.Substring(0, 1).ToUpper() + getUsername.Substring(1);
         }
 
+        /// <summary>
+        /// Инициализирует панель приборов (dashboard).
+        /// </summary>
         private void InitializeDash()
         {
             DBConnection.CloseConnection();
@@ -30,13 +40,17 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             incomeForm.Visible = false;
             expensesForm.Visible = false;
 
-
             if (dashboardForm is DashboardForm dForm)
             {
                 dForm.RefreshData();
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика на метку закрытия приложения.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LabelCloseApp_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите закрыть программу?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -45,6 +59,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку выхода из системы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonLogout_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Вы уверены, что хотите выйти?", "Сообщение подтверждения", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -56,11 +75,21 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку панели приборов (dashboard).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonDashboard_Click(object sender, EventArgs e)
         {
             InitializeDash();
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку добавления категории.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonAddCategory_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
@@ -70,13 +99,17 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             incomeForm.Visible = false;
             expensesForm.Visible = false;
 
-
             if (categoryForm is CategoryForm cForm)
             {
                 cForm.RefreshData();
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку доходов.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonIncome_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
@@ -86,13 +119,17 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             incomeForm.Visible = true;
             expensesForm.Visible = false;
 
-
             if (incomeForm is IncomeForm iForm)
             {
                 iForm.RefreshData();
             }
         }
 
+        /// <summary>
+        /// Обработчик события клика на кнопку расходов.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonExpenses_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
@@ -102,12 +139,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             incomeForm.Visible = false;
             expensesForm.Visible = true;
 
-
             if (expensesForm is ExpensesForm eForm)
             {
                 eForm.RefreshData();
             }
         }
-
     }
 }
