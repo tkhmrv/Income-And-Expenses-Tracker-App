@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridViewIncome = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,10 +66,21 @@
             // 
             this.dataGridViewIncome.AllowUserToAddRows = false;
             this.dataGridViewIncome.AllowUserToDeleteRows = false;
+            this.dataGridViewIncome.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewIncome.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewIncome.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewIncome.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewIncome.Location = new System.Drawing.Point(16, 49);
             this.dataGridViewIncome.Name = "dataGridViewIncome";
             this.dataGridViewIncome.ReadOnly = true;
+            this.dataGridViewIncome.RowHeadersVisible = false;
             this.dataGridViewIncome.Size = new System.Drawing.Size(994, 335);
             this.dataGridViewIncome.TabIndex = 2;
             this.dataGridViewIncome.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewIncome_CellClick);
@@ -149,12 +161,13 @@
             this.income_buttonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonDelete.ForeColor = System.Drawing.Color.White;
-            this.income_buttonDelete.Location = new System.Drawing.Point(643, 165);
+            this.income_buttonDelete.Location = new System.Drawing.Point(511, 165);
             this.income_buttonDelete.Name = "income_buttonDelete";
             this.income_buttonDelete.Size = new System.Drawing.Size(121, 31);
             this.income_buttonDelete.TabIndex = 16;
             this.income_buttonDelete.Text = "Удалить";
             this.income_buttonDelete.UseVisualStyleBackColor = false;
+            this.income_buttonDelete.Click += new System.EventHandler(this.income_buttonDelete_Click);
             // 
             // income_buttonUpdate
             // 
@@ -178,12 +191,13 @@
             this.income_buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonClear.ForeColor = System.Drawing.Color.White;
-            this.income_buttonClear.Location = new System.Drawing.Point(512, 165);
+            this.income_buttonClear.Location = new System.Drawing.Point(642, 165);
             this.income_buttonClear.Name = "income_buttonClear";
             this.income_buttonClear.Size = new System.Drawing.Size(121, 31);
             this.income_buttonClear.TabIndex = 14;
             this.income_buttonClear.Text = "Очистить";
             this.income_buttonClear.UseVisualStyleBackColor = false;
+            this.income_buttonClear.Click += new System.EventHandler(this.income_buttonClear_Click);
             // 
             // income_buttonAdd
             // 

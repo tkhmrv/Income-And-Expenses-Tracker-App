@@ -28,25 +28,25 @@ internal class CategoryData
             if (CheckConnection())
             {
                 sqlConnection.Open();
-            }
 
-            string selectData = "SELECT * FROM categories";
+                string selectData = "SELECT * FROM categories";
 
-            using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
-            using (SqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
+                using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    CategoryData categoryData = new CategoryData
+                    while (reader.Read())
                     {
-                        ID = (int)reader["id_category"],
-                        Category = reader["category"].ToString(),
-                        Type = reader["type"].ToString(),
-                        Status = reader["status"].ToString(),
-                        Date = ((DateTime)reader["creation_date"]).ToString("MM-dd-yyyy")
-                    };
+                        CategoryData categoryData = new CategoryData
+                        {
+                            ID = (int)reader["id_category"],
+                            Category = reader["category"].ToString(),
+                            Type = reader["type"].ToString(),
+                            Status = reader["status"].ToString(),
+                            Date = ((DateTime)reader["creation_date"]).ToString("MM-dd-yyyy")
+                        };
 
-                    listData.Add(categoryData);
+                        listData.Add(categoryData);
+                    }
                 }
             }
         }

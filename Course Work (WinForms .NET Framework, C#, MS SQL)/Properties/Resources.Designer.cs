@@ -169,5 +169,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap round_back {
+            get {
+                object obj = ResourceManager.GetObject("round_back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

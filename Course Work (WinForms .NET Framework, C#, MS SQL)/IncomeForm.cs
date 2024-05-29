@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,16 +17,46 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
     {
         private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
 
+
         public IncomeForm()
         {
             InitializeComponent();
 
             DisplayIncomeCategories();
+
+            DisplayIncomeData();
         }
+
         public bool CheckConnection()
         {
             return sqlConnection.State == ConnectionState.Closed;
         }
+
+        private void DisplayIncomeData()
+        {
+            IncomeData incomeData = new IncomeData();
+            List<IncomeData> listData = incomeData.IncomeListData();
+
+            dataGridViewIncome.DataSource = listData;
+
+            // Скрываем колонку с CategoryId
+            if (dataGridViewIncome.Columns["CategoryId"] != null)
+            {
+                dataGridViewIncome.Columns["CategoryId"].Visible = false;
+            }
+
+            if (dataGridViewIncome.Columns["ID"] != null)
+            {
+                dataGridViewIncome.Columns["ID"].Visible = false;
+            }
+
+            // Переименовываем колонку CategoryName для удобства
+            if (dataGridViewIncome.Columns["CategoryName"] != null)
+            {
+                dataGridViewIncome.Columns["CategoryName"].HeaderText = "Category";
+            }
+        }
+
 
         private void DisplayIncomeCategories()
         {
@@ -71,7 +102,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             if (!ValidateInput())
             {
                 MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 return;
             }
 
@@ -79,13 +109,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 try
                 {
-                    int? categoryId = GetCategoryId(income_comboBoxCategory.SelectedItem.ToString());
-
-                    sqlConnection.Open();
+                    IncomeData incomeData = new IncomeData();
+                    int? categoryId = incomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString());
 
                     if (categoryId.HasValue)
                     {
-                        // Запрос для добавления нового дохода
+                        sqlConnection.Open();
+
                         string insertIncomeQuery = "INSERT INTO income_3nf (category_id, item, amount, [description], income_date) VALUES (@categoryId, @item, @amount, @description, @incomeDate)";
                         using (SqlCommand insertCmd = new SqlCommand(insertIncomeQuery, sqlConnection))
                         {
@@ -99,14 +129,14 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Новый источник дохода добавлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                            DisplayIncomeData();
                             ClearFields();
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Категория не найдена:" + categoryId, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Категория не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -135,7 +165,8 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 try
                 {
-                    int? categoryId = GetCategoryId(income_comboBoxCategory.SelectedItem.ToString());
+                    IncomeData incomeData = new IncomeData();
+                    int? categoryId = incomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString());
 
                     sqlConnection.Open();
 
@@ -150,11 +181,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                             insertCmd.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
                             insertCmd.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
                             insertCmd.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
+                            insertCmd.Parameters.AddWithValue("@id_income", getID);
 
                             insertCmd.ExecuteNonQuery();
 
                             MessageBox.Show("Источник дохода обновлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                            DisplayIncomeData();
                             ClearFields();
                         }
                     }
@@ -178,57 +211,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-        /// <summary>
-        /// Функция, соединяющая таблицы для получения категории в текстовом виде (3нф)
-        /// </summary>
-        /// <param name="categoryName"></param>
-        /// <returns>айдишник категории для записи в бд</returns>
-        public int? GetCategoryId(string categoryName)
-        {
-            try
-            {
-                sqlConnection.Open();
-
-                // Запрос для получения id_category по выбранной категории
-                string getCategoryIdQuery = "SELECT c.id_category FROM categories c INNER JOIN income_3nf i ON c.id_category = i.category_id WHERE c.category = @category";
-                using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, sqlConnection))
-                {
-                    getCategoryCmd.Parameters.AddWithValue("@category", categoryName);
-
-                    int? categoryId = null;
-                    using (SqlDataReader reader = getCategoryCmd.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            if (reader.Read())
-                            {
-                                categoryId = reader.GetInt32(0);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Запрос не вернул строк. Категория" + categoryName + "не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-
-                    return categoryId;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Обработка исключений, например, логирование ошибки
-                Console.WriteLine($"Ошибка при получении categoryId: {ex.Message}");
-                return null;
-            }
-            finally
-            {
-                if (!CheckConnection())
-                {
-                    sqlConnection.Close();
-                }
-            }
-        }
-
         private void ClearFields()
         {
             income_textBoxItem.Text = "";
@@ -239,16 +221,111 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private bool ValidateInput()
         {
+            // Проверка, что выбран элемент в ComboBox
+            if (income_comboBoxCategory.SelectedItem == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите категорию.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             // Проверка валидности входных данных
-            return !string.IsNullOrEmpty(income_comboBoxCategory.SelectedItem.ToString()) &&
-                  !string.IsNullOrEmpty(income_textBoxItem.Text) &&
-                  !string.IsNullOrEmpty(income_textBoxIncome.Text) &&
-                  !string.IsNullOrEmpty(income_textBoxDescription.Text);
+            if (string.IsNullOrWhiteSpace(income_comboBoxCategory.SelectedItem.ToString()))
+            {
+                MessageBox.Show("Категория не может быть пустой.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(income_textBoxItem.Text))
+            {
+                MessageBox.Show("Поле 'Наименование' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(income_textBoxIncome.Text))
+            {
+                MessageBox.Show("Поле 'Сумма' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(income_textBoxDescription.Text))
+            {
+                MessageBox.Show("Поле 'Описание' не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // Проверка, что поле 'Сумма' содержит числовое значение
+            if (!decimal.TryParse(income_textBoxIncome.Text, out decimal incomeAmount))
+            {
+                MessageBox.Show("Поле 'Сумма' должно содержать числовое значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
         }
 
+        private int getID = 0;
         private void dataGridViewIncome_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex != -1)
+            {
+                DataGridViewRow row = dataGridViewIncome.Rows[e.RowIndex];
 
+                getID = (int)row.Cells["Id"].Value;
+                income_comboBoxCategory.SelectedItem = row.Cells["CategoryName"].Value;
+                income_textBoxItem.Text = row.Cells["Item"].Value.ToString();
+                income_textBoxIncome.Text = row.Cells["Amount"].Value.ToString();
+                income_textBoxDescription.Text = row.Cells["Description"].Value.ToString();
+                income_dateTimePicker.Value = Convert.ToDateTime(row.Cells["IncomeDate"].Value.ToString());
+            }
+        }
+
+        private void income_buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (!ValidateInput())
+            {
+                MessageBox.Show("Пожалуйста, выберите сначала источник дохода!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (CheckConnection())
+            {
+                try
+                {
+                    sqlConnection.Open();
+
+                    // Запрос для добавления нового дохода
+                    string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @id_income";
+                    using (SqlCommand insertCmd = new SqlCommand(deleteIncomeQuery, sqlConnection))
+                    {
+                        insertCmd.Parameters.AddWithValue("@id_income", getID);
+
+                        insertCmd.ExecuteNonQuery();
+
+                        MessageBox.Show("Источник дохода удален успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        DisplayIncomeData();
+                        ClearFields();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (!CheckConnection())
+                    {
+                        sqlConnection.Close();
+                    }
+                }
+            }
+        }
+
+        private void income_buttonClear_Click(object sender, EventArgs e)
+        {
+            ClearFields();
         }
     }
 }

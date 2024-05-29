@@ -14,8 +14,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
     public partial class AuthForm : Form
     {
         private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-        //private static readonly string stringConnection = @"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True";
-
+        
         public AuthForm()
         {
             InitializeComponent();
@@ -34,6 +33,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
 
         }
 
@@ -56,9 +56,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         {
             RegisterForm registerForm = new RegisterForm();
             registerForm.ShowDialog();
-
-            /*RegisterForm test = new RegisterForm();
-            test.ShowDialog();*/
 
             this.Close();
         }
