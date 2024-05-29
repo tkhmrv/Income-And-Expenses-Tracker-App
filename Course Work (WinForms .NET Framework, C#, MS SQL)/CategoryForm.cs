@@ -13,8 +13,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     public partial class CategoryForm : UserControl
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
         public CategoryForm()
         {
             InitializeComponent();
@@ -37,12 +35,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
-
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
-        }
-
         private void category_buttonAdd_Click(object sender, EventArgs e)
         {
             if (category_textBoxCategory.Text == "" || category_comboBoxType.SelectedIndex == -1 || category_comboBoxStatus.SelectedIndex == -1)
@@ -51,15 +43,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             else
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
                     try
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         string insertData = "INSERT INTO categories (category, [type], [status], creation_date)" + "VALUES (@cat, @type, @status, GETDATE())";
 
-                        using (SqlCommand cmd = new SqlCommand(insertData, sqlConnection))
+                        using (SqlCommand cmd = new SqlCommand(insertData, DBConnection.SqlConnection))
                         {
                             cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
                             cmd.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
@@ -77,7 +69,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                     }
                     finally
                     {
-                        sqlConnection.Close();
+                        if (!DBConnection.CheckConnection())
+                        {
+                            DBConnection.SqlConnection.Close();
+                        }
                     }
                 }
             }
@@ -111,15 +106,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 if (MessageBox.Show("Вы уверены, что хотите обновить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    if (CheckConnection())
+                    if (DBConnection.CheckConnection())
                     {
                         try
                         {
-                            sqlConnection.Open();
+                            DBConnection.SqlConnection.Open();
 
                             string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status WHERE id_category = @id";
 
-                            using (SqlCommand cmd = new SqlCommand(updateData, sqlConnection))
+                            using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
                             {
                                 cmd.Parameters.AddWithValue("@id", getID);
                                 cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
@@ -138,7 +133,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                         }
                         finally
                         {
-                            sqlConnection.Close();
+                            if (!DBConnection.CheckConnection())
+                            {
+                                DBConnection.SqlConnection.Close();
+                            }
                         }
                     }
                 }
@@ -168,15 +166,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 if (MessageBox.Show("Вы уверены, что хотите удалить категорию?", "Подтверждение действия", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    if (CheckConnection())
+                    if (DBConnection.CheckConnection())
                     {
                         try
                         {
-                            sqlConnection.Open();
+                            DBConnection.SqlConnection.Open();
 
                             string updateData = "DELETE FROM categories WHERE id_category = @id";
 
-                            using (SqlCommand cmd = new SqlCommand(updateData, sqlConnection))
+                            using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
                             {
                                 cmd.Parameters.AddWithValue("@id", getID);
 
@@ -192,7 +190,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                         }
                         finally
                         {
-                            sqlConnection.Close();
+                            if (!DBConnection.CheckConnection())
+                            {
+                                DBConnection.SqlConnection.Close();
+                            }
                         }
                     }
                 }

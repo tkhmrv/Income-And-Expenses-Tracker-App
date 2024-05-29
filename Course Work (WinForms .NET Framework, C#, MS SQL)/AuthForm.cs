@@ -13,8 +13,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     public partial class AuthForm : Form
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-        
         public AuthForm()
         {
             InitializeComponent();
@@ -40,11 +38,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         private void labelCloseApp_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
-
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
         }
 
         private void checkboxShowAuthPassword_CheckedChanged(object sender, EventArgs e)
@@ -75,34 +68,51 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private void buttonAuthLogic()
         {
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
-                sqlConnection.Open();
-
-                string selectData = "SELECT * FROM users WHERE username = @usern AND password = @pass";
-
-                using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@usern", textboxAuthUser.Text.Trim());
-                    cmd.Parameters.AddWithValue("@pass", textboxPassword.Text.Trim());
+                    DBConnection.SqlConnection.Open();
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
+                    string selectData = "SELECT * FROM users WHERE username = @usern AND password = @pass";
 
-                    adapter.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        MessageBox.Show("Вы успешно вошли!", "Информационное сообщение", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                        cmd.Parameters.AddWithValue("@usern", textboxAuthUser.Text.Trim());
+                        cmd.Parameters.AddWithValue("@pass", textboxPassword.Text.Trim());
 
-                        MainForm mainForm = new MainForm();
-                        mainForm.Show();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
 
-                        this.Hide();
+                        adapter.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            DBConnection.SqlConnection.Close();
+
+                            MessageBox.Show("Вы успешно вошли!", "Информационное сообщение", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                            MainForm mainForm = new MainForm();
+                            mainForm.Show();
+
+                            this.Hide();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Неправильное имя пользователя или пароль!", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        }
                     }
-                    else
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке!", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (!DBConnection.CheckConnection())
                     {
-                        MessageBox.Show("Неправильное имя пользователя или пароль!", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        DBConnection.SqlConnection.Close();
                     }
                 }
             }

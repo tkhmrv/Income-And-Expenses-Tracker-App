@@ -16,16 +16,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     public partial class RegisterForm : Form
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
         public RegisterForm()
         {
             InitializeComponent();
-        }
-
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
         }
 
         private void labelCloseApp_Click(object sender, EventArgs e)
@@ -55,16 +48,16 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             else
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
                     try
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         // проверка на существование введенного юзернейма
                         string selectUsername = "SELECT * FROM users WHERE username = @usern";
 
-                        using (SqlCommand checkUser = new SqlCommand(selectUsername, sqlConnection))
+                        using (SqlCommand checkUser = new SqlCommand(selectUsername, DBConnection.SqlConnection))
                         {
                             checkUser.Parameters.AddWithValue("@usern", textboxRegisterUsername.Text.Trim());
 
@@ -92,7 +85,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                             {
                                 string insertData = "INSERT INTO users (username, password, register_date) VALUES(@usern, @pass, GETDATE())";
 
-                                using (SqlCommand insertUser = new SqlCommand(insertData, sqlConnection))
+                                using (SqlCommand insertUser = new SqlCommand(insertData, DBConnection.SqlConnection))
                                 {
                                     insertUser.Parameters.AddWithValue("@usern", textboxRegisterUsername.Text.Trim());
                                     insertUser.Parameters.AddWithValue("@pass", textboxRegPassword.Text.Trim());
@@ -116,7 +109,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                     }
                     finally
                     {
-                        sqlConnection.Close();
+                        if (!DBConnection.CheckConnection())
+                        {
+                            DBConnection.SqlConnection.Close();
+                        }
                     }
                 }
             }

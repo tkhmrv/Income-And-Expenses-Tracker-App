@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     internal class IncomeData
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -21,27 +20,22 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         public string Description { get; set; }
         public string IncomeDate { get; set; }
 
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
-        }
-
         public List<IncomeData> IncomeListData()
         {
             List<IncomeData> listData = new List<IncomeData>();
 
             try
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
                     string selectData = @"SELECT income_3nf.id_income, income_3nf.category_id, categories.category AS category_name, 
                                       income_3nf.item, income_3nf.amount, income_3nf.description, income_3nf.income_date 
                                       FROM income_3nf 
                                       INNER JOIN categories ON income_3nf.category_id = categories.id_category";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -69,9 +63,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             finally
             {
-                if (sqlConnection.State == ConnectionState.Open)
+                if (!DBConnection.CheckConnection())
                 {
-                    sqlConnection.Close();
+                    DBConnection.SqlConnection.Close();
                 }
             }
 
@@ -82,13 +76,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         {
             try
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
                 }
 
                 string getCategoryIdQuery = "SELECT id_category FROM categories WHERE category = @category";
-                using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, sqlConnection))
+                using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, DBConnection.SqlConnection))
                 {
                     getCategoryCmd.Parameters.AddWithValue("@category", categoryName);
 
@@ -115,9 +109,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             finally
             {
-                if (sqlConnection.State == ConnectionState.Open)
+                if (DBConnection.CheckConnection())
                 {
-                    sqlConnection.Close();
+                    DBConnection.SqlConnection.Close();
                 }
             }
         }

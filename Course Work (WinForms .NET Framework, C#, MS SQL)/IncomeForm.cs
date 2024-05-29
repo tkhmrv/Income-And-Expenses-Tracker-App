@@ -15,9 +15,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     public partial class IncomeForm : UserControl
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
-
         public IncomeForm()
         {
             InitializeComponent();
@@ -25,11 +22,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayIncomeCategories();
 
             DisplayIncomeData();
-        }
-
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
         }
 
         private void DisplayIncomeData()
@@ -60,15 +52,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
         private void DisplayIncomeCategories()
         {
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
                     string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         cmd.Parameters.AddWithValue("@type", "Доходы");
                         cmd.Parameters.AddWithValue("@status", "Активный");
@@ -89,9 +81,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
             }
@@ -105,7 +97,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
@@ -114,10 +106,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     if (categoryId.HasValue)
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         string insertIncomeQuery = "INSERT INTO income_3nf (category_id, item, amount, [description], income_date) VALUES (@categoryId, @item, @amount, @description, @incomeDate)";
-                        using (SqlCommand insertCmd = new SqlCommand(insertIncomeQuery, sqlConnection))
+                        using (SqlCommand insertCmd = new SqlCommand(insertIncomeQuery, DBConnection.SqlConnection))
                         {
                             insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
                             insertCmd.Parameters.AddWithValue("@item", income_textBoxItem.Text);
@@ -129,7 +121,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Новый источник дохода добавлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            DisplayIncomeData();
                             ClearFields();
                         }
                     }
@@ -144,11 +135,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+                DisplayIncomeData();
             }
         }
 
@@ -161,20 +153,20 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
                     IncomeData incomeData = new IncomeData();
                     int? categoryId = incomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString());
 
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
                     if (categoryId.HasValue)
                     {
                         // Запрос для добавления нового дохода
                         string updateIncomeQuery = "UPDATE income_3nf SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, income_date = @incomeDate WHERE id_income = @id_income";
-                        using (SqlCommand insertCmd = new SqlCommand(updateIncomeQuery, sqlConnection))
+                        using (SqlCommand insertCmd = new SqlCommand(updateIncomeQuery, DBConnection.SqlConnection))
                         {
                             insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
                             insertCmd.Parameters.AddWithValue("@item", income_textBoxItem.Text);
@@ -187,7 +179,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Источник дохода обновлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            DisplayIncomeData();
                             ClearFields();
                         }
                     }
@@ -203,11 +194,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+                DisplayIncomeData();
             }
         }
 
@@ -288,15 +280,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
                     // Запрос для добавления нового дохода
                     string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @id_income";
-                    using (SqlCommand insertCmd = new SqlCommand(deleteIncomeQuery, sqlConnection))
+                    using (SqlCommand insertCmd = new SqlCommand(deleteIncomeQuery, DBConnection.SqlConnection))
                     {
                         insertCmd.Parameters.AddWithValue("@id_income", getID);
 
@@ -304,7 +296,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                         MessageBox.Show("Источник дохода удален успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        DisplayIncomeData();
                         ClearFields();
                     }
 
@@ -315,11 +306,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+                DisplayIncomeData();
             }
         }
 

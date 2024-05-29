@@ -4,64 +4,60 @@ using System.Data;
 using System.Windows.Forms;
 using System;
 
-internal class CategoryData
+namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
-    private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
-    public bool CheckConnection()
+    internal class CategoryData
     {
-        return sqlConnection.State == ConnectionState.Closed;
-    }
+        public int ID { get; set; }
+        public string Category { get; set; }
+        public string Type { get; set; }
+        public string Status { get; set; }
+        public string Date { get; set; }
 
-    public int ID { get; set; }
-    public string Category { get; set; }
-    public string Type { get; set; }
-    public string Status { get; set; }
-    public string Date { get; set; }
-
-    public List<CategoryData> categoryListData()
-    {
-        List<CategoryData> listData = new List<CategoryData>();
-
-        try
+        public List<CategoryData> categoryListData()
         {
-            if (CheckConnection())
+            List<CategoryData> listData = new List<CategoryData>();
+
+            try
             {
-                sqlConnection.Open();
-
-                string selectData = "SELECT * FROM categories";
-
-                using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                if (DBConnection.CheckConnection())
                 {
-                    while (reader.Read())
-                    {
-                        CategoryData categoryData = new CategoryData
-                        {
-                            ID = (int)reader["id_category"],
-                            Category = reader["category"].ToString(),
-                            Type = reader["type"].ToString(),
-                            Status = reader["status"].ToString(),
-                            Date = ((DateTime)reader["creation_date"]).ToString("MM-dd-yyyy")
-                        };
+                    DBConnection.SqlConnection.Open();
 
-                        listData.Add(categoryData);
+                    string selectData = "SELECT * FROM categories";
+
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CategoryData categoryData = new CategoryData
+                            {
+                                ID = (int)reader["id_category"],
+                                Category = reader["category"].ToString(),
+                                Type = reader["type"].ToString(),
+                                Status = reader["status"].ToString(),
+                                Date = ((DateTime)reader["creation_date"]).ToString("MM-dd-yyyy")
+                            };
+
+                            listData.Add(categoryData);
+                        }
                     }
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        finally
-        {
-            if (sqlConnection.State == ConnectionState.Open)
+            catch (Exception ex)
             {
-                sqlConnection.Close();
+                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+            finally
+            {
+                if (DBConnection.CheckConnection())
+                {
+                    DBConnection.SqlConnection.Close();
+                }
+            }
 
-        return listData;
+            return listData;
+        }
     }
 }

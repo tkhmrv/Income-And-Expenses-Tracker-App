@@ -13,8 +13,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     public partial class ExpensesForm : UserControl
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
         public ExpensesForm()
         {
             InitializeComponent();
@@ -24,22 +22,17 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             DisplayExpensesData();
         }
 
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
-        }
-
         private void DisplayExpensesCategories()
         {
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
                     string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         cmd.Parameters.AddWithValue("@type", "Расходы");
                         cmd.Parameters.AddWithValue("@status", "Активный");
@@ -60,9 +53,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
             }
@@ -101,7 +94,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
@@ -110,10 +103,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     if (categoryId.HasValue)
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         string insertExpensesQuery = "INSERT INTO expenses (category_id, item, amount, [description], expenses_date) VALUES (@categoryId, @item, @amount, @description, @expensesDate)";
-                        using (SqlCommand insertCmd = new SqlCommand(insertExpensesQuery, sqlConnection))
+                        using (SqlCommand insertCmd = new SqlCommand(insertExpensesQuery, DBConnection.SqlConnection))
                         {
                             insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
                             insertCmd.Parameters.AddWithValue("@item", expenses_textBoxItem.Text);
@@ -125,7 +118,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Новый источник расходов добавлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            DisplayExpensesData();
                             ClearFields();
                         }
                     }
@@ -140,11 +132,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+
+                DisplayExpensesData();
             }
         }
 
@@ -225,7 +219,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
@@ -234,10 +228,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     if (categoryId.HasValue)
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         string updateExpensesQuery = "UPDATE expenses SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, expenses_date = @expensesDate WHERE id_expenses = @id_expenses";
-                        using (SqlCommand insertCmd = new SqlCommand(updateExpensesQuery, sqlConnection))
+                        using (SqlCommand insertCmd = new SqlCommand(updateExpensesQuery, DBConnection.SqlConnection))
                         {
                             insertCmd.Parameters.AddWithValue("@categoryId", categoryId.Value);
                             insertCmd.Parameters.AddWithValue("@item", expenses_textBoxItem.Text);
@@ -250,7 +244,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Новый источник расходов обновлен успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            DisplayExpensesData();
                             ClearFields();
                         }
                     }
@@ -265,11 +258,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+                DisplayExpensesData();
             }
         }
 
@@ -282,7 +276,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 return;
             }
 
-            if (CheckConnection())
+            if (DBConnection.CheckConnection())
             {
                 try
                 {
@@ -291,10 +285,10 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     if (categoryId.HasValue)
                     {
-                        sqlConnection.Open();
+                        DBConnection.SqlConnection.Open();
 
                         string deleteExpensesQuery = "DELETE FROM expenses WHERE id_expenses = @id_expenses";
-                        using (SqlCommand insertCmd = new SqlCommand(deleteExpensesQuery, sqlConnection))
+                        using (SqlCommand insertCmd = new SqlCommand(deleteExpensesQuery, DBConnection.SqlConnection))
                         {
                             insertCmd.Parameters.AddWithValue("@id_expenses", getID);
 
@@ -302,7 +296,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                             MessageBox.Show("Источник расходов удален успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            DisplayExpensesData();
                             ClearFields();
                         }
                     }
@@ -317,11 +310,12 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 }
                 finally
                 {
-                    if (!CheckConnection())
+                    if (!DBConnection.CheckConnection())
                     {
-                        sqlConnection.Close();
+                        DBConnection.SqlConnection.Close();
                     }
                 }
+                DisplayExpensesData();
             }
         }
 

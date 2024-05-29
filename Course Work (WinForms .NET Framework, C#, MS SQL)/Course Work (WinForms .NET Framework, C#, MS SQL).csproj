@@ -65,6 +65,7 @@
     <Compile Include="DashboardForm.Designer.cs">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DBConnection.cs" />
     <Compile Include="ExpensesData.cs" />
     <Compile Include="ExpensesForm.cs">
       <SubType>UserControl</SubType>

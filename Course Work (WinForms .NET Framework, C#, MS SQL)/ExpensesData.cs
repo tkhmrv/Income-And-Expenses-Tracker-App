@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 {
     internal class ExpensesData
     {
-        private static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.31.153; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = sa; Password=Basisol40@;Encrypt=False;TrustServerCertificate=True");
-
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -21,10 +20,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         public string Description { get; set; }
         public string ExpensesDate { get; set; }
 
-        public bool CheckConnection()
-        {
-            return sqlConnection.State == ConnectionState.Closed;
-        }
 
         public List<ExpensesData> ExpensesListData()
         {
@@ -32,16 +27,15 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
             try
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
 
-                    string selectData = @"SELECT expenses.id_expenses, expenses.category_id, categories.category AS category_name, 
-                                      expenses.item, expenses.amount, expenses.description, expenses.expenses_date 
-                                      FROM expenses 
-                                      INNER JOIN categories ON expenses.category_id = categories.id_category";
+                    string selectData = @"SELECT e.id_expenses, e.category_id, c.category AS CategoryName, e.item, e.amount, e.description, e.expenses_date
+                                          FROM expenses e
+                                          JOIN categories c ON e.category_id = c.id_category";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, sqlConnection))
+                    using (SqlCommand cmd = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -51,7 +45,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                             {
                                 Id = (int)reader["id_expenses"],
                                 CategoryId = (int)reader["category_id"],
-                                CategoryName = reader["category_name"].ToString(),
+                                CategoryName = reader["CategoryName"].ToString(),
                                 Item = reader["item"].ToString(),
                                 Amount = reader["amount"].ToString(),
                                 Description = reader["description"].ToString(),
@@ -69,26 +63,27 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             finally
             {
-                if (sqlConnection.State == ConnectionState.Open)
+                if (!DBConnection.CheckConnection())
                 {
-                    sqlConnection.Close();
+                    DBConnection.SqlConnection.Close();
                 }
             }
 
             return listData;
         }
 
+
         public int? GetCategoryIdByName(string categoryName)
         {
             try
             {
-                if (CheckConnection())
+                if (DBConnection.CheckConnection())
                 {
-                    sqlConnection.Open();
+                    DBConnection.SqlConnection.Open();
                 }
 
                 string getCategoryIdQuery = "SELECT id_category FROM categories WHERE category = @category";
-                using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, sqlConnection))
+                using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, DBConnection.SqlConnection))
                 {
                     getCategoryCmd.Parameters.AddWithValue("@category", categoryName);
 
@@ -115,9 +110,9 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
             finally
             {
-                if (sqlConnection.State == ConnectionState.Open)
+                if (!DBConnection.CheckConnection())
                 {
-                    sqlConnection.Close();
+                    DBConnection.SqlConnection.Close();
                 }
             }
         }
