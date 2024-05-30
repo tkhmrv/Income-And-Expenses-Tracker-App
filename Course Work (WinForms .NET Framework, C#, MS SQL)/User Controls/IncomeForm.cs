@@ -74,8 +74,8 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 dataGridViewIncome.Columns["CategoryName"].HeaderText = "Категория";
             }
 
-            dataGridViewIncome.Columns["Item"].HeaderText = "Событие";
-            dataGridViewIncome.Columns["Amount"].HeaderText = "Количество";
+            dataGridViewIncome.Columns["Item"].HeaderText = "Наименование";
+            dataGridViewIncome.Columns["Amount"].HeaderText = "Сумма";
             dataGridViewIncome.Columns["Description"].HeaderText = "Описание";
             dataGridViewIncome.Columns["IncomeDate"].HeaderText = "Дата добавления";
         }
@@ -290,6 +290,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                     DBConnection.CloseConnection();
                 }
             }
+            DisplayIncomeData();
         }
 
         /// <summary>

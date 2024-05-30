@@ -123,6 +123,8 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 iForm.RefreshData();
             }
+
+            //DBConnection.CloseConnection();
         }
 
         /// <summary>

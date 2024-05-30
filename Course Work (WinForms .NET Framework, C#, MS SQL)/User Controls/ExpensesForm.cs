@@ -115,7 +115,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
 
             dataGridViewExpenses.Columns["Item"].HeaderText = "Наименование";
-            dataGridViewExpenses.Columns["Amount"].HeaderText = "Количество";
+            dataGridViewExpenses.Columns["Amount"].HeaderText = "Сумма";
             dataGridViewExpenses.Columns["Description"].HeaderText = "Описание";
             dataGridViewExpenses.Columns["ExpensesDate"].HeaderText = "Дата добавления";
         }

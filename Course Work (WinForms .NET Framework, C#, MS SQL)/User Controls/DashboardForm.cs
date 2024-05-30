@@ -207,7 +207,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
 
                     DateTime today = DateTime.Now.Date;
                     DateTime startYear = new DateTime(today.Year, 1, 1);
-                    DateTime endYear = startYear.AddMonths(1).AddDays(-1);
+                    DateTime endYear = startYear.AddMonths(12).AddDays(-1);
 
                     using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
                     {

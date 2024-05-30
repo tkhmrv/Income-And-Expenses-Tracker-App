@@ -154,9 +154,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 sqlCommand.Parameters.AddWithValue("@item", textBoxName.Text.Trim());
 
-                DBConnection.SqlConnection.Open();
                 int count = (int)sqlCommand.ExecuteScalar();
-                DBConnection.SqlConnection.Close();
 
                 return count > 0;
             }

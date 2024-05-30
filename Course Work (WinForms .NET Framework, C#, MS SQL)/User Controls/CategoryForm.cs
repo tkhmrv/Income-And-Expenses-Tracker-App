@@ -33,11 +33,6 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
 
             DisplayCategoryList();
-
-            dataGridViewCategory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(49, 121, 74);
-            dataGridViewCategory.EnableHeadersVisualStyles = false;
-            dataGridViewCategory.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dataGridViewCategory.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewCategory.Font, FontStyle.Bold);
         }
 
         /// <summary>
@@ -66,6 +61,13 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             {
                 dataGridViewCategory.DataSource = null;
             }
+
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(49, 121, 74);
+            dataGridViewCategory.EnableHeadersVisualStyles = false;
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewCategory.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewCategory.Font, FontStyle.Bold);
+
+            dataGridViewCategory.CellFormatting += dataGridViewCategory_CellFormatting;
         }
 
         /// <summary>
@@ -220,6 +222,29 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                             return;
                         }
 
+                        // Проверка наличия доходов или расходов с этой категорией
+                        string checkIncomeQuery = "SELECT COUNT(*) FROM income_3nf WHERE category_id = @id";
+                        string checkExpensesQuery = "SELECT COUNT(*) FROM expenses WHERE category_id = @id";
+
+                        using (SqlCommand checkIncomeCmd = new SqlCommand(checkIncomeQuery, DBConnection.SqlConnection))
+                        using (SqlCommand checkExpensesCmd = new SqlCommand(checkExpensesQuery, DBConnection.SqlConnection))
+                        {
+                            checkIncomeCmd.Parameters.AddWithValue("@id", getID);
+                            checkExpensesCmd.Parameters.AddWithValue("@id", getID);
+
+                            int incomeCount = (int)checkIncomeCmd.ExecuteScalar();
+                            int expensesCount = (int)checkExpensesCmd.ExecuteScalar();
+
+                            if (incomeCount > 0 || expensesCount > 0)
+                            {
+                                MessageBox.Show("Невозможно удалить категорию, так как существуют связанные доходы или расходы.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                DBConnection.CloseConnection();
+
+                                return;
+                            }
+                        }
+
                         string updateData = "DELETE FROM categories WHERE id_category = @id";
 
                         using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
@@ -286,6 +311,26 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                 category_textBoxCategory.Text = row.Cells["category"].Value.ToString();
                 category_comboBoxType.SelectedItem = row.Cells["type"].Value.ToString();
                 category_comboBoxStatus.SelectedItem = row.Cells["status"].Value.ToString();
+            }
+        }
+
+        private void dataGridViewCategory_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Проверка, что это не строка заголовков
+            if (e.RowIndex >= 0)
+            {
+                // Получение типа категории из текущей строки
+                string categoryType = dataGridViewCategory.Rows[e.RowIndex].Cells["Type"].Value.ToString();
+
+                // Установка цвета фона в зависимости от типа категории
+                if (categoryType == "Расходы")
+                {
+                    dataGridViewCategory.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightSalmon;
+                }
+                else if (categoryType == "Доходы")
+                {
+                    dataGridViewCategory.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
             }
         }
     }
