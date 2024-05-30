@@ -27,19 +27,7 @@ CREATE TABLE categories (
 
 SELECT * FROM categories;
 
-CREATE TABLE income (
-	id_income INT PRIMARY KEY IDENTITY(1,1),
-	category VARCHAR(50) NOT NULL,
-	item VARCHAR(50) NOT NULL,
-	amount FLOAT NOT NULL,
-	[description] TEXT NOT NULL,
-	income_date DATE NOT NULL,
-	creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
 SELECT * FROM income_3nf;
-
-delete from income_3nf where category_id = 3;
 
 CREATE TABLE income_3nf (
 	id_income INT PRIMARY KEY IDENTITY(1,1),
