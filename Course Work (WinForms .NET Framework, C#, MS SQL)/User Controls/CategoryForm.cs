@@ -314,6 +314,11 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
             }
         }
 
+        /// <summary>
+        /// Проверяет, существуют ли записи с доходами/расходами у категории, перед ее удалением
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dataGridViewCategory_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             // Проверка, что это не строка заголовков
