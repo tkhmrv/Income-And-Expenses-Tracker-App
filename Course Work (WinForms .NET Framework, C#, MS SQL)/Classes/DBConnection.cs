@@ -11,7 +11,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
         /// <summary>
         /// Экземпляр подключения к базе данных.
         /// </summary>
-        static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = 192.168.175.168; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = admin; Password=Sa1234@@;Encrypt=False;TrustServerCertificate=True");
+        static readonly SqlConnection sqlConnection = new SqlConnection(@"Data Source = ; Initial Catalog = Tracker_DB; Persist Security Info=True;User ID = admin; Password=Sa1234@@;Encrypt=False;TrustServerCertificate=True");
 
         /// <summary>
         /// Возвращает экземпляр подключения к базе данных.
