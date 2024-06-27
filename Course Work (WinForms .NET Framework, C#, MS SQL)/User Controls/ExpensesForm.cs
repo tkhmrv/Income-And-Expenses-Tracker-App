@@ -155,7 +155,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
                             MessageBox.Show("Новый источник расходов добавлен успешно!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             ClearFields();
-                        }
+                        }   
                     }
                     else
                     {
