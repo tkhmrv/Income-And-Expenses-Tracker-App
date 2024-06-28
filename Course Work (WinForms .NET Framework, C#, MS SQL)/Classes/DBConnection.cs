@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
 
-namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+namespace Financial.Tracker
 {
     /// <summary>
     /// Класс для управления подключением к базе данных.

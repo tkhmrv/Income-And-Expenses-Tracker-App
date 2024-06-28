@@ -1,4 +1,4 @@
-﻿namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+﻿namespace Financial.Tracker
 {
     partial class MainForm
     {
@@ -43,10 +43,10 @@
             this.buttonAddCategory = new System.Windows.Forms.Button();
             this.buttonDashboard = new System.Windows.Forms.Button();
             this.labelDisplayUsername = new System.Windows.Forms.Label();
-            this.dashboardForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.DashboardForm();
-            this.categoryForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.CategoryForm();
-            this.incomeForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.IncomeForm();
-            this.expensesForm = new Course_Work__WinForms.NET_Framework__C___MS_SQL_.ExpensesForm();
+            this.dashboardForm = new Financial.Tracker.DashboardForm();
+            this.categoryForm = new Financial.Tracker.CategoryForm();
+            this.incomeForm = new Financial.Tracker.IncomeForm();
+            this.expensesForm = new Financial.Tracker.ExpensesForm();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -68,7 +68,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.pay;
+            this.pictureBox1.Image = global::Financial.Tracker.Properties.Resources.pay;
             this.pictureBox1.Location = new System.Drawing.Point(6, 6);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
@@ -150,7 +150,7 @@
             // pictureboxLogo
             // 
             this.pictureboxLogo.BackColor = System.Drawing.Color.White;
-            this.pictureboxLogo.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.pay;
+            this.pictureboxLogo.Image = global::Financial.Tracker.Properties.Resources.pay;
             this.pictureboxLogo.Location = new System.Drawing.Point(24, 21);
             this.pictureboxLogo.Margin = new System.Windows.Forms.Padding(2);
             this.pictureboxLogo.Name = "pictureboxLogo";
@@ -175,7 +175,7 @@
             this.buttonLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLogout.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonLogout.ForeColor = System.Drawing.Color.White;
-            this.buttonLogout.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.logout_24;
+            this.buttonLogout.Image = global::Financial.Tracker.Properties.Resources.logout_24;
             this.buttonLogout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonLogout.Location = new System.Drawing.Point(16, 605);
             this.buttonLogout.Margin = new System.Windows.Forms.Padding(2);
@@ -192,7 +192,7 @@
             this.buttonIncome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonIncome.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonIncome.ForeColor = System.Drawing.Color.White;
-            this.buttonIncome.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.income_24;
+            this.buttonIncome.Image = global::Financial.Tracker.Properties.Resources.income_24;
             this.buttonIncome.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonIncome.Location = new System.Drawing.Point(16, 279);
             this.buttonIncome.Margin = new System.Windows.Forms.Padding(2);
@@ -209,7 +209,7 @@
             this.buttonExpenses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExpenses.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExpenses.ForeColor = System.Drawing.Color.White;
-            this.buttonExpenses.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.expenses_24;
+            this.buttonExpenses.Image = global::Financial.Tracker.Properties.Resources.expenses_24;
             this.buttonExpenses.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExpenses.Location = new System.Drawing.Point(16, 327);
             this.buttonExpenses.Margin = new System.Windows.Forms.Padding(2);
@@ -226,7 +226,7 @@
             this.buttonAddCategory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAddCategory.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAddCategory.ForeColor = System.Drawing.Color.White;
-            this.buttonAddCategory.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.plus_24;
+            this.buttonAddCategory.Image = global::Financial.Tracker.Properties.Resources.plus_24;
             this.buttonAddCategory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonAddCategory.Location = new System.Drawing.Point(16, 230);
             this.buttonAddCategory.Margin = new System.Windows.Forms.Padding(2);
@@ -243,7 +243,7 @@
             this.buttonDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDashboard.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDashboard.ForeColor = System.Drawing.Color.White;
-            this.buttonDashboard.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.compass_24;
+            this.buttonDashboard.Image = global::Financial.Tracker.Properties.Resources.compass_24;
             this.buttonDashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonDashboard.Location = new System.Drawing.Point(16, 182);
             this.buttonDashboard.Margin = new System.Windows.Forms.Padding(2);

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{786E1A57-566A-4037-9EBD-934DB16C3F40}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Course_Work__WinForms.NET_Framework__C___MS_SQL_</RootNamespace>
+    <RootNamespace>Financial.Tracker</RootNamespace>
     <AssemblyName>BeWealthy - Finances Tracker</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -1,4 +1,4 @@
-﻿namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+﻿namespace Financial.Tracker
 {
     partial class DashboardForm
     {
@@ -498,7 +498,7 @@
             // 
             // pictureBox10
             // 
-            this.pictureBox10.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.decline_100;
+            this.pictureBox10.Image = global::Financial.Tracker.Properties.Resources.decline_100;
             this.pictureBox10.Location = new System.Drawing.Point(20, 18);
             this.pictureBox10.Name = "pictureBox10";
             this.pictureBox10.Size = new System.Drawing.Size(90, 90);
@@ -508,7 +508,7 @@
             // 
             // pictureBox5
             // 
-            this.pictureBox5.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.year_50;
+            this.pictureBox5.Image = global::Financial.Tracker.Properties.Resources.year_50;
             this.pictureBox5.Location = new System.Drawing.Point(19, 18);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(50, 50);
@@ -518,7 +518,7 @@
             // 
             // pictureBox6
             // 
-            this.pictureBox6.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.month_50;
+            this.pictureBox6.Image = global::Financial.Tracker.Properties.Resources.month_50;
             this.pictureBox6.Location = new System.Drawing.Point(19, 18);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(50, 50);
@@ -528,7 +528,7 @@
             // 
             // pictureBox7
             // 
-            this.pictureBox7.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.yesterday_50;
+            this.pictureBox7.Image = global::Financial.Tracker.Properties.Resources.yesterday_50;
             this.pictureBox7.Location = new System.Drawing.Point(19, 18);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(50, 50);
@@ -538,7 +538,7 @@
             // 
             // pictureBox8
             // 
-            this.pictureBox8.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.day_50;
+            this.pictureBox8.Image = global::Financial.Tracker.Properties.Resources.day_50;
             this.pictureBox8.Location = new System.Drawing.Point(19, 18);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(50, 50);
@@ -548,7 +548,7 @@
             // 
             // pictureBox9
             // 
-            this.pictureBox9.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.growth_100;
+            this.pictureBox9.Image = global::Financial.Tracker.Properties.Resources.growth_100;
             this.pictureBox9.Location = new System.Drawing.Point(20, 19);
             this.pictureBox9.Name = "pictureBox9";
             this.pictureBox9.Size = new System.Drawing.Size(90, 90);
@@ -558,7 +558,7 @@
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.year_50;
+            this.pictureBox4.Image = global::Financial.Tracker.Properties.Resources.year_50;
             this.pictureBox4.Location = new System.Drawing.Point(19, 18);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(50, 50);
@@ -568,7 +568,7 @@
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.month_50;
+            this.pictureBox3.Image = global::Financial.Tracker.Properties.Resources.month_50;
             this.pictureBox3.Location = new System.Drawing.Point(19, 18);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(50, 50);
@@ -578,7 +578,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.yesterday_50;
+            this.pictureBox2.Image = global::Financial.Tracker.Properties.Resources.yesterday_50;
             this.pictureBox2.Location = new System.Drawing.Point(19, 18);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(50, 50);
@@ -588,7 +588,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.day_50;
+            this.pictureBox1.Image = global::Financial.Tracker.Properties.Resources.day_50;
             this.pictureBox1.Location = new System.Drawing.Point(19, 18);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 50);

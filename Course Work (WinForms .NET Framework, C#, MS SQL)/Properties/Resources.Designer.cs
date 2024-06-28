@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
+namespace Financial.Tracker.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Financial.Tracker.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

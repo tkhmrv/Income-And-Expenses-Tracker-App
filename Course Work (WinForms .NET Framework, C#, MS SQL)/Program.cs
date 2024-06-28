@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+namespace Financial.Tracker
 {
     internal static class Program
     {

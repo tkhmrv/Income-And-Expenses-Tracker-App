@@ -1,4 +1,4 @@
-﻿namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+﻿namespace Financial.Tracker
 {
     partial class AuthForm
     {
@@ -89,7 +89,7 @@
             // pictureboxLogo
             // 
             this.pictureboxLogo.BackColor = System.Drawing.Color.White;
-            this.pictureboxLogo.Image = global::Course_Work__WinForms.NET_Framework__C___MS_SQL_.Properties.Resources.pay;
+            this.pictureboxLogo.Image = global::Financial.Tracker.Properties.Resources.pay;
             this.pictureboxLogo.Location = new System.Drawing.Point(27, 20);
             this.pictureboxLogo.Margin = new System.Windows.Forms.Padding(2);
             this.pictureboxLogo.Name = "pictureboxLogo";

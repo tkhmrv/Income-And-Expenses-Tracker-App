@@ -1,4 +1,4 @@
-﻿namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+﻿namespace Financial.Tracker
 {
     partial class ExpensesForm
     {

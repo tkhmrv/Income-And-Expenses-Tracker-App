@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+namespace Financial.Tracker
 {
     /// <summary>
     /// Форма для управления расходами.

@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace Course_Work__WinForms.NET_Framework__C___MS_SQL_
+namespace Financial.Tracker
 {
     /// <summary>
     /// Форма для отображения данных на панели управления.
