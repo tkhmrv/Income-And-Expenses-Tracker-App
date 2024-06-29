@@ -17,6 +17,11 @@ namespace Financial.Tracker
         public static string username;
 
         /// <summary>
+        /// Идентификатор пользователя: авторизованного в системе.
+        /// </summary>
+        public static int userid;
+
+        /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="AuthForm"/>.
         /// </summary>
         public AuthForm()
@@ -124,6 +129,7 @@ namespace Financial.Tracker
                         if (dataTable.Rows.Count > 0)
                         {
                             username = dataTable.Rows[0]["username"].ToString();
+                            userid = (int)dataTable.Rows[0]["id_user"];
 
                             DBConnection.SqlConnection.Close();
 

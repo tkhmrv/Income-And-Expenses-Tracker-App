@@ -46,9 +46,15 @@ namespace Financial.Tracker
         public string IncomeDate { get; set; }
 
         /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Получает список всех доходов из базы данных.
         /// </summary>
         /// <returns>Список данных доходов.</returns>
+        /// 
         public List<IncomeData> IncomeListData()
         {
             List<IncomeData> listData = new List<IncomeData>();
@@ -62,10 +68,12 @@ namespace Financial.Tracker
                     string selectData = @"SELECT income_3nf.id_income, income_3nf.category_id, categories.category AS category_name, 
                                       income_3nf.item, income_3nf.amount, income_3nf.description, income_3nf.income_date 
                                       FROM income_3nf 
-                                      INNER JOIN categories ON income_3nf.category_id = categories.id_category";
+                                      INNER JOIN categories ON income_3nf.category_id = categories.id_category
+                                      WHERE income_3nf.user_id = @userId";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
                         while (sqlDataReader.Read())
@@ -78,7 +86,8 @@ namespace Financial.Tracker
                                 Item = sqlDataReader["item"].ToString(),
                                 Amount = sqlDataReader["amount"].ToString(),
                                 Description = sqlDataReader["description"].ToString(),
-                                IncomeDate = ((DateTime)sqlDataReader["income_date"]).ToString("MM-dd-yyyy")
+                                IncomeDate = ((DateTime)sqlDataReader["income_date"]).ToString("MM-dd-yyyy"),
+                                UserId = AuthForm.userid
                             };
 
                             listData.Add(incomeData);

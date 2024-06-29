@@ -36,6 +36,11 @@ namespace Financial.Tracker
         public string Date { get; set; }
 
         /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Получает список всех категорий из базы данных.
         /// </summary>
         /// <returns>Список данных категорий.</returns>
@@ -49,11 +54,13 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT * FROM categories";
+                    string selectData = "SELECT * FROM categories WHERE user_id = @userId";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
-                    using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
                     {
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
+                        SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                    
                         while (sqlDataReader.Read())
                         {
                             CategoryData categoryData = new CategoryData
@@ -62,7 +69,8 @@ namespace Financial.Tracker
                                 Category = sqlDataReader["category"].ToString(),
                                 Type = sqlDataReader["type"].ToString(),
                                 Status = sqlDataReader["status"].ToString(),
-                                Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy")
+                                Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy"),
+                                UserId = AuthForm.userid
                             };
 
                             listData.Add(categoryData);

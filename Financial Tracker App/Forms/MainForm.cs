@@ -26,7 +26,7 @@ namespace Financial.Tracker
         {
             string getUsername = AuthForm.username;
             labelDisplayUsername.Text += getUsername.Substring(0, 1).ToUpper() + getUsername.Substring(1);
-        }
+    }
 
         /// <summary>
         /// Инициализирует панель приборов (dashboard).

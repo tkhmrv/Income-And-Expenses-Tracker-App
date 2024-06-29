@@ -52,3 +52,23 @@ CREATE TABLE expenses (
 	creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 	FOREIGN KEY (category_id) REFERENCES categories(id_category)
 );	
+
+BEGIN TRANSACTION;
+
+-- Добавление столбца user_id в существующие таблицы
+ALTER TABLE categories ADD user_id INT NOT NULL DEFAULT 1;
+ALTER TABLE income_3nf ADD user_id INT NOT NULL DEFAULT 1;
+ALTER TABLE expenses ADD user_id INT NOT NULL DEFAULT 1;
+
+-- Создание внешних ключей
+ALTER TABLE categories
+ADD CONSTRAINT FK_Categories_Users FOREIGN KEY (user_id) REFERENCES users(id_user);
+
+ALTER TABLE income_3nf
+ADD CONSTRAINT FK_Income_Users FOREIGN KEY (user_id) REFERENCES users(id_user);
+
+ALTER TABLE expenses
+ADD CONSTRAINT FK_Expenses_Users FOREIGN KEY (user_id) REFERENCES users(id_user);
+
+COMMIT TRANSACTION;
+

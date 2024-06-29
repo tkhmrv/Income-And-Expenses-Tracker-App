@@ -46,6 +46,11 @@ namespace Financial.Tracker
         public string ExpensesDate { get; set; }
 
         /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Получает список всех расходов из базы данных.
         /// </summary>
         /// <returns>Список данных расходов.</returns>
@@ -61,10 +66,12 @@ namespace Financial.Tracker
 
                     string selectData = @"SELECT e.id_expenses, e.category_id, c.category AS CategoryName, e.item, e.amount, e.description, e.expenses_date
                                           FROM expenses e
-                                          JOIN categories c ON e.category_id = c.id_category";
+                                          JOIN categories c ON e.category_id = c.id_category
+                                          WHERE e.user_id = @userId";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
                         while (sqlDataReader.Read())
@@ -77,7 +84,8 @@ namespace Financial.Tracker
                                 Item = sqlDataReader["item"].ToString(),
                                 Amount = sqlDataReader["amount"].ToString(),
                                 Description = sqlDataReader["description"].ToString(),
-                                ExpensesDate = ((DateTime)sqlDataReader["expenses_date"]).ToString("MM-dd-yyyy")
+                                ExpensesDate = ((DateTime)sqlDataReader["expenses_date"]).ToString("MM-dd-yyyy"),
+                                UserId = AuthForm.userid
                             };
 
                             listData.Add(expensesData);

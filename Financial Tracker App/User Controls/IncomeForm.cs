@@ -57,15 +57,12 @@ namespace Financial.Tracker
 
             dataGridViewIncome.DataSource = listData;
 
-            // Скрываем колонку с CategoryId
-            if (dataGridViewIncome.Columns["CategoryId"] != null)
-            {
-                dataGridViewIncome.Columns["CategoryId"].Visible = false;
-            }
-
             if (dataGridViewIncome.Columns["ID"] != null)
             {
                 dataGridViewIncome.Columns["ID"].Visible = false;
+                dataGridViewIncome.Columns["CategoryId"].Visible = false;
+                dataGridViewIncome.Columns["UserId"].Visible = false;
+
             }
 
             // Переименовываем колонку CategoryName для удобства

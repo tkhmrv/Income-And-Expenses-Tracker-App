@@ -97,15 +97,11 @@ namespace Financial.Tracker
 
             dataGridViewExpenses.DataSource = listData;
 
-            // Скрываем колонку с CategoryId
-            if (dataGridViewExpenses.Columns["CategoryId"] != null)
-            {
-                dataGridViewExpenses.Columns["CategoryId"].Visible = false;
-            }
-
             if (dataGridViewExpenses.Columns["ID"] != null)
             {
                 dataGridViewExpenses.Columns["ID"].Visible = false;
+                dataGridViewExpenses.Columns["CategoryId"].Visible = false;
+                dataGridViewExpenses.Columns["UserId"].Visible = false;
             }
 
             // Переименовываем колонку CategoryName для удобства

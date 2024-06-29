@@ -50,6 +50,7 @@ namespace Financial.Tracker
                 if (dataGridViewCategory.Columns["ID"] != null)
                 {
                     dataGridViewCategory.Columns["ID"].Visible = false;
+                    dataGridViewCategory.Columns["UserId"].Visible = false;
                 }
 
                 dataGridViewCategory.Columns["Category"].HeaderText = "Категория";
@@ -86,13 +87,15 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date)" + "VALUES (@category, @type, @status, GETDATE())";
+                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date, user_id)" 
+                                        + "VALUES (@category, @type, @status, GETDATE(), @userId)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(insertData, DBConnection.SqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.Text.Trim());
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
 
                         sqlCommand.ExecuteNonQuery();
 
@@ -145,16 +148,17 @@ namespace Financial.Tracker
 
                         }*/
 
-                        string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status WHERE id_category = @id";
+                        string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status, user_id = @userId WHERE id_category = @id";
 
-                        using (SqlCommand cmd = new SqlCommand(updateData, DBConnection.SqlConnection))
+                        using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
-                            cmd.Parameters.AddWithValue("@id", getID);
-                            cmd.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
-                            cmd.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
-                            cmd.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
+                            sqlCommand.Parameters.AddWithValue("@id", getID);
+                            sqlCommand.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
+                            sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
+                            sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
+                            sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
 
-                            cmd.ExecuteNonQuery();
+                            sqlCommand.ExecuteNonQuery();
 
                             MessageBox.Show("Категория успешно обновлена!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             ClearFields();
