@@ -26,11 +26,6 @@ namespace Financial.Tracker
         public string WalletName { get; set; }
 
         /// <summary>
-        /// Отстаток на кошелке в фиате.
-        /// </summary>
-        //public string MoneyAmount { get; set; }
-
-        /// <summary>
         /// Тип кошелька.
         /// </summary>
         public string Type { get; set; }
@@ -50,11 +45,15 @@ namespace Financial.Tracker
         /// </summary>
         public string Date { get; set; }
 
-        
+        /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
         /// <summary>
         /// Получает список всех кошельков из базы данных.
         /// </summary>
-        /// <returns>Список данных кошельков.</returns>
+        /// <returns>Список с данными кошельков.</returns>
         public List<WalletData> WalletListData()
         {
             List<WalletData> listData = new List<WalletData>();
@@ -69,7 +68,7 @@ namespace Financial.Tracker
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                     
                         while (sqlDataReader.Read())
@@ -77,9 +76,8 @@ namespace Financial.Tracker
                             WalletData walletData = new WalletData
                             {
                                 ID = (int)sqlDataReader["id_wallet"],
-                                UserId = AuthForm.CurrentUserId,
+                                UserId = currentUserId,
                                 WalletName = sqlDataReader["wallet_name"].ToString(),
-                                //MoneyAmount = sqlDataReader["money_amount"].ToString(),
                                 Type = sqlDataReader["type"].ToString(),
                                 Status = sqlDataReader["status"].ToString(),
                                 Description = sqlDataReader["description"].ToString(),
@@ -93,7 +91,7 @@ namespace Financial.Tracker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных в классе WalletData: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -104,16 +102,34 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// Проверяет, существует ли категория в базе данных.
+        /// Метод для проверки существования кошелька по имени и идентификатору пользователя.
+        /// </summary>
+        /// <param name="walletName">Имя кошелька.</param>
+        /// <param name="userId">Идентификатор пользователя.</param>
+        /// <returns>Возвращает true, если кошелек существует; иначе false.</returns>
+        public static bool WalletExistsByName(string walletName, int userId)
+        {
+            string checkCategoryQuery = "SELECT * FROM wallets WHERE wallet_name = @walletName AND user_id = @userId";
+            using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@walletName", walletName);
+                sqlCommand.Parameters.AddWithValue("@userId", userId);
+                int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        /// <summary>
+        /// Проверяет, существует ли кошелек в базе данных.
         /// </summary>
         /// <param name="textBoxName">TextBox с названием категории для проверки.</param>
         /// <returns>Возвращает true, если категория существует; иначе false.</returns>
-        public bool WalletExists(TextBox textBoxName)
+        public static bool WalletExistsById(int idWallet)
         {
-            string checkCategoryQuery = "SELECT COUNT(*) FROM wallets WHERE wallet_name = @wallet_name";
+            string checkCategoryQuery = "SELECT COUNT(*) FROM wallets WHERE id_wallet = @idWallet";
             using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@wallet_name", textBoxName.Text.Trim());
+                sqlCommand.Parameters.AddWithValue("@idWallet", idWallet);
                 int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 return count > 0;
             }

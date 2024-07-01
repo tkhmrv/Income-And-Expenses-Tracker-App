@@ -1,6 +1,6 @@
 ﻿namespace Financial.Tracker
 {
-    partial class DashboardForm
+    partial class DashboardUserControl
     {
         /// <summary> 
         /// Required designer variable.

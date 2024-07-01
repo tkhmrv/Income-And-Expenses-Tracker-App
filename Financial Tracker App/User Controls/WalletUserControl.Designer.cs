@@ -112,7 +112,7 @@
             this.wallet_buttonDelete.TabIndex = 12;
             this.wallet_buttonDelete.Text = "Удалить";
             this.wallet_buttonDelete.UseVisualStyleBackColor = false;
-            this.wallet_buttonDelete.Click += new System.EventHandler(this.wallet_buttonDelete_Click);
+            this.wallet_buttonDelete.Click += new System.EventHandler(this.Wallet_buttonDelete_Click);
             // 
             // wallet_buttonUpdate
             // 
@@ -127,7 +127,7 @@
             this.wallet_buttonUpdate.TabIndex = 11;
             this.wallet_buttonUpdate.Text = "Обновить";
             this.wallet_buttonUpdate.UseVisualStyleBackColor = false;
-            this.wallet_buttonUpdate.Click += new System.EventHandler(this.wallet_buttonUpdate_Click);
+            this.wallet_buttonUpdate.Click += new System.EventHandler(this.Wallet_buttonUpdate_Click);
             // 
             // wallet_buttonClear
             // 
@@ -142,7 +142,7 @@
             this.wallet_buttonClear.TabIndex = 10;
             this.wallet_buttonClear.Text = "Очистить";
             this.wallet_buttonClear.UseVisualStyleBackColor = false;
-            this.wallet_buttonClear.Click += new System.EventHandler(this.wallet_buttonClear_Click);
+            this.wallet_buttonClear.Click += new System.EventHandler(this.Wallet_buttonClear_Click);
             // 
             // wallet_buttonAdd
             // 
@@ -157,7 +157,7 @@
             this.wallet_buttonAdd.TabIndex = 8;
             this.wallet_buttonAdd.Text = "Добавить";
             this.wallet_buttonAdd.UseVisualStyleBackColor = false;
-            this.wallet_buttonAdd.Click += new System.EventHandler(this.wallet_buttonAdd_Click);
+            this.wallet_buttonAdd.Click += new System.EventHandler(this.Wallet_buttonAdd_Click);
             // 
             // wallet_comboBoxStatus
             // 

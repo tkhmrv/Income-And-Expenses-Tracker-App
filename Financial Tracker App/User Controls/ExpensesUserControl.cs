@@ -9,19 +9,38 @@ namespace Financial.Tracker
     /// <summary>
     /// Форма для управления расходами.
     /// </summary>
-    public partial class ExpensesForm : UserControl
+    public partial class ExpensesUserControl : UserControl
     {
-        /// <summary>
-        /// Переменная, в которую записывается ID расходов.
-        /// </summary>
-        private int getID = 0;
-
-        public static int GetWalletId = 0;
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="ExpensesForm"/>.
+        /// Индентификатор кошелька, выбранного пользователем из DataGridView.
         /// </summary>
-        public ExpensesForm()
+        public static int walletIdFromDGV = 0;
+
+        /// <summary>
+        /// Идентификатор расходов, выбранный пользователем из DataGridView.
+        /// </summary>
+        private int expensesdFromDGV = 0;
+
+        /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
+        /// <summary>
+        /// Идентификатор текущего кошелька.
+        /// </summary>
+        private int currentWalletId => MainForm.CurrentWalletId;
+
+        /// <summary>
+        /// Статический экземпляр пользовательского интерфейса расходов.
+        /// </summary>
+        public static ExpensesUserControl Instance { get; private set; }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="ExpensesUserControl"/>.
+        /// </summary>
+        public ExpensesUserControl()
         {
             InitializeComponent();
 
@@ -31,13 +50,17 @@ namespace Financial.Tracker
             DisplayExpensesData();
         }
 
-        public static ExpensesForm Instance { get; private set; }
-
+        /// <summary>
+        /// Отображает данные расходов, используя статический экземпляр пользовательского интерфейса.
+        /// </summary>
         public static void DisplayExpensesDataStatic()
         {
             Instance.DisplayExpensesData();
         }
 
+        /// <summary>
+        /// Отображает данные категорий в ComboBox, используя статический экземпляр пользовательского интерфейса.
+        /// </summary>
         public static void DisplayExpensesCategoriesStatic()
         {
             Instance.DisplayExpensesCategories();
@@ -74,18 +97,14 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status AND user_id = @userid";
-                    if (MainForm.CurrentWalletId != 0)
-                        selectData += " AND wallet_id = @walletid";
+                    string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@type", "Расходы");
                         sqlCommand.Parameters.AddWithValue("@status", "Активный");
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-
-                        if (MainForm.CurrentWalletId != 0)
-                            sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", currentWalletId);
 
                         expenses_comboBoxCategory.Items.Clear();
 
@@ -123,12 +142,18 @@ namespace Financial.Tracker
                 dataGridViewExpenses.Columns["ID"].Visible = false;
                 dataGridViewExpenses.Columns["CategoryId"].Visible = false;
                 dataGridViewExpenses.Columns["UserId"].Visible = false;
+                dataGridViewExpenses.Columns["WalletId"].Visible = false;
             }
 
             // Переименовываем колонку CategoryName для удобства
             if (dataGridViewExpenses.Columns["CategoryName"] != null)
             {
                 dataGridViewExpenses.Columns["CategoryName"].HeaderText = "Категория";
+            }
+
+            if (dataGridViewExpenses.Columns["WalletName"] != null)
+            {
+                dataGridViewExpenses.Columns["WalletName"].HeaderText = "Кошелек";
             }
 
             dataGridViewExpenses.Columns["Item"].HeaderText = "Наименование";
@@ -144,7 +169,7 @@ namespace Financial.Tracker
         /// <param name="e"></param>
         private void Expenses_buttonAdd_Click(object sender, EventArgs e)
         {
-            if (MainForm.CurrentWalletId == 0)
+            if (currentWalletId == 0)
             {
                 MessageBox.Show("Для добавления нового источника расходов выберите кошелек.", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 return;
@@ -157,15 +182,14 @@ namespace Financial.Tracker
             {
                 try
                 {
-                    ExpensesData expensesData = new ExpensesData();
-                    int? categoryId = expensesData.GetCategoryIdByName(expenses_comboBoxCategory.SelectedItem.ToString(), MainForm.CurrentWalletId);
+                    int? categoryId = ExpensesData.GetCategoryIdByName(expenses_comboBoxCategory.SelectedItem.ToString(), currentWalletId);
 
                     if (categoryId.HasValue)
                     {
                         DBConnection.SqlConnection.Open();
 
                         string insertExpensesQuery = "INSERT INTO expenses (category_id, item, amount, [description], expenses_date, user_id, wallet_id) " +
-                                                     "VALUES (@categoryId, @item, @amount, @description, @expensesDate, @userid, @walletid)";
+                                                     "VALUES (@categoryId, @item, @amount, @description, @expensesDate, @userId, @walletId)";
                         using (SqlCommand sqlCommand = new SqlCommand(insertExpensesQuery, DBConnection.SqlConnection))
                         {
                             sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
@@ -173,8 +197,8 @@ namespace Financial.Tracker
                             sqlCommand.Parameters.AddWithValue("@amount", expenses_textBoxExpenses.Text);
                             sqlCommand.Parameters.AddWithValue("@description", expenses_textBoxDescription.Text);
                             sqlCommand.Parameters.AddWithValue("@expensesDate", expenses_dateTimePicker.Value);
-                            sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                            sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                            sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
+                            sqlCommand.Parameters.AddWithValue("@walletId", currentWalletId);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -190,7 +214,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении расходов: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при добавлении расходов в ExpensesUserInterface: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -214,14 +238,13 @@ namespace Financial.Tracker
             {
                 try
                 {
-                    ExpensesData expensesData = new ExpensesData();
-                    int? categoryId = expensesData.GetCategoryIdByName(expenses_comboBoxCategory.SelectedItem.ToString(), GetWalletId);
+                    int? categoryId = ExpensesData.GetCategoryIdByName(expenses_comboBoxCategory.SelectedItem.ToString(), walletIdFromDGV);
 
                     if (categoryId.HasValue)
                     {
                         DBConnection.SqlConnection.Open();
 
-                        string updateExpensesQuery = "UPDATE expenses SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, expenses_date = @expensesDate WHERE id_expenses = @id_expenses";
+                        string updateExpensesQuery = "UPDATE expenses SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, expenses_date = @expensesDate WHERE id_expenses = @idExpenses";
                         using (SqlCommand sqlCommand = new SqlCommand(updateExpensesQuery, DBConnection.SqlConnection))
                         {
                             sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
@@ -229,7 +252,7 @@ namespace Financial.Tracker
                             sqlCommand.Parameters.AddWithValue("@amount", expenses_textBoxExpenses.Text);
                             sqlCommand.Parameters.AddWithValue("@description", expenses_textBoxDescription.Text);
                             sqlCommand.Parameters.AddWithValue("@expensesDate", expenses_dateTimePicker.Value);
-                            sqlCommand.Parameters.AddWithValue("@id_expenses", getID);
+                            sqlCommand.Parameters.AddWithValue("@idExpenses", expensesdFromDGV);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -245,7 +268,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении расходов: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при добавлении расходов в ExpensesUserInterface: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -271,10 +294,8 @@ namespace Financial.Tracker
                 {
                     ExpensesData expensesData = new ExpensesData();
 
-                    DBConnection.SqlConnection.Open();
-
                     // Проверка существования расходов
-                    if (!expensesData.ItemExists(getID))
+                    if (!ExpensesData.ItemExistsById(expensesdFromDGV))
                     {
                         MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -283,11 +304,11 @@ namespace Financial.Tracker
                         return;
                     }
 
-                    string deleteExpensesQuery = "DELETE FROM expenses WHERE id_expenses = @id_expenses";
+                    string deleteExpensesQuery = "DELETE FROM expenses WHERE id_expenses = @idExpenses";
 
                     using (SqlCommand sqlCommand = new SqlCommand(deleteExpensesQuery, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@id_expenses", getID);
+                        sqlCommand.Parameters.AddWithValue("@idExpenses", expensesdFromDGV);
                         sqlCommand.ExecuteNonQuery();
 
                         MessageBox.Show("Источник расходов удален успешно!", "Информационное сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -297,7 +318,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении расходов: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при добавлении расходов в ExpensesUserInterface: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -379,8 +400,8 @@ namespace Financial.Tracker
             {
                 DataGridViewRow row = dataGridViewExpenses.Rows[e.RowIndex];
 
-                getID = Convert.ToInt32(row.Cells["Id"].Value);
-                GetWalletId = Convert.ToInt32(row.Cells["WalletId"].Value);
+                expensesdFromDGV = Convert.ToInt32(row.Cells["Id"].Value);
+                walletIdFromDGV = Convert.ToInt32(row.Cells["WalletId"].Value);
                 expenses_comboBoxCategory.SelectedItem = row.Cells["CategoryName"].Value;
                 expenses_textBoxItem.Text = row.Cells["Item"].Value.ToString();
                 expenses_textBoxExpenses.Text = row.Cells["Amount"].Value.ToString();

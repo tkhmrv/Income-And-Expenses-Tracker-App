@@ -1,6 +1,6 @@
 ﻿namespace Financial.Tracker
 {
-    partial class IncomeForm
+    partial class IncomeUserControl
     {
         /// <summary> 
         /// Required designer variable.

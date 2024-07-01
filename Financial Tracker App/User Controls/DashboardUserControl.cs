@@ -7,32 +7,43 @@ namespace Financial.Tracker
     /// <summary>
     /// Форма для отображения данных на панели управления.
     /// </summary>
-    public partial class DashboardForm : UserControl
+    public partial class DashboardUserControl : UserControl
     {
-        private readonly string dailyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date = @income_date AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
-        private readonly string dailyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date = @expenses_date AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string dailyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date = @income_date AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+        private readonly string dailyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date = @expenses_date AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
-        private readonly string yesterdayIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE CONVERT(DATE, income_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
-        private readonly string yesterdayExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE CONVERT(DATE, expenses_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string yesterdayIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE CONVERT(DATE, income_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+        private readonly string yesterdayExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE CONVERT(DATE, expenses_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
-        private readonly string monthlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startMonth AND income_date <= @endMonth AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
-        private readonly string monthlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startMonth AND expenses_date <= @endMonth AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string monthlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startMonth AND income_date <= @endMonth AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+        private readonly string monthlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startMonth AND expenses_date <= @endMonth AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
-        private readonly string yearlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startYear AND income_date <= @endYear AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
-        private readonly string yearlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startYear AND expenses_date <= @endYear AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string yearlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startYear AND income_date <= @endYear AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+        private readonly string yearlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startYear AND expenses_date <= @endYear AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
-        private readonly string totalIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
-        private readonly string totalExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string totalIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+        private readonly string totalExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
-        private readonly int currentUserId = AuthForm.CurrentUserId;
-        private readonly int currentWalletId = MainForm.CurrentWalletId;
-
-        public static DashboardForm Instance { get; private set; }
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="DashboardForm"/>.
+        /// Идентификатор текущего пользователя.
         /// </summary>
-        public DashboardForm()
+        private readonly int currentUserId = AuthForm.CurrentUserId;
+
+        /// <summary>
+        /// Идентификатор текущего кошелька.
+        /// </summary>
+        private readonly int currentWalletId = MainForm.CurrentWalletId;
+
+        /// <summary>
+        /// Статический экземпляр пользовательского интерфейса статистики.
+        /// </summary>
+        public static DashboardUserControl Instance { get; private set; }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="DashboardUserControl"/>.
+        /// </summary>
+        public DashboardUserControl()
         {
             InitializeComponent();
 
@@ -42,7 +53,7 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// 
+        /// Обновляет данные на панели управления, используя статический экземпляр пользовательского интерфейса..
         /// </summary>
         public static void RefreshDataStatic()
         {
@@ -94,8 +105,8 @@ namespace Financial.Tracker
                     {
                         DateTime today = DateTime.Today;
                         sqlCommand.Parameters.AddWithValue(dateColumnName, today);
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -113,7 +124,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в DashboardUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -137,8 +148,8 @@ namespace Financial.Tracker
 
                     using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -156,7 +167,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в DashboardUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -186,8 +197,8 @@ namespace Financial.Tracker
                     {
                         sqlCommand.Parameters.AddWithValue("@startMonth", startMonth);
                         sqlCommand.Parameters.AddWithValue("@endMonth", endMonth);
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -205,7 +216,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в DashboardUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -235,8 +246,8 @@ namespace Financial.Tracker
                     {
                         sqlCommand.Parameters.AddWithValue("@startYear", startYear);
                         sqlCommand.Parameters.AddWithValue("@endYear", endYear);
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -254,7 +265,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в DashboardUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -278,8 +289,8 @@ namespace Financial.Tracker
 
                     using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -297,7 +308,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в DashboardUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {

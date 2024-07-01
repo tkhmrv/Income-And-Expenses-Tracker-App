@@ -46,6 +46,16 @@ namespace Financial.Tracker
         public int WalletId { get; set; }
 
         /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
+        /// <summary>
+        /// Идентификатор текущего кошелька.
+        /// </summary>
+        private int currentWalletId => MainForm.CurrentWalletId;
+
+        /// <summary>
         /// Получает список всех категорий из базы данных.
         /// </summary>
         /// <returns>Список данных категорий.</returns>
@@ -59,18 +69,15 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT * FROM categories WHERE user_id = @userid";
-                    if (MainForm.CurrentWalletId != 0)
-                        selectData += " AND wallet_id = @walletId";
+                    string selectData = "SELECT * FROM categories WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                        if (MainForm.CurrentWalletId != 0)
-                            sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", currentWalletId);
 
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                    
+
                         while (sqlDataReader.Read())
                         {
                             CategoryData categoryData = new CategoryData
@@ -80,7 +87,7 @@ namespace Financial.Tracker
                                 Type = sqlDataReader["type"].ToString(),
                                 Status = sqlDataReader["status"].ToString(),
                                 Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy"),
-                                UserId = AuthForm.CurrentUserId,
+                                UserId = currentUserId,
                                 WalletId = (int)sqlDataReader["wallet_id"]
                             };
 
@@ -91,7 +98,7 @@ namespace Financial.Tracker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных в классе CategoryData: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -102,28 +109,34 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// Проверяет, существует ли категория в базе данных.
+        /// Проверяет, существует ли категория в базе данных по имени и идентификатору кошелька.
         /// </summary>
-        /// <param name="textBoxName">TextBox с названием категории для проверки.</param>
+        /// <param name="categoryName">Имя категории.</param>
+        /// <param name="walletId">Идентификатор кошелька.</param>
         /// <returns>Возвращает true, если категория существует; иначе false.</returns>
-        public bool CategoryExistsById (int categoryId)
+        public static bool CategoryExistsByName(string categoryName, int walletId)
         {
-            string checkCategoryQuery = "SELECT COUNT(*) FROM categories WHERE id_category = @id";
+            string checkCategoryQuery = "SELECT * FROM categories WHERE category = @category AND wallet_id = @walletId";
             using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@id", categoryId);
+                sqlCommand.Parameters.AddWithValue("@category", categoryName);
+                sqlCommand.Parameters.AddWithValue("@walletId", walletId);
                 int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 return count > 0;
             }
         }
 
-        public bool CategoryExistsByName (string categoryName, int walletId)
+        /// <summary>
+        /// Проверяет, существует ли категория в базе данных по ее идентификатору.
+        /// </summary>
+        /// <param name="categoryId">Идентификатор категории.</param>
+        /// <returns>Возвращает true, если категория существует; иначе false.</returns>
+        public static bool CategoryExistsById(int categoryId)
         {
-            string checkCategoryQuery = "SELECT * FROM categories WHERE category = @category AND wallet_id = @walletid";
+            string checkCategoryQuery = "SELECT COUNT(*) FROM categories WHERE id_category = @id";
             using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@category", categoryName);
-                sqlCommand.Parameters.AddWithValue("@walletid", walletId);
+                sqlCommand.Parameters.AddWithValue("@id", categoryId);
                 int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 return count > 0;
             }

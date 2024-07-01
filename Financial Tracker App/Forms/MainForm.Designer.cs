@@ -33,6 +33,8 @@
             this.labelCloseApp = new System.Windows.Forms.Label();
             this.labelAbout = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.labelCurrentBalance = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxAllWallets = new System.Windows.Forms.ComboBox();
             this.buttonWallets = new System.Windows.Forms.Button();
@@ -46,13 +48,11 @@
             this.buttonAddCategory = new System.Windows.Forms.Button();
             this.buttonDashboard = new System.Windows.Forms.Button();
             this.labelDisplayUsername = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labelCurrentBalance = new System.Windows.Forms.Label();
             this.walletUserControl = new Financial.Tracker.WalletUserControl();
-            this.dashboardForm = new Financial.Tracker.DashboardForm();
-            this.categoryForm = new Financial.Tracker.CategoryForm();
-            this.incomeForm = new Financial.Tracker.IncomeForm();
-            this.expensesForm = new Financial.Tracker.ExpensesForm();
+            this.dashboardForm = new Financial.Tracker.DashboardUserControl();
+            this.categoryForm = new Financial.Tracker.CategoryUserControl();
+            this.incomeForm = new Financial.Tracker.IncomeUserControl();
+            this.expensesForm = new Financial.Tracker.ExpensesUserControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -133,6 +133,30 @@
             this.panel2.Size = new System.Drawing.Size(243, 656);
             this.panel2.TabIndex = 1;
             // 
+            // labelCurrentBalance
+            // 
+            this.labelCurrentBalance.AutoSize = true;
+            this.labelCurrentBalance.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentBalance.ForeColor = System.Drawing.Color.White;
+            this.labelCurrentBalance.Location = new System.Drawing.Point(14, 567);
+            this.labelCurrentBalance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelCurrentBalance.Name = "labelCurrentBalance";
+            this.labelCurrentBalance.Size = new System.Drawing.Size(18, 18);
+            this.labelCurrentBalance.TabIndex = 39;
+            this.labelCurrentBalance.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(14, 541);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(141, 18);
+            this.label3.TabIndex = 38;
+            this.label3.Text = "Текущий баланс:";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -172,7 +196,7 @@
             this.buttonWallets.TabIndex = 35;
             this.buttonWallets.Text = "Кошельки";
             this.buttonWallets.UseVisualStyleBackColor = false;
-            this.buttonWallets.Click += new System.EventHandler(this.buttonWallets_Click);
+            this.buttonWallets.Click += new System.EventHandler(this.ButtonWallets_Click);
             // 
             // label1
             // 
@@ -318,30 +342,6 @@
             this.labelDisplayUsername.TabIndex = 2;
             this.labelDisplayUsername.Text = "Ваш аккаунт: ";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(14, 541);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(141, 18);
-            this.label3.TabIndex = 38;
-            this.label3.Text = "Текущий баланс:";
-            // 
-            // labelCurrentBalance
-            // 
-            this.labelCurrentBalance.AutoSize = true;
-            this.labelCurrentBalance.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrentBalance.ForeColor = System.Drawing.Color.White;
-            this.labelCurrentBalance.Location = new System.Drawing.Point(14, 567);
-            this.labelCurrentBalance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelCurrentBalance.Name = "labelCurrentBalance";
-            this.labelCurrentBalance.Size = new System.Drawing.Size(18, 18);
-            this.labelCurrentBalance.TabIndex = 39;
-            this.labelCurrentBalance.Text = "0";
-            // 
             // walletUserControl
             // 
             this.walletUserControl.Location = new System.Drawing.Point(243, 46);
@@ -397,7 +397,6 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "MainForm";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -421,10 +420,10 @@
         private System.Windows.Forms.Button buttonIncome;
         private System.Windows.Forms.Button buttonExpenses;
         private System.Windows.Forms.Button buttonAddCategory;
-        private ExpensesForm expensesForm;
-        private IncomeForm incomeForm;
-        private CategoryForm categoryForm;
-        private DashboardForm dashboardForm;
+        private ExpensesUserControl expensesForm;
+        private IncomeUserControl incomeForm;
+        private CategoryUserControl categoryForm;
+        private DashboardUserControl dashboardForm;
         private System.Windows.Forms.Label labelLogo;
         private System.Windows.Forms.PictureBox pictureboxLogo;
         private System.Windows.Forms.Label labelLogoPadding;

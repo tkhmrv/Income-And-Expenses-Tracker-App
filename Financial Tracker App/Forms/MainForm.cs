@@ -16,10 +16,19 @@ namespace Financial.Tracker
         public static int CurrentWalletId = 0;
 
         /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
+        /// <summary>
         /// Статический экземпляр главного окна приложения.
         /// </summary>
-        /// <value>Возвращает экземпляр главного окна приложения.</value>
         public static MainForm Instance { get; private set; }
+
+        /// <summary>
+        /// Флаг процесса загрузки кошельков в ComboBox.
+        /// </summary>
+        private bool isLoadingWallets = false;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="MainForm"/>.
@@ -47,15 +56,6 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// Отображает имя пользователя, вошедшего в систему.
-        /// </summary>
-        public void DisplayUsername()
-        {
-            string getUsername = AuthForm.Username;
-            labelDisplayUsername.Text += getUsername.Substring(0, 1).ToUpper() + getUsername.Substring(1);
-        }
-
-        /// <summary>
         /// Инициализирует панель приборов (dashboard).
         /// </summary>
         private void InitializeDash()
@@ -70,10 +70,19 @@ namespace Financial.Tracker
 
             LoadWalletsToComboBox();
 
-            if (dashboardForm is DashboardForm dForm)
+            if (dashboardForm is DashboardUserControl dForm)
             {
                 dForm.RefreshData();
             }
+        }
+
+        /// <summary>
+        /// Отображает имя пользователя, вошедшего в систему.
+        /// </summary>
+        public void DisplayUsername()
+        {
+            string getUsername = AuthForm.Username;
+            labelDisplayUsername.Text += getUsername.Substring(0, 1).ToUpper() + getUsername.Substring(1);
         }
 
         /// <summary>
@@ -132,7 +141,7 @@ namespace Financial.Tracker
 
             LoadWalletsToComboBox();
 
-            if (categoryForm is CategoryForm cForm)
+            if (categoryForm is CategoryUserControl cForm)
             {
                 cForm.RefreshData();
             }
@@ -155,12 +164,10 @@ namespace Financial.Tracker
 
             LoadWalletsToComboBox();
 
-            if (incomeForm is IncomeForm iForm)
+            if (incomeForm is IncomeUserControl iForm)
             {
                 iForm.RefreshData();
             }
-
-            //DBConnection.CloseConnection();
         }
 
         /// <summary>
@@ -180,13 +187,18 @@ namespace Financial.Tracker
 
             LoadWalletsToComboBox();
 
-            if (expensesForm is ExpensesForm eForm)
+            if (expensesForm is ExpensesUserControl eForm)
             {
                 eForm.RefreshData();
             }
         }
 
-        private void buttonWallets_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Обработчик события клика на кнопку кошельков.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonWallets_Click(object sender, EventArgs e)
         {
             DBConnection.CloseConnection();
 
@@ -204,8 +216,9 @@ namespace Financial.Tracker
             }
         }
 
-        private bool isLoadingWallets = false;
-
+        /// <summary>
+        /// Загружает кошельки пользователя в ComboBox.
+        /// </summary>
         public void LoadWalletsToComboBox()
         {
             if (DBConnection.CheckConnection())
@@ -217,7 +230,7 @@ namespace Financial.Tracker
                     string loadQuery = "SELECT id_wallet, wallet_name FROM wallets WHERE user_id = @userId";
                     using (SqlCommand sqlCommand = new SqlCommand(loadQuery, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
 
                         using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
                         {
@@ -238,13 +251,9 @@ namespace Financial.Tracker
 
                             // Устанавливаем выбранное значение обратно
                             if (CurrentWalletId != 0)
-                            {
                                 comboBoxAllWallets.SelectedValue = CurrentWalletId;
-                            }
                             else
-                            {
                                 comboBoxAllWallets.SelectedIndex = 0;
-                            }
 
                             isLoadingWallets = false;
                         }
@@ -252,7 +261,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при загрузке кошельков: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при загрузке кошельков в MainForm: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -261,6 +270,9 @@ namespace Financial.Tracker
             }
         }
 
+        /// <summary>
+        /// Выводит текущий баланс кошелька/кошельков в label.
+        /// </summary>
         public void DisplayWalletBalance()
         {
             decimal incomeSum = 0;
@@ -276,7 +288,7 @@ namespace Financial.Tracker
                     string incomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
                     using (SqlCommand incomeCommand = new SqlCommand(incomeQuery, DBConnection.SqlConnection))
                     {
-                        incomeCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        incomeCommand.Parameters.AddWithValue("@userId", currentUserId);
                         incomeCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object incomeResult = incomeCommand.ExecuteScalar();
@@ -290,7 +302,7 @@ namespace Financial.Tracker
                     string expensesQuery = "SELECT SUM(amount) FROM expenses WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
                     using (SqlCommand expensesCommand = new SqlCommand(expensesQuery, DBConnection.SqlConnection))
                     {
-                        expensesCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        expensesCommand.Parameters.AddWithValue("@userId", currentUserId);
                         expensesCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
 
                         object expensesResult = expensesCommand.ExecuteScalar();
@@ -304,7 +316,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединение, ошибка: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединение, ошибка в MainForm: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -313,7 +325,11 @@ namespace Financial.Tracker
             }
         }
 
-
+        /// <summary>
+        /// Обработчик события смены выбранного элемента в ComboBox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxAllWallets_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Обработчик события выполнится только если isLoadingWallets == false
@@ -324,21 +340,21 @@ namespace Financial.Tracker
                 DisplayWalletBalance();
 
                 if (dashboardForm.Visible == true)
-                    DashboardForm.RefreshDataStatic();
+                    DashboardUserControl.RefreshDataStatic();
 
                 if (categoryForm.Visible == true)
-                    CategoryForm.DisplayCategoryListStatic();
+                    CategoryUserControl.DisplayCategoryListStatic();
 
                 if (incomeForm.Visible == true)
                 {
-                    IncomeForm.DisplayIncomeDataStatic();
-                    IncomeForm.DisplayIncomeCategoriesStatic();
+                    IncomeUserControl.DisplayIncomeDataStatic();
+                    IncomeUserControl.DisplayIncomeCategoriesStatic();
                 }
 
                 if (expensesForm.Visible == true)
                 {
-                    ExpensesForm.DisplayExpensesDataStatic();
-                    ExpensesForm.DisplayExpensesCategoriesStatic();
+                    ExpensesUserControl.DisplayExpensesDataStatic();
+                    ExpensesUserControl.DisplayExpensesCategoriesStatic();
                 }
             }
         }   

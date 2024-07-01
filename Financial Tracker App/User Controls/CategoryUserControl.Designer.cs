@@ -1,6 +1,6 @@
 ﻿namespace Financial.Tracker
 {
-    partial class CategoryForm
+    partial class CategoryUserControl
     {
         /// <summary> 
         /// Required designer variable.

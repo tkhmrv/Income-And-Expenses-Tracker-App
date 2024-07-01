@@ -9,19 +9,37 @@ namespace Financial.Tracker
     /// <summary>
     /// Форма для управления доходами.
     /// </summary>
-    public partial class IncomeForm : UserControl
+    public partial class IncomeUserControl : UserControl
     {
         /// <summary>
-        /// Переменная, в которую записывается ID расходов.
+        /// Индентификатор кошелька, выбранного пользователем из DataGridView.
         /// </summary>
-        private int getID = 0;
-
-        public static int GetWalletId = 0;
+        public static int walletIdFromDGV = 0;
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="IncomeForm"/>.
+        /// Идентификатор дохода, выбранный пользователем из DataGridView.
         /// </summary>
-        public IncomeForm()
+        private int incomeIdFromDGV = 0;
+
+        /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
+        /// <summary>
+        /// Идентификатор текущего кошелька.
+        /// </summary>
+        private int currentWalletId => MainForm.CurrentWalletId;
+
+        /// <summary>
+        /// Статический экземпляр пользовательского интерфейса доходов.
+        /// </summary>
+        public static IncomeUserControl Instance { get; private set; }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="IncomeUserControl"/>.
+        /// </summary>
+        public IncomeUserControl()
         {
             InitializeComponent();
 
@@ -31,13 +49,18 @@ namespace Financial.Tracker
             DisplayIncomeData();
         }
 
-        public static IncomeForm Instance { get; private set; }
 
+        /// <summary>
+        /// Отображает данные доходов, используя статический экземпляр пользовательского интерфейса.
+        /// </summary>
         public static void DisplayIncomeDataStatic()
         {
             Instance.DisplayIncomeData();
         }
 
+        /// <summary>
+        /// Отображает данные категорий в ComboBox, используя статический экземпляр пользовательского интерфейса.
+        /// </summary>
         public static void DisplayIncomeCategoriesStatic()
         {
             Instance.DisplayIncomeCategories();
@@ -78,14 +101,15 @@ namespace Financial.Tracker
                 dataGridViewIncome.Columns["ID"].Visible = false;
                 dataGridViewIncome.Columns["CategoryId"].Visible = false;
                 dataGridViewIncome.Columns["UserId"].Visible = false;
-
+                dataGridViewIncome.Columns["WalletId"].Visible = false;
             }
 
             // Переименовываем колонку CategoryName для удобства
             if (dataGridViewIncome.Columns["CategoryName"] != null)
-            {
                 dataGridViewIncome.Columns["CategoryName"].HeaderText = "Категория";
-            }
+
+            if (dataGridViewIncome.Columns["WalletNAme"] != null)
+                dataGridViewIncome.Columns["WalletNAme"].HeaderText = "Кошелек";
 
             dataGridViewIncome.Columns["Item"].HeaderText = "Наименование";
             dataGridViewIncome.Columns["Amount"].HeaderText = "Сумма";
@@ -99,23 +123,19 @@ namespace Financial.Tracker
         private void DisplayIncomeCategories()
         {
             if (DBConnection.CheckConnection())
-            { 
+            {
                 try
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status AND user_id = @userid";
-                    if (MainForm.CurrentWalletId != 0)
-                        selectData += " AND wallet_id = @walletid";
+                    string selectData = "SELECT category FROM categories WHERE type = @type AND status = @status AND user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@type", "Доходы");
                         sqlCommand.Parameters.AddWithValue("@status", "Активный");
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-
-                        if (MainForm.CurrentWalletId != 0)
-                            sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                        sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletId", currentWalletId);
 
                         income_comboBoxCategory.Items.Clear();
 
@@ -129,7 +149,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при загрузке данных в интерфейсе: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при загрузке данных в IncomeUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -145,7 +165,7 @@ namespace Financial.Tracker
         /// <param name="e"></param>
         private void Income_buttonAdd_Click(object sender, EventArgs e)
         {
-            if (MainForm.CurrentWalletId == 0)
+            if (currentWalletId == 0)
             {
                 MessageBox.Show("Для добавления нового источника дохода выберите кошелек.", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 return;
@@ -158,15 +178,14 @@ namespace Financial.Tracker
             {
                 try
                 {
-                    IncomeData incomeData = new IncomeData();
-                    int? categoryId = incomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString(), MainForm.CurrentWalletId);
+                    int? categoryId = IncomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString(), currentWalletId);
 
                     if (categoryId.HasValue)
                     {
                         DBConnection.SqlConnection.Open();
 
-                        string insertIncomeQuery = "INSERT INTO income_3nf (category_id, item, amount, [description], income_date, user_id, wallet_id) " +
-                                                   "VALUES (@categoryId, @item, @amount, @description, @incomeDate, @userid, @walletid)";
+                        string insertIncomeQuery = "INSERT INTO income_3nf (category_id, item, amount, [description], income_date, user_id, wallet_id)" +
+                                                   "VALUES (@categoryId, @item, @amount, @description, @incomeDate, @userId, @walletId)";
                         using (SqlCommand sqlCommand = new SqlCommand(insertIncomeQuery, DBConnection.SqlConnection))
                         {
                             sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
@@ -174,8 +193,8 @@ namespace Financial.Tracker
                             sqlCommand.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
                             sqlCommand.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
                             sqlCommand.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
-                            sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
-                            sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
+                            sqlCommand.Parameters.AddWithValue("@userId", currentUserId);
+                            sqlCommand.Parameters.AddWithValue("@walletId", currentWalletId);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -191,7 +210,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при добавлении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при добавлении дохода в IncomeUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -215,15 +234,14 @@ namespace Financial.Tracker
             {
                 try
                 {
-                    IncomeData incomeData = new IncomeData();
-                    int? categoryId = incomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString(), GetWalletId);
+                    int? categoryId = IncomeData.GetCategoryIdByName(income_comboBoxCategory.SelectedItem.ToString(), walletIdFromDGV);
 
                     DBConnection.SqlConnection.Open();
 
                     if (categoryId.HasValue)
                     {
                         // Запрос для обновления дохода
-                        string updateIncomeQuery = "UPDATE income_3nf SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, income_date = @incomeDate WHERE id_income = @id_income";
+                        string updateIncomeQuery = "UPDATE income_3nf SET category_id = @categoryId, item = @item, amount = @amount, [description] = @description, income_date = @incomeDate WHERE id_income = @idIncome";
                         using (SqlCommand sqlCommand = new SqlCommand(updateIncomeQuery, DBConnection.SqlConnection))
                         {
                             sqlCommand.Parameters.AddWithValue("@categoryId", categoryId.Value);
@@ -231,7 +249,7 @@ namespace Financial.Tracker
                             sqlCommand.Parameters.AddWithValue("@amount", income_textBoxIncome.Text);
                             sqlCommand.Parameters.AddWithValue("@description", income_textBoxDescription.Text);
                             sqlCommand.Parameters.AddWithValue("@incomeDate", income_dateTimePicker.Value);
-                            sqlCommand.Parameters.AddWithValue("@id_income", getID);
+                            sqlCommand.Parameters.AddWithValue("@idIncome", incomeIdFromDGV);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -247,7 +265,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при обновлении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при обновлении дохода в IncomeUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -273,12 +291,10 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    IncomeData incomeData = new IncomeData();
-
                     // Проверка существования расходов
-                    if (!incomeData.ItemExists(getID))
+                    if (!IncomeData.ItemExistsById(incomeIdFromDGV))
                     {
-                        MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Доходов с таким названием не существует. Пожалуйста, введите существующее название.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         DBConnection.CloseConnection();
 
@@ -286,10 +302,10 @@ namespace Financial.Tracker
                     }
 
                     // Запрос для добавления нового дохода
-                    string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @id_income";
+                    string deleteIncomeQuery = "DELETE FROM income_3nf WHERE id_income = @idIncome";
                     using (SqlCommand sqlCommand = new SqlCommand(deleteIncomeQuery, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@id_income", getID);
+                        sqlCommand.Parameters.AddWithValue("@idIncome", incomeIdFromDGV);
 
                         sqlCommand.ExecuteNonQuery();
 
@@ -301,7 +317,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при удалении дохода: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ошибка при удалении дохода в IncomeUserControl: " + ex.Message, "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -383,8 +399,8 @@ namespace Financial.Tracker
             {
                 DataGridViewRow row = dataGridViewIncome.Rows[e.RowIndex];
 
-                getID = Convert.ToInt32(row.Cells["Id"].Value);
-                GetWalletId = Convert.ToInt32(row.Cells["WalletId"].Value);
+                incomeIdFromDGV = Convert.ToInt32(row.Cells["Id"].Value);
+                walletIdFromDGV = Convert.ToInt32(row.Cells["WalletId"].Value);
                 income_comboBoxCategory.SelectedItem = row.Cells["CategoryName"].Value;
                 income_textBoxItem.Text = row.Cells["Item"].Value.ToString();
                 income_textBoxIncome.Text = row.Cells["Amount"].Value.ToString();

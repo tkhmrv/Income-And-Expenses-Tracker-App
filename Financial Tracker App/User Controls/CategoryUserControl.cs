@@ -9,12 +9,32 @@ namespace Financial.Tracker
     /// <summary>
     /// Форма для управления категориями.
     /// </summary>
-    public partial class CategoryForm : UserControl
+    public partial class CategoryUserControl : UserControl
     {
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="CategoryForm"/>.
+        /// Индентификатор кошелька, выбранного пользователем из DataGridView.
         /// </summary>
-        public CategoryForm()
+        private int walletIdFromDGV = 0;
+
+        /// <summary>
+        /// Идентификатор категории, выбранный пользователем из DataGridView.
+        /// </summary>
+        private int categoryIdFromDGV = 0;
+
+        /// <summary>
+        /// Идентификатор текущего пользователя.
+        /// </summary>
+        private int currentUserId => AuthForm.CurrentUserId;
+
+        /// <summary>
+        /// Статический экземпляр пользовательского интерфейса категорий.
+        /// </summary>
+        public static CategoryUserControl Instance { get; private set; }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="CategoryUserControl"/>.
+        /// </summary>
+        public CategoryUserControl()
         {
             InitializeComponent();
 
@@ -23,10 +43,9 @@ namespace Financial.Tracker
             DisplayCategoryList();
         }
 
-        public static int GetWalletId;
-
-        public static CategoryForm Instance { get; private set; }
-
+        /// <summary>
+        /// Отображает данные категорий, используя статический экземпляр пользовательского интерфейса.
+        /// </summary>
         public static void DisplayCategoryListStatic()
         {
             Instance?.DisplayCategoryList();
@@ -47,7 +66,7 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// Отображает список категорий.
+        /// Отображает данные категорий.
         /// </summary>
         private void DisplayCategoryList()
         {
@@ -89,7 +108,7 @@ namespace Financial.Tracker
         /// <param name="e"></param>
         private void Category_buttonAdd_Click(object sender, EventArgs e)
         {
-            if(MainForm.CurrentWalletId == 0)
+            if (MainForm.CurrentWalletId == 0)
             {
                 MessageBox.Show("Для добавления новой категории выберите кошелек.", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 return;
@@ -104,10 +123,8 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    CategoryData categoryData = new CategoryData();
-
                     // Проверка существования категории
-                    if (categoryData.CategoryExistsByName(category_textBoxCategory.Text.ToString(), GetWalletId))
+                    if (CategoryData.CategoryExistsByName(category_textBoxCategory.Text.ToString(), walletIdFromDGV))
                     {
                         MessageBox.Show("Категория для кошелька с таким именем уже существует. Пожалуйста, введите другое название.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -116,7 +133,7 @@ namespace Financial.Tracker
                         return;
                     }
 
-                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date, user_id, wallet_id)" 
+                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date, user_id, wallet_id)"
                                         + "VALUES (@category, @type, @status, GETDATE(), @userid, @wallet_id)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(insertData, DBConnection.SqlConnection))
@@ -124,7 +141,7 @@ namespace Financial.Tracker
                         sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.Text.Trim());
-                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@userid", currentUserId);
                         sqlCommand.Parameters.AddWithValue("@wallet_id", MainForm.CurrentWalletId);
 
                         sqlCommand.ExecuteNonQuery();
@@ -135,7 +152,7 @@ namespace Financial.Tracker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Не удалось провести соединие, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    MessageBox.Show("Не удалось провести соединие, ошибка в CategoryUserControl: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -144,8 +161,6 @@ namespace Financial.Tracker
             }
             DisplayCategoryList();
         }
-
-        private int getID = 0;
 
         /// <summary>
         /// Обработчик события клика по кнопке обновления категории.
@@ -165,10 +180,8 @@ namespace Financial.Tracker
                     {
                         DBConnection.SqlConnection.Open();
 
-                        CategoryData categoryData = new CategoryData();
-
                         // Проверка существования категории
-                        if (!categoryData.CategoryExistsById(getID))
+                        if (!CategoryData.CategoryExistsById(categoryIdFromDGV))
                         {
                             MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -181,7 +194,7 @@ namespace Financial.Tracker
 
                         using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
-                            sqlCommand.Parameters.AddWithValue("@id", getID);
+                            sqlCommand.Parameters.AddWithValue("@id", categoryIdFromDGV);
                             sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
                             sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
                             sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
@@ -194,7 +207,7 @@ namespace Financial.Tracker
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Не удалось провести соединие, ошибка: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        MessageBox.Show("Не удалось провести соединие, ошибка в CategoryUserControl: " + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     }
                     finally
                     {
@@ -203,26 +216,6 @@ namespace Financial.Tracker
                 }
             }
             DisplayCategoryList();
-        }
-
-        /// <summary>
-        /// Очищает поля ввода.
-        /// </summary>
-        public void ClearFields()
-        {
-            category_textBoxCategory.Text = "";
-            category_comboBoxType.SelectedIndex = -1;
-            category_comboBoxStatus.SelectedIndex = -1;
-        }
-
-        /// <summary>
-        /// Обработчик события клика по кнопке очистки полей.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Category_buttonClear_Click(object sender, EventArgs e)
-        {
-            ClearFields();
         }
 
         /// <summary>
@@ -243,9 +236,8 @@ namespace Financial.Tracker
                     {
                         DBConnection.SqlConnection.Open();
 
-                        CategoryData categoryData = new CategoryData();
                         // Проверка существования категории
-                        if (!categoryData.CategoryExistsById(getID))
+                        if (!CategoryData.CategoryExistsById(categoryIdFromDGV))
                         {
                             MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -261,8 +253,8 @@ namespace Financial.Tracker
                         using (SqlCommand checkIncomeCmd = new SqlCommand(checkIncomeQuery, DBConnection.SqlConnection))
                         using (SqlCommand checkExpensesCmd = new SqlCommand(checkExpensesQuery, DBConnection.SqlConnection))
                         {
-                            checkIncomeCmd.Parameters.AddWithValue("@id", getID);
-                            checkExpensesCmd.Parameters.AddWithValue("@id", getID);
+                            checkIncomeCmd.Parameters.AddWithValue("@id", categoryIdFromDGV);
+                            checkExpensesCmd.Parameters.AddWithValue("@id", categoryIdFromDGV);
 
                             int incomeCount = (int)checkIncomeCmd.ExecuteScalar();
                             int expensesCount = (int)checkExpensesCmd.ExecuteScalar();
@@ -281,7 +273,7 @@ namespace Financial.Tracker
 
                         using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
-                            sqlCommand.Parameters.AddWithValue("@id", getID);
+                            sqlCommand.Parameters.AddWithValue("@id", categoryIdFromDGV);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -291,7 +283,7 @@ namespace Financial.Tracker
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Не удалось провести соединие, ошибка:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        MessageBox.Show("Не удалось провести соединие, ошибка в CategoryUserControl:" + ex, "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     }
                     finally
                     {
@@ -300,6 +292,26 @@ namespace Financial.Tracker
                 }
             }
             DisplayCategoryList();
+        }
+
+        /// <summary>
+        /// Обработчик события клика по кнопке очистки полей.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Category_buttonClear_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+        }
+
+        /// <summary>
+        /// Очищает поля ввода.
+        /// </summary>
+        public void ClearFields()
+        {
+            category_textBoxCategory.Text = "";
+            category_comboBoxType.SelectedIndex = -1;
+            category_comboBoxStatus.SelectedIndex = -1;
         }
 
         /// <summary>
@@ -339,8 +351,8 @@ namespace Financial.Tracker
             {
                 DataGridViewRow row = dataGridViewCategory.Rows[e.RowIndex];
 
-                getID = Convert.ToInt32(row.Cells["ID"].Value);
-                GetWalletId = Convert.ToInt32(row.Cells["walletid"].Value);
+                categoryIdFromDGV = Convert.ToInt32(row.Cells["ID"].Value);
+                walletIdFromDGV = Convert.ToInt32(row.Cells["walletid"].Value);
                 category_textBoxCategory.Text = row.Cells["category"].Value.ToString();
                 category_comboBoxType.SelectedItem = row.Cells["type"].Value.ToString();
                 category_comboBoxStatus.SelectedItem = row.Cells["status"].Value.ToString();
