@@ -25,6 +25,22 @@ CREATE TABLE categories (
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE wallets (
+    id_wallet INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT NOT NULL,
+    wallet_name VARCHAR(50) NOT NULL,
+    -- money_amount FLOAT NOT NULL,
+    [type] VARCHAR(50) NOT NULL,
+    [status] VARCHAR(10) NOT NULL CHECK ([status] IN ('Активный', 'Неактивный')),
+    [description] TEXT NOT NULL,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id_user)
+);
+
+select * from wallets;
+
+alter table wallets drop column money_amount;
+
 SELECT * FROM categories;
 
 SELECT * FROM income_3nf;
@@ -57,8 +73,12 @@ BEGIN TRANSACTION;
 
 -- Добавление столбца user_id в существующие таблицы
 ALTER TABLE categories ADD user_id INT NOT NULL DEFAULT 1;
+ALTER TABLE categories ADD wallet_id INT NOT NULL DEFAULT 1;
 ALTER TABLE income_3nf ADD user_id INT NOT NULL DEFAULT 1;
 ALTER TABLE expenses ADD user_id INT NOT NULL DEFAULT 1;
+
+ALTER TABLE categories
+ADD CONSTRAINT FK_Categories_Wallets FOREIGN KEY (wallet_id) REFERENCES wallets(id_wallet);
 
 -- Создание внешних ключей
 ALTER TABLE categories
@@ -69,6 +89,10 @@ ADD CONSTRAINT FK_Income_Users FOREIGN KEY (user_id) REFERENCES users(id_user);
 
 ALTER TABLE expenses
 ADD CONSTRAINT FK_Expenses_Users FOREIGN KEY (user_id) REFERENCES users(id_user);
+
+UPDATE categories SET user_id = 2 WHERE user_id = 1;
+UPDATE income_3nf SET user_id = 2 WHERE user_id = 1;
+UPDATE expenses SET user_id = 2 WHERE user_id = 1;
 
 COMMIT TRANSACTION;
 

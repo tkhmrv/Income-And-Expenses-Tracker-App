@@ -14,12 +14,12 @@ namespace Financial.Tracker
         /// <summary>
         /// Имя пользователя, авторизованного в системе.
         /// </summary>
-        public static string username;
+        public static string Username;
 
         /// <summary>
-        /// Идентификатор пользователя: авторизованного в системе.
+        /// Идентификатор пользователя, авторизованного в системе.
         /// </summary>
-        public static int userid;
+        public static int CurrentUserId = 0;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="AuthForm"/>.
@@ -128,8 +128,8 @@ namespace Financial.Tracker
 
                         if (dataTable.Rows.Count > 0)
                         {
-                            username = dataTable.Rows[0]["username"].ToString();
-                            userid = (int)dataTable.Rows[0]["id_user"];
+                            Username = dataTable.Rows[0]["username"].ToString();
+                            CurrentUserId = (int)dataTable.Rows[0]["id_user"];
 
                             DBConnection.SqlConnection.Close();
 

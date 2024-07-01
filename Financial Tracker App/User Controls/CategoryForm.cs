@@ -18,7 +18,18 @@ namespace Financial.Tracker
         {
             InitializeComponent();
 
+            Instance = this;
+
             DisplayCategoryList();
+        }
+
+        public static int GetWalletId;
+
+        public static CategoryForm Instance { get; private set; }
+
+        public static void DisplayCategoryListStatic()
+        {
+            Instance?.DisplayCategoryList();
         }
 
         /// <summary>
@@ -78,6 +89,12 @@ namespace Financial.Tracker
         /// <param name="e"></param>
         private void Category_buttonAdd_Click(object sender, EventArgs e)
         {
+            if(MainForm.CurrentWalletId == 0)
+            {
+                MessageBox.Show("Для добавления новой категории выберите кошелек.", "Сообщение об ошибке", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                return;
+            }
+
             if (!ValidateCategoryInputs())
                 return;
 
@@ -87,15 +104,28 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date, user_id)" 
-                                        + "VALUES (@category, @type, @status, GETDATE(), @userId)";
+                    CategoryData categoryData = new CategoryData();
+
+                    // Проверка существования категории
+                    if (categoryData.CategoryExistsByName(category_textBoxCategory.Text.ToString(), GetWalletId))
+                    {
+                        MessageBox.Show("Категория для кошелька с таким именем уже существует. Пожалуйста, введите другое название.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        DBConnection.CloseConnection();
+
+                        return;
+                    }
+
+                    string insertData = "INSERT INTO categories (category, [type], [status], creation_date, user_id, wallet_id)" 
+                                        + "VALUES (@category, @type, @status, GETDATE(), @userid, @wallet_id)";
 
                     using (SqlCommand sqlCommand = new SqlCommand(insertData, DBConnection.SqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.Text.Trim());
                         sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.Text.Trim());
-                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@wallet_id", MainForm.CurrentWalletId);
 
                         sqlCommand.ExecuteNonQuery();
 
@@ -135,28 +165,26 @@ namespace Financial.Tracker
                     {
                         DBConnection.SqlConnection.Open();
 
-                        /*CategoryData categoryData = new CategoryData();
+                        CategoryData categoryData = new CategoryData();
 
                         // Проверка существования категории
-                        if (!categoryData.CategoryExists(category_textBoxCategory))
+                        if (!categoryData.CategoryExistsById(getID))
                         {
                             MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            
+
                             DBConnection.CloseConnection();
-                            
+
                             return;
+                        }
 
-                        }*/
-
-                        string updateData = "UPDATE categories SET category = @cat, type = @type, status = @status, user_id = @userId WHERE id_category = @id";
+                        string updateData = "UPDATE categories SET category = @category, type = @type, status = @status WHERE id_category = @id";
 
                         using (SqlCommand sqlCommand = new SqlCommand(updateData, DBConnection.SqlConnection))
                         {
                             sqlCommand.Parameters.AddWithValue("@id", getID);
-                            sqlCommand.Parameters.AddWithValue("@cat", category_textBoxCategory.Text.Trim());
+                            sqlCommand.Parameters.AddWithValue("@category", category_textBoxCategory.Text.Trim());
                             sqlCommand.Parameters.AddWithValue("@type", category_comboBoxType.SelectedItem);
                             sqlCommand.Parameters.AddWithValue("@status", category_comboBoxStatus.SelectedItem);
-                            sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
 
                             sqlCommand.ExecuteNonQuery();
 
@@ -217,7 +245,7 @@ namespace Financial.Tracker
 
                         CategoryData categoryData = new CategoryData();
                         // Проверка существования категории
-                        if (!categoryData.CategoryExists(category_textBoxCategory))
+                        if (!categoryData.CategoryExistsById(getID))
                         {
                             MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -312,6 +340,7 @@ namespace Financial.Tracker
                 DataGridViewRow row = dataGridViewCategory.Rows[e.RowIndex];
 
                 getID = Convert.ToInt32(row.Cells["ID"].Value);
+                GetWalletId = Convert.ToInt32(row.Cells["walletid"].Value);
                 category_textBoxCategory.Text = row.Cells["category"].Value.ToString();
                 category_comboBoxType.SelectedItem = row.Cells["type"].Value.ToString();
                 category_comboBoxStatus.SelectedItem = row.Cells["status"].Value.ToString();
@@ -319,7 +348,7 @@ namespace Financial.Tracker
         }
 
         /// <summary>
-        /// Проверяет, существуют ли записи с доходами/расходами у категории, перед ее удалением
+        /// Красит строки в разные цвета, в зависимости от типа категории.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

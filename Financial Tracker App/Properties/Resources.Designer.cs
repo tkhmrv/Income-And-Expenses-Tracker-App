@@ -223,6 +223,16 @@ namespace Financial.Tracker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap wallet_24 {
+            get {
+                object obj = ResourceManager.GetObject("wallet_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap year_50 {
             get {
                 object obj = ResourceManager.GetObject("year_50", resourceCulture);

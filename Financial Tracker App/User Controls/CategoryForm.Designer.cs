@@ -62,10 +62,9 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.category_textBoxCategory);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(28, 29);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Location = new System.Drawing.Point(14, 15);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(580, 1202);
+            this.panel1.Size = new System.Drawing.Size(290, 625);
             this.panel1.TabIndex = 0;
             // 
             // category_buttonDelete
@@ -75,10 +74,9 @@
             this.category_buttonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.category_buttonDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category_buttonDelete.ForeColor = System.Drawing.Color.White;
-            this.category_buttonDelete.Location = new System.Drawing.Point(300, 567);
-            this.category_buttonDelete.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_buttonDelete.Location = new System.Drawing.Point(150, 295);
             this.category_buttonDelete.Name = "category_buttonDelete";
-            this.category_buttonDelete.Size = new System.Drawing.Size(242, 60);
+            this.category_buttonDelete.Size = new System.Drawing.Size(121, 31);
             this.category_buttonDelete.TabIndex = 12;
             this.category_buttonDelete.Text = "Удалить";
             this.category_buttonDelete.UseVisualStyleBackColor = false;
@@ -91,10 +89,9 @@
             this.category_buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.category_buttonUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category_buttonUpdate.ForeColor = System.Drawing.Color.White;
-            this.category_buttonUpdate.Location = new System.Drawing.Point(300, 492);
-            this.category_buttonUpdate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_buttonUpdate.Location = new System.Drawing.Point(150, 256);
             this.category_buttonUpdate.Name = "category_buttonUpdate";
-            this.category_buttonUpdate.Size = new System.Drawing.Size(242, 60);
+            this.category_buttonUpdate.Size = new System.Drawing.Size(121, 31);
             this.category_buttonUpdate.TabIndex = 11;
             this.category_buttonUpdate.Text = "Обновить";
             this.category_buttonUpdate.UseVisualStyleBackColor = false;
@@ -107,10 +104,9 @@
             this.category_buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.category_buttonClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category_buttonClear.ForeColor = System.Drawing.Color.White;
-            this.category_buttonClear.Location = new System.Drawing.Point(38, 567);
-            this.category_buttonClear.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_buttonClear.Location = new System.Drawing.Point(19, 295);
             this.category_buttonClear.Name = "category_buttonClear";
-            this.category_buttonClear.Size = new System.Drawing.Size(242, 60);
+            this.category_buttonClear.Size = new System.Drawing.Size(121, 31);
             this.category_buttonClear.TabIndex = 10;
             this.category_buttonClear.Text = "Очистить";
             this.category_buttonClear.UseVisualStyleBackColor = false;
@@ -123,10 +119,9 @@
             this.category_buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.category_buttonAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category_buttonAdd.ForeColor = System.Drawing.Color.White;
-            this.category_buttonAdd.Location = new System.Drawing.Point(38, 492);
-            this.category_buttonAdd.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_buttonAdd.Location = new System.Drawing.Point(19, 256);
             this.category_buttonAdd.Name = "category_buttonAdd";
-            this.category_buttonAdd.Size = new System.Drawing.Size(242, 60);
+            this.category_buttonAdd.Size = new System.Drawing.Size(121, 31);
             this.category_buttonAdd.TabIndex = 8;
             this.category_buttonAdd.Text = "Добавить";
             this.category_buttonAdd.UseVisualStyleBackColor = false;
@@ -134,25 +129,24 @@
             // 
             // category_comboBoxStatus
             // 
+            this.category_comboBoxStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.category_comboBoxStatus.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.category_comboBoxStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category_comboBoxStatus.FormattingEnabled = true;
             this.category_comboBoxStatus.Items.AddRange(new object[] {
             "Активный",
             "Неактивный"});
-            this.category_comboBoxStatus.Location = new System.Drawing.Point(38, 385);
-            this.category_comboBoxStatus.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_comboBoxStatus.Location = new System.Drawing.Point(19, 200);
             this.category_comboBoxStatus.Name = "category_comboBoxStatus";
-            this.category_comboBoxStatus.Size = new System.Drawing.Size(500, 45);
+            this.category_comboBoxStatus.Size = new System.Drawing.Size(252, 28);
             this.category_comboBoxStatus.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(30, 335);
-            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label3.Location = new System.Drawing.Point(15, 174);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(448, 44);
+            this.label3.Size = new System.Drawing.Size(224, 23);
             this.label3.TabIndex = 6;
             this.label3.Text = "Статус";
             // 
@@ -164,19 +158,17 @@
             this.category_comboBoxType.Items.AddRange(new object[] {
             "Доходы",
             "Расходы"});
-            this.category_comboBoxType.Location = new System.Drawing.Point(38, 233);
-            this.category_comboBoxType.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_comboBoxType.Location = new System.Drawing.Point(19, 121);
             this.category_comboBoxType.Name = "category_comboBoxType";
-            this.category_comboBoxType.Size = new System.Drawing.Size(500, 45);
+            this.category_comboBoxType.Size = new System.Drawing.Size(252, 28);
             this.category_comboBoxType.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(30, 183);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(15, 95);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(448, 44);
+            this.label2.Size = new System.Drawing.Size(224, 23);
             this.label2.TabIndex = 4;
             this.label2.Text = "Подтип";
             // 
@@ -184,19 +176,17 @@
             // 
             this.category_textBoxCategory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.category_textBoxCategory.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.category_textBoxCategory.Location = new System.Drawing.Point(38, 87);
-            this.category_textBoxCategory.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.category_textBoxCategory.Location = new System.Drawing.Point(19, 45);
             this.category_textBoxCategory.Name = "category_textBoxCategory";
-            this.category_textBoxCategory.Size = new System.Drawing.Size(502, 44);
+            this.category_textBoxCategory.Size = new System.Drawing.Size(252, 26);
             this.category_textBoxCategory.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(30, 37);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(15, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(448, 44);
+            this.label1.Size = new System.Drawing.Size(224, 23);
             this.label1.TabIndex = 2;
             this.label1.Text = "Категория";
             // 
@@ -205,10 +195,9 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.Controls.Add(this.dataGridViewCategory);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(638, 29);
-            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel2.Location = new System.Drawing.Point(319, 15);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1440, 1202);
+            this.panel2.Size = new System.Drawing.Size(720, 625);
             this.panel2.TabIndex = 1;
             // 
             // dataGridViewCategory
@@ -235,13 +224,12 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewCategory.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewCategory.Location = new System.Drawing.Point(30, 88);
-            this.dataGridViewCategory.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.dataGridViewCategory.Location = new System.Drawing.Point(15, 46);
             this.dataGridViewCategory.Name = "dataGridViewCategory";
             this.dataGridViewCategory.ReadOnly = true;
             this.dataGridViewCategory.RowHeadersVisible = false;
             this.dataGridViewCategory.RowHeadersWidth = 82;
-            this.dataGridViewCategory.Size = new System.Drawing.Size(1380, 1087);
+            this.dataGridViewCategory.Size = new System.Drawing.Size(690, 565);
             this.dataGridViewCategory.TabIndex = 14;
             this.dataGridViewCategory.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewCategory_CellClick);
             this.dataGridViewCategory.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewCategory_CellFormatting);
@@ -249,22 +237,20 @@
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(24, 25);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label4.Location = new System.Drawing.Point(12, 13);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(448, 44);
+            this.label4.Size = new System.Drawing.Size(224, 23);
             this.label4.TabIndex = 13;
             this.label4.Text = "Список категорий";
             // 
             // CategoryForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "CategoryForm";
-            this.Size = new System.Drawing.Size(2110, 1260);
+            this.Size = new System.Drawing.Size(1055, 655);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

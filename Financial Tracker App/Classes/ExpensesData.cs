@@ -51,6 +51,11 @@ namespace Financial.Tracker
         public int UserId { get; set; }
 
         /// <summary>
+        /// Идентификатор кошелька.
+        /// </summary>
+        public int WalletId { get; set; }
+
+        /// <summary>
         /// Получает список всех расходов из базы данных.
         /// </summary>
         /// <returns>Список данных расходов.</returns>
@@ -64,14 +69,19 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = @"SELECT e.id_expenses, e.category_id, c.category AS CategoryName, e.item, e.amount, e.description, e.expenses_date
+                    string selectData = @"SELECT e.id_expenses, e.category_id, c.category AS CategoryName, e.item, 
+                                        e.amount, e.description, e.expenses_date, e.user_id, e.wallet_id
                                           FROM expenses e
                                           JOIN categories c ON e.category_id = c.id_category
                                           WHERE e.user_id = @userId";
+                    if (MainForm.CurrentWalletId != 0)
+                        selectData += " AND e.wallet_id = @wallet_id";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.CurrentUserId);
+                        if (MainForm.CurrentWalletId != 0)
+                            sqlCommand.Parameters.AddWithValue("@wallet_id", MainForm.CurrentWalletId);
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
                         while (sqlDataReader.Read())
@@ -85,7 +95,8 @@ namespace Financial.Tracker
                                 Amount = sqlDataReader["amount"].ToString(),
                                 Description = sqlDataReader["description"].ToString(),
                                 ExpensesDate = ((DateTime)sqlDataReader["expenses_date"]).ToString("MM-dd-yyyy"),
-                                UserId = AuthForm.userid
+                                UserId = AuthForm.CurrentUserId,
+                                WalletId = (int)sqlDataReader["wallet_id"]
                             };
 
                             listData.Add(expensesData);
@@ -95,7 +106,7 @@ namespace Financial.Tracker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке данных в классе ExpensesData: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -110,7 +121,7 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="categoryName">Название категории.</param>
         /// <returns>Идентификатор категории или null, если категория не найдена.</returns>
-        public int? GetCategoryIdByName(string categoryName)
+        public int? GetCategoryIdByName(string categoryName, int walletId)
         {
             try
             {
@@ -119,10 +130,11 @@ namespace Financial.Tracker
                     DBConnection.SqlConnection.Open();
                 }
 
-                string getCategoryIdQuery = "SELECT id_category FROM categories WHERE category = @category";
+                string getCategoryIdQuery = "SELECT id_category FROM categories WHERE category = @category AND wallet_id = @walletid";
                 using (SqlCommand getCategoryCmd = new SqlCommand(getCategoryIdQuery, DBConnection.SqlConnection))
                 {
                     getCategoryCmd.Parameters.AddWithValue("@category", categoryName);
+                    getCategoryCmd.Parameters.AddWithValue("@walletid", walletId);
 
                     int? categoryId = null;
                     using (SqlDataReader reader = getCategoryCmd.ExecuteReader())
@@ -155,12 +167,12 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="textBoxName">TextBox с названием элемента для проверки.</param>
         /// <returns>Возвращает true, если элемент существует; иначе false.</returns>
-        public bool ItemExists(TextBox textBoxName)
+        public bool ItemExists(int idExpenses)
         {
-            string query = "SELECT COUNT(*) FROM expenses WHERE item = @item";
+            string query = "SELECT COUNT(*) FROM expenses WHERE id_expenses = @idExpenses";
             using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@item", textBoxName.Text.Trim());
+                sqlCommand.Parameters.AddWithValue("@idExpenses", idExpenses);
 
                 int count = (int)sqlCommand.ExecuteScalar();
 

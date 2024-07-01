@@ -41,6 +41,11 @@ namespace Financial.Tracker
         public int UserId { get; set; }
 
         /// <summary>
+        /// Идентификатор кошелька.
+        /// </summary>
+        public int WalletId { get; set; }
+
+        /// <summary>
         /// Получает список всех категорий из базы данных.
         /// </summary>
         /// <returns>Список данных категорий.</returns>
@@ -54,11 +59,16 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT * FROM categories WHERE user_id = @userId";
+                    string selectData = "SELECT * FROM categories WHERE user_id = @userid";
+                    if (MainForm.CurrentWalletId != 0)
+                        selectData += " AND wallet_id = @walletId";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@userId", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        if (MainForm.CurrentWalletId != 0)
+                            sqlCommand.Parameters.AddWithValue("@walletId", MainForm.CurrentWalletId);
+
                         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                     
                         while (sqlDataReader.Read())
@@ -70,7 +80,8 @@ namespace Financial.Tracker
                                 Type = sqlDataReader["type"].ToString(),
                                 Status = sqlDataReader["status"].ToString(),
                                 Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy"),
-                                UserId = AuthForm.userid
+                                UserId = AuthForm.CurrentUserId,
+                                WalletId = (int)sqlDataReader["wallet_id"]
                             };
 
                             listData.Add(categoryData);
@@ -95,12 +106,24 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="textBoxName">TextBox с названием категории для проверки.</param>
         /// <returns>Возвращает true, если категория существует; иначе false.</returns>
-        public bool CategoryExists(TextBox textBoxName)
+        public bool CategoryExistsById (int categoryId)
         {
-            string checkCategoryQuery = "SELECT COUNT(*) FROM categories WHERE category = @category";
+            string checkCategoryQuery = "SELECT COUNT(*) FROM categories WHERE id_category = @id";
             using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@category", textBoxName.Text.Trim());
+                sqlCommand.Parameters.AddWithValue("@id", categoryId);
+                int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
+        public bool CategoryExistsByName (string categoryName, int walletId)
+        {
+            string checkCategoryQuery = "SELECT * FROM categories WHERE category = @category AND wallet_id = @walletid";
+            using (SqlCommand sqlCommand = new SqlCommand(checkCategoryQuery, DBConnection.SqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@category", categoryName);
+                sqlCommand.Parameters.AddWithValue("@walletid", walletId);
                 int count = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 return count > 0;
             }

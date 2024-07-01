@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridViewIncome = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -57,10 +57,9 @@
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.dataGridViewIncome);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(30, 31);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Location = new System.Drawing.Point(15, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(2050, 740);
+            this.panel1.Size = new System.Drawing.Size(1025, 385);
             this.panel1.TabIndex = 1;
             // 
             // dataGridViewIncome
@@ -70,32 +69,30 @@
             this.dataGridViewIncome.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewIncome.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewIncome.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewIncome.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewIncome.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewIncome.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewIncome.Location = new System.Drawing.Point(32, 85);
-            this.dataGridViewIncome.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.dataGridViewIncome.Location = new System.Drawing.Point(16, 44);
             this.dataGridViewIncome.Name = "dataGridViewIncome";
             this.dataGridViewIncome.ReadOnly = true;
             this.dataGridViewIncome.RowHeadersVisible = false;
             this.dataGridViewIncome.RowHeadersWidth = 82;
-            this.dataGridViewIncome.Size = new System.Drawing.Size(1988, 625);
+            this.dataGridViewIncome.Size = new System.Drawing.Size(994, 325);
             this.dataGridViewIncome.TabIndex = 2;
             this.dataGridViewIncome.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewIncome_CellClick);
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(30, 19);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(15, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(580, 44);
+            this.label1.Size = new System.Drawing.Size(290, 23);
             this.label1.TabIndex = 1;
             this.label1.Text = "Список доходов";
             // 
@@ -117,50 +114,45 @@
             this.panel2.Controls.Add(this.income_comboBoxCategory);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel2.Location = new System.Drawing.Point(30, 802);
-            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel2.Location = new System.Drawing.Point(15, 417);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(2050, 427);
+            this.panel2.Size = new System.Drawing.Size(1025, 222);
             this.panel2.TabIndex = 3;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(1094, 204);
-            this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label6.Location = new System.Drawing.Point(547, 106);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(114, 30);
+            this.label6.Size = new System.Drawing.Size(58, 16);
             this.label6.TabIndex = 20;
             this.label6.Text = "Доходы:";
             // 
             // income_dateTimePicker
             // 
-            this.income_dateTimePicker.Location = new System.Drawing.Point(1222, 200);
-            this.income_dateTimePicker.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_dateTimePicker.Location = new System.Drawing.Point(611, 104);
             this.income_dateTimePicker.Name = "income_dateTimePicker";
-            this.income_dateTimePicker.Size = new System.Drawing.Size(494, 37);
+            this.income_dateTimePicker.Size = new System.Drawing.Size(249, 22);
             this.income_dateTimePicker.TabIndex = 19;
             // 
             // income_textBoxDescription
             // 
             this.income_textBoxDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.income_textBoxDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.income_textBoxDescription.Location = new System.Drawing.Point(1222, 56);
-            this.income_textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_textBoxDescription.Location = new System.Drawing.Point(611, 29);
             this.income_textBoxDescription.Multiline = true;
             this.income_textBoxDescription.Name = "income_textBoxDescription";
-            this.income_textBoxDescription.Size = new System.Drawing.Size(674, 114);
+            this.income_textBoxDescription.Size = new System.Drawing.Size(338, 60);
             this.income_textBoxDescription.TabIndex = 18;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(1060, 60);
-            this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label5.Location = new System.Drawing.Point(530, 31);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(139, 30);
+            this.label5.Size = new System.Drawing.Size(75, 16);
             this.label5.TabIndex = 17;
             this.label5.Text = "Описание:";
             // 
@@ -171,10 +163,9 @@
             this.income_buttonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonDelete.ForeColor = System.Drawing.Color.White;
-            this.income_buttonDelete.Location = new System.Drawing.Point(1022, 317);
-            this.income_buttonDelete.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_buttonDelete.Location = new System.Drawing.Point(511, 165);
             this.income_buttonDelete.Name = "income_buttonDelete";
-            this.income_buttonDelete.Size = new System.Drawing.Size(242, 60);
+            this.income_buttonDelete.Size = new System.Drawing.Size(121, 31);
             this.income_buttonDelete.TabIndex = 16;
             this.income_buttonDelete.Text = "Удалить";
             this.income_buttonDelete.UseVisualStyleBackColor = false;
@@ -187,10 +178,9 @@
             this.income_buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonUpdate.ForeColor = System.Drawing.Color.White;
-            this.income_buttonUpdate.Location = new System.Drawing.Point(760, 317);
-            this.income_buttonUpdate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_buttonUpdate.Location = new System.Drawing.Point(380, 165);
             this.income_buttonUpdate.Name = "income_buttonUpdate";
-            this.income_buttonUpdate.Size = new System.Drawing.Size(242, 60);
+            this.income_buttonUpdate.Size = new System.Drawing.Size(121, 31);
             this.income_buttonUpdate.TabIndex = 15;
             this.income_buttonUpdate.Text = "Обновить";
             this.income_buttonUpdate.UseVisualStyleBackColor = false;
@@ -203,10 +193,9 @@
             this.income_buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonClear.ForeColor = System.Drawing.Color.White;
-            this.income_buttonClear.Location = new System.Drawing.Point(1284, 317);
-            this.income_buttonClear.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_buttonClear.Location = new System.Drawing.Point(642, 165);
             this.income_buttonClear.Name = "income_buttonClear";
-            this.income_buttonClear.Size = new System.Drawing.Size(242, 60);
+            this.income_buttonClear.Size = new System.Drawing.Size(121, 31);
             this.income_buttonClear.TabIndex = 14;
             this.income_buttonClear.Text = "Очистить";
             this.income_buttonClear.UseVisualStyleBackColor = false;
@@ -219,10 +208,9 @@
             this.income_buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.income_buttonAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.income_buttonAdd.ForeColor = System.Drawing.Color.White;
-            this.income_buttonAdd.Location = new System.Drawing.Point(498, 317);
-            this.income_buttonAdd.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_buttonAdd.Location = new System.Drawing.Point(249, 165);
             this.income_buttonAdd.Name = "income_buttonAdd";
-            this.income_buttonAdd.Size = new System.Drawing.Size(242, 60);
+            this.income_buttonAdd.Size = new System.Drawing.Size(121, 31);
             this.income_buttonAdd.TabIndex = 13;
             this.income_buttonAdd.Text = "Добавить";
             this.income_buttonAdd.UseVisualStyleBackColor = false;
@@ -232,20 +220,18 @@
             // 
             this.income_textBoxIncome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.income_textBoxIncome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.income_textBoxIncome.Location = new System.Drawing.Point(308, 200);
-            this.income_textBoxIncome.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_textBoxIncome.Location = new System.Drawing.Point(154, 104);
             this.income_textBoxIncome.Name = "income_textBoxIncome";
-            this.income_textBoxIncome.Size = new System.Drawing.Size(506, 37);
+            this.income_textBoxIncome.Size = new System.Drawing.Size(254, 22);
             this.income_textBoxIncome.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(192, 202);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label4.Location = new System.Drawing.Point(96, 105);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(104, 30);
+            this.label4.Size = new System.Drawing.Size(53, 16);
             this.label4.TabIndex = 4;
             this.label4.Text = "Сумма:";
             // 
@@ -253,54 +239,49 @@
             // 
             this.income_textBoxItem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.income_textBoxItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.income_textBoxItem.Location = new System.Drawing.Point(308, 129);
-            this.income_textBoxItem.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_textBoxItem.Location = new System.Drawing.Point(154, 67);
             this.income_textBoxItem.Name = "income_textBoxItem";
-            this.income_textBoxItem.Size = new System.Drawing.Size(506, 37);
+            this.income_textBoxItem.Size = new System.Drawing.Size(254, 22);
             this.income_textBoxItem.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(96, 131);
-            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label3.Location = new System.Drawing.Point(48, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(200, 30);
+            this.label3.Size = new System.Drawing.Size(109, 16);
             this.label3.TabIndex = 2;
             this.label3.Text = "Наименование:";
             // 
             // income_comboBoxCategory
             // 
+            this.income_comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.income_comboBoxCategory.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.income_comboBoxCategory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.income_comboBoxCategory.FormattingEnabled = true;
-            this.income_comboBoxCategory.Location = new System.Drawing.Point(308, 54);
-            this.income_comboBoxCategory.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.income_comboBoxCategory.Location = new System.Drawing.Point(154, 28);
             this.income_comboBoxCategory.Name = "income_comboBoxCategory";
-            this.income_comboBoxCategory.Size = new System.Drawing.Size(504, 38);
+            this.income_comboBoxCategory.Size = new System.Drawing.Size(254, 24);
             this.income_comboBoxCategory.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(152, 58);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(76, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 30);
+            this.label2.Size = new System.Drawing.Size(78, 16);
             this.label2.TabIndex = 0;
             this.label2.Text = "Категория:";
             // 
             // IncomeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "IncomeForm";
-            this.Size = new System.Drawing.Size(2110, 1260);
+            this.Size = new System.Drawing.Size(1055, 655);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIncome)).EndInit();
             this.panel2.ResumeLayout(false);

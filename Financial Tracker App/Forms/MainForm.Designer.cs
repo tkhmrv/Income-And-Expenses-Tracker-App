@@ -33,6 +33,9 @@
             this.labelCloseApp = new System.Windows.Forms.Label();
             this.labelAbout = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBoxAllWallets = new System.Windows.Forms.ComboBox();
+            this.buttonWallets = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.labelLogo = new System.Windows.Forms.Label();
             this.pictureboxLogo = new System.Windows.Forms.PictureBox();
@@ -43,6 +46,9 @@
             this.buttonAddCategory = new System.Windows.Forms.Button();
             this.buttonDashboard = new System.Windows.Forms.Button();
             this.labelDisplayUsername = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelCurrentBalance = new System.Windows.Forms.Label();
+            this.walletUserControl = new Financial.Tracker.WalletUserControl();
             this.dashboardForm = new Financial.Tracker.DashboardForm();
             this.categoryForm = new Financial.Tracker.CategoryForm();
             this.incomeForm = new Financial.Tracker.IncomeForm();
@@ -105,6 +111,11 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            this.panel2.Controls.Add(this.labelCurrentBalance);
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.comboBoxAllWallets);
+            this.panel2.Controls.Add(this.buttonWallets);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.labelLogo);
             this.panel2.Controls.Add(this.pictureboxLogo);
@@ -121,6 +132,47 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(243, 656);
             this.panel2.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(14, 180);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(156, 18);
+            this.label2.TabIndex = 37;
+            this.label2.Text = "Текущий кошелек:";
+            // 
+            // comboBoxAllWallets
+            // 
+            this.comboBoxAllWallets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAllWallets.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxAllWallets.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxAllWallets.FormattingEnabled = true;
+            this.comboBoxAllWallets.Location = new System.Drawing.Point(16, 206);
+            this.comboBoxAllWallets.Name = "comboBoxAllWallets";
+            this.comboBoxAllWallets.Size = new System.Drawing.Size(210, 28);
+            this.comboBoxAllWallets.TabIndex = 36;
+            this.comboBoxAllWallets.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAllWallets_SelectedIndexChanged);
+            // 
+            // buttonWallets
+            // 
+            this.buttonWallets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(121)))), ((int)(((byte)(74)))));
+            this.buttonWallets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonWallets.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonWallets.ForeColor = System.Drawing.Color.White;
+            this.buttonWallets.Image = global::Financial.Tracker.Properties.Resources.wallet_24;
+            this.buttonWallets.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonWallets.Location = new System.Drawing.Point(16, 319);
+            this.buttonWallets.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonWallets.Name = "buttonWallets";
+            this.buttonWallets.Size = new System.Drawing.Size(210, 35);
+            this.buttonWallets.TabIndex = 35;
+            this.buttonWallets.Text = "Кошельки";
+            this.buttonWallets.UseVisualStyleBackColor = false;
+            this.buttonWallets.Click += new System.EventHandler(this.buttonWallets_Click);
             // 
             // label1
             // 
@@ -194,7 +246,7 @@
             this.buttonIncome.ForeColor = System.Drawing.Color.White;
             this.buttonIncome.Image = global::Financial.Tracker.Properties.Resources.income_24;
             this.buttonIncome.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonIncome.Location = new System.Drawing.Point(16, 279);
+            this.buttonIncome.Location = new System.Drawing.Point(16, 416);
             this.buttonIncome.Margin = new System.Windows.Forms.Padding(2);
             this.buttonIncome.Name = "buttonIncome";
             this.buttonIncome.Size = new System.Drawing.Size(210, 35);
@@ -211,7 +263,7 @@
             this.buttonExpenses.ForeColor = System.Drawing.Color.White;
             this.buttonExpenses.Image = global::Financial.Tracker.Properties.Resources.expenses_24;
             this.buttonExpenses.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExpenses.Location = new System.Drawing.Point(16, 327);
+            this.buttonExpenses.Location = new System.Drawing.Point(16, 464);
             this.buttonExpenses.Margin = new System.Windows.Forms.Padding(2);
             this.buttonExpenses.Name = "buttonExpenses";
             this.buttonExpenses.Size = new System.Drawing.Size(210, 35);
@@ -228,7 +280,7 @@
             this.buttonAddCategory.ForeColor = System.Drawing.Color.White;
             this.buttonAddCategory.Image = global::Financial.Tracker.Properties.Resources.plus_24;
             this.buttonAddCategory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonAddCategory.Location = new System.Drawing.Point(16, 230);
+            this.buttonAddCategory.Location = new System.Drawing.Point(16, 367);
             this.buttonAddCategory.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAddCategory.Name = "buttonAddCategory";
             this.buttonAddCategory.Size = new System.Drawing.Size(210, 35);
@@ -245,7 +297,7 @@
             this.buttonDashboard.ForeColor = System.Drawing.Color.White;
             this.buttonDashboard.Image = global::Financial.Tracker.Properties.Resources.compass_24;
             this.buttonDashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDashboard.Location = new System.Drawing.Point(16, 182);
+            this.buttonDashboard.Location = new System.Drawing.Point(16, 270);
             this.buttonDashboard.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDashboard.Name = "buttonDashboard";
             this.buttonDashboard.Size = new System.Drawing.Size(210, 35);
@@ -266,9 +318,41 @@
             this.labelDisplayUsername.TabIndex = 2;
             this.labelDisplayUsername.Text = "Ваш аккаунт: ";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(14, 541);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(141, 18);
+            this.label3.TabIndex = 38;
+            this.label3.Text = "Текущий баланс:";
+            // 
+            // labelCurrentBalance
+            // 
+            this.labelCurrentBalance.AutoSize = true;
+            this.labelCurrentBalance.Font = new System.Drawing.Font("Verdana", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCurrentBalance.ForeColor = System.Drawing.Color.White;
+            this.labelCurrentBalance.Location = new System.Drawing.Point(14, 567);
+            this.labelCurrentBalance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelCurrentBalance.Name = "labelCurrentBalance";
+            this.labelCurrentBalance.Size = new System.Drawing.Size(18, 18);
+            this.labelCurrentBalance.TabIndex = 39;
+            this.labelCurrentBalance.Text = "0";
+            // 
+            // walletUserControl
+            // 
+            this.walletUserControl.Location = new System.Drawing.Point(243, 46);
+            this.walletUserControl.Name = "walletUserControl";
+            this.walletUserControl.Size = new System.Drawing.Size(1055, 655);
+            this.walletUserControl.TabIndex = 6;
+            // 
             // dashboardForm
             // 
             this.dashboardForm.Location = new System.Drawing.Point(243, 43);
+            this.dashboardForm.Margin = new System.Windows.Forms.Padding(6);
             this.dashboardForm.Name = "dashboardForm";
             this.dashboardForm.Size = new System.Drawing.Size(1055, 655);
             this.dashboardForm.TabIndex = 5;
@@ -276,6 +360,7 @@
             // categoryForm
             // 
             this.categoryForm.Location = new System.Drawing.Point(243, 43);
+            this.categoryForm.Margin = new System.Windows.Forms.Padding(6);
             this.categoryForm.Name = "categoryForm";
             this.categoryForm.Size = new System.Drawing.Size(1055, 655);
             this.categoryForm.TabIndex = 4;
@@ -283,6 +368,7 @@
             // incomeForm
             // 
             this.incomeForm.Location = new System.Drawing.Point(243, 43);
+            this.incomeForm.Margin = new System.Windows.Forms.Padding(6);
             this.incomeForm.Name = "incomeForm";
             this.incomeForm.Size = new System.Drawing.Size(1055, 655);
             this.incomeForm.TabIndex = 3;
@@ -290,6 +376,7 @@
             // expensesForm
             // 
             this.expensesForm.Location = new System.Drawing.Point(243, 43);
+            this.expensesForm.Margin = new System.Windows.Forms.Padding(6);
             this.expensesForm.Name = "expensesForm";
             this.expensesForm.Size = new System.Drawing.Size(1055, 655);
             this.expensesForm.TabIndex = 2;
@@ -299,6 +386,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1300, 700);
+            this.Controls.Add(this.walletUserControl);
             this.Controls.Add(this.dashboardForm);
             this.Controls.Add(this.categoryForm);
             this.Controls.Add(this.incomeForm);
@@ -341,5 +429,11 @@
         private System.Windows.Forms.PictureBox pictureboxLogo;
         private System.Windows.Forms.Label labelLogoPadding;
         private System.Windows.Forms.Label label1;
+        private WalletUserControl walletUserControl;
+        private System.Windows.Forms.Button buttonWallets;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBoxAllWallets;
+        private System.Windows.Forms.Label labelCurrentBalance;
+        private System.Windows.Forms.Label label3;
     }
 }

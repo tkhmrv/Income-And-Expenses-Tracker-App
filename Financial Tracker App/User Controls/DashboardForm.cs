@@ -9,20 +9,25 @@ namespace Financial.Tracker
     /// </summary>
     public partial class DashboardForm : UserControl
     {
-        private readonly string dailyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date = @income_date AND user_id = @user_id";
-        private readonly string dailyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date = @expenses_date AND user_id = @user_id";
+        private readonly string dailyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date = @income_date AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string dailyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date = @expenses_date AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
 
-        private readonly string yesterdayIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE CONVERT(DATE, income_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @user_id";
-        private readonly string yesterdayExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE CONVERT(DATE, expenses_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @user_id";
+        private readonly string yesterdayIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE CONVERT(DATE, income_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string yesterdayExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE CONVERT(DATE, expenses_date) = DATEADD(day, DATEDIFF(day, 0, GETDATE()), -1) AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
 
-        private readonly string monthlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startMonth AND income_date <= @endMonth AND user_id = @user_id";
-        private readonly string monthlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startMonth AND expenses_date <= @endMonth AND user_id = @user_id";
+        private readonly string monthlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startMonth AND income_date <= @endMonth AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string monthlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startMonth AND expenses_date <= @endMonth AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
 
-        private readonly string yearlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startYear AND income_date <= @endYear AND user_id = @user_id";
-        private readonly string yearlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startYear AND expenses_date <= @endYear AND user_id = @user_id";
+        private readonly string yearlyIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE income_date >= @startYear AND income_date <= @endYear AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string yearlyExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE expenses_date >= @startYear AND expenses_date <= @endYear AND user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
 
-        private readonly string totalIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE user_id = @user_id";
-        private readonly string totalExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE user_id = @user_id";
+        private readonly string totalIncomeQuery = "SELECT SUM(amount) FROM income_3nf WHERE user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+        private readonly string totalExpensesQuery = "SELECT SUM(amount) FROM expenses WHERE user_id = @userid AND (@walletid = 0 OR wallet_id = @walletid)";
+
+        private readonly int currentUserId = AuthForm.CurrentUserId;
+        private readonly int currentWalletId = MainForm.CurrentWalletId;
+
+        public static DashboardForm Instance { get; private set; }
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="DashboardForm"/>.
@@ -31,7 +36,17 @@ namespace Financial.Tracker
         {
             InitializeComponent();
 
+            Instance = this;
+
             RefreshData();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void RefreshDataStatic()
+        {
+            Instance?.RefreshData();
         }
 
         /// <summary>
@@ -67,7 +82,7 @@ namespace Financial.Tracker
         /// <param name="query">SQL-запрос для получения данных.</param>
         /// <param name="dateColumnName">Имя колонки для параметра даты.</param>
         /// <param name="labelName">Имя метки для отображения результата.</param>
-        public void ShowTodayUniversal(string query, string dateColumnName, Label labelName)
+        private void ShowTodayUniversal(string query, string dateColumnName, Label labelName)
         {
             if (DBConnection.CheckConnection())
             {
@@ -79,7 +94,8 @@ namespace Financial.Tracker
                     {
                         DateTime today = DateTime.Today;
                         sqlCommand.Parameters.AddWithValue(dateColumnName, today);
-                        sqlCommand.Parameters.AddWithValue("@user_id", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -111,7 +127,7 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="query">SQL-запрос для получения данных.</param>
         /// <param name="labelName">Имя метки для отображения результата.</param>
-        public void ShowYesterdayUniversal(string query, Label labelName)
+        private void ShowYesterdayUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
             {
@@ -121,7 +137,8 @@ namespace Financial.Tracker
 
                     using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@user_id", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -153,7 +170,7 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="query">SQL-запрос для получения данных.</param>
         /// <param name="labelName">Имя метки для отображения результата.</param>
-        public void ShowMonthUniversal(string query, Label labelName)
+        private void ShowMonthUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
             {
@@ -169,7 +186,8 @@ namespace Financial.Tracker
                     {
                         sqlCommand.Parameters.AddWithValue("@startMonth", startMonth);
                         sqlCommand.Parameters.AddWithValue("@endMonth", endMonth);
-                        sqlCommand.Parameters.AddWithValue("@user_id", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -201,7 +219,7 @@ namespace Financial.Tracker
         /// </summary>
         /// <param name="query">SQL-запрос для получения данных.</param>
         /// <param name="labelName">Имя метки для отображения результата.</param>
-        public void ShowYearUniversal(string query, Label labelName)
+        private void ShowYearUniversal(string query, Label labelName)
         {
             if (DBConnection.CheckConnection())
             {
@@ -217,7 +235,8 @@ namespace Financial.Tracker
                     {
                         sqlCommand.Parameters.AddWithValue("@startYear", startYear);
                         sqlCommand.Parameters.AddWithValue("@endYear", endYear);
-                        sqlCommand.Parameters.AddWithValue("@user_id", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
@@ -259,7 +278,8 @@ namespace Financial.Tracker
 
                     using (SqlCommand sqlCommand = new SqlCommand(query, DBConnection.SqlConnection))
                     {
-                        sqlCommand.Parameters.AddWithValue("@user_id", AuthForm.userid);
+                        sqlCommand.Parameters.AddWithValue("@userid", AuthForm.CurrentUserId);
+                        sqlCommand.Parameters.AddWithValue("@walletid", MainForm.CurrentWalletId);
 
                         object result = sqlCommand.ExecuteScalar();
 
