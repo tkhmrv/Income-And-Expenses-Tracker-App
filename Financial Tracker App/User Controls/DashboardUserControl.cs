@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace Financial.Tracker
 {
     /// <summary>
-    /// Форма для отображения данных на панели управления.
+    /// Пользовательский интерфейс для отображения данных на панели управления.
     /// </summary>
     public partial class DashboardUserControl : UserControl
     {

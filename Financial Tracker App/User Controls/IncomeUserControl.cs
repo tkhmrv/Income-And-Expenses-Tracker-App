@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Financial.Tracker
 {
     /// <summary>
-    /// Форма для управления доходами.
+    /// Пользовательский интерфейс для управления доходами.
     /// </summary>
     public partial class IncomeUserControl : UserControl
     {
@@ -357,7 +357,7 @@ namespace Financial.Tracker
         {
             if (income_comboBoxCategory.SelectedItem == null)
             {
-                MessageBox.Show("Пожалуйста, выберите категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, выберите поле с доходами.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Financial.Tracker
 {
     /// <summary>
-    /// Форма для управления расходами.
+    /// Пользовательский интерфейс для управления расходами.
     /// </summary>
     public partial class ExpensesUserControl : UserControl
     {
@@ -291,12 +291,12 @@ namespace Financial.Tracker
             {
                 try
                 {
-                    ExpensesData expensesData = new ExpensesData();
+                    DBConnection.SqlConnection.Open();
 
                     // Проверка существования расходов
                     if (!ExpensesData.ItemExistsById(expensesdFromDGV))
                     {
-                        MessageBox.Show("Категория не существует. Пожалуйста, введите существующую категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Расходов с таким названием не существует. Пожалуйста, выберите существующую запись.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         DBConnection.CloseConnection();
 
@@ -357,7 +357,7 @@ namespace Financial.Tracker
         {
             if (expenses_comboBoxCategory.SelectedItem == null)
             {
-                MessageBox.Show("Пожалуйста, выберите категорию.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Пожалуйста, выберите поле с расходами.", "Сообщение об ошибке", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

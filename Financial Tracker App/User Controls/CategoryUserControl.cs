@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace Financial.Tracker
 {
     /// <summary>
-    /// Форма для управления категориями.
+    /// Пользовательский интерфейс для управления категориями.
     /// </summary>
     public partial class CategoryUserControl : UserControl
     {

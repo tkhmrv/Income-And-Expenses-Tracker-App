@@ -122,6 +122,7 @@ namespace Financial.Tracker
         private void ButtonDashboard_Click(object sender, EventArgs e)
         {
             InitializeDash();
+            DisplayWalletBalance();
         }
 
         /// <summary>
@@ -140,6 +141,7 @@ namespace Financial.Tracker
             walletUserControl.Visible = false;
 
             LoadWalletsToComboBox();
+            DisplayWalletBalance();
 
             if (categoryForm is CategoryUserControl cForm)
             {
@@ -163,6 +165,7 @@ namespace Financial.Tracker
             walletUserControl.Visible = false;
 
             LoadWalletsToComboBox();
+            DisplayWalletBalance();
 
             if (incomeForm is IncomeUserControl iForm)
             {
@@ -186,6 +189,7 @@ namespace Financial.Tracker
             walletUserControl.Visible = false;
 
             LoadWalletsToComboBox();
+            DisplayWalletBalance();
 
             if (expensesForm is ExpensesUserControl eForm)
             {
@@ -209,6 +213,7 @@ namespace Financial.Tracker
             walletUserControl.Visible = true;
 
             LoadWalletsToComboBox();
+            DisplayWalletBalance();
 
             if (walletUserControl is WalletUserControl walletUC)
             {
