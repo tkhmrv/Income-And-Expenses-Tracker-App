@@ -46,6 +46,11 @@ namespace Financial.Tracker
         public int WalletId { get; set; }
 
         /// <summary>
+        /// Название кошелька.
+        /// </summary>
+        public string WalletName { get; set; }
+
+        /// <summary>
         /// Идентификатор текущего пользователя.
         /// </summary>
         private int currentUserId => AuthForm.CurrentUserId;
@@ -69,7 +74,10 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string selectData = "SELECT * FROM categories WHERE user_id = @userId AND (@walletId = 0 OR wallet_id = @walletId)";
+                    string selectData = "SELECT c.id_category, c.category, c.type, c.status, c.creation_date, c.user_id, c.wallet_id, w.wallet_name " +
+                                        "FROM categories c " + 
+                                        "INNER JOIN wallets w ON c.wallet_id = w.id_wallet " +
+                                        "WHERE (@walletId = 0 OR c.wallet_id = @walletId) AND c.user_id = @userId";
 
                     using (SqlCommand sqlCommand = new SqlCommand(selectData, DBConnection.SqlConnection))
                     {
@@ -88,7 +96,8 @@ namespace Financial.Tracker
                                 Status = sqlDataReader["status"].ToString(),
                                 Date = ((DateTime)sqlDataReader["creation_date"]).ToString("MM-dd-yyyy"),
                                 UserId = currentUserId,
-                                WalletId = (int)sqlDataReader["wallet_id"]
+                                WalletId = (int)sqlDataReader["wallet_id"],
+                                WalletName = sqlDataReader["wallet_name"].ToString()
                             };
 
                             listData.Add(categoryData);

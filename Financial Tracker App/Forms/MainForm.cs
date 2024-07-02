@@ -227,7 +227,7 @@ namespace Financial.Tracker
                 {
                     DBConnection.SqlConnection.Open();
 
-                    string loadQuery = "SELECT id_wallet, wallet_name FROM wallets WHERE user_id = @userId";
+                    string loadQuery = "SELECT id_wallet, wallet_name FROM wallets WHERE user_id = @userId AND status = 'Активный'";
                     using (SqlCommand sqlCommand = new SqlCommand(loadQuery, DBConnection.SqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@userId", currentUserId);

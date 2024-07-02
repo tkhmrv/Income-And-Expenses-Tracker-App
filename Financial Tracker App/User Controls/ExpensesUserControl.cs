@@ -11,7 +11,6 @@ namespace Financial.Tracker
     /// </summary>
     public partial class ExpensesUserControl : UserControl
     {
-
         /// <summary>
         /// Индентификатор кошелька, выбранного пользователем из DataGridView.
         /// </summary>

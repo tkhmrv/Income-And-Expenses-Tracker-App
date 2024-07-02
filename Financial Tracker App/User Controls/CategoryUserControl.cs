@@ -81,6 +81,12 @@ namespace Financial.Tracker
                 {
                     dataGridViewCategory.Columns["ID"].Visible = false;
                     dataGridViewCategory.Columns["UserId"].Visible = false;
+                    dataGridViewCategory.Columns["WalletId"].Visible = false;
+                }
+
+                if (dataGridViewCategory.Columns["WalletName"] != null)
+                {
+                    dataGridViewCategory.Columns["WalletName"].HeaderText = "Кошелек";
                 }
 
                 dataGridViewCategory.Columns["Category"].HeaderText = "Категория";
