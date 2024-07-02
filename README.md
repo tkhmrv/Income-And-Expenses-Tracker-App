@@ -17,6 +17,7 @@
 
 ## Документация
 По этой ссылке можно найти документацию всего проекта: [DOCUMENTATION](https://tkhmrv.github.io/Financial-Tracker-App-Documentation/html/0308fc10-4849-afd3-9e82-d10547e86599.htm).
+
 А по этой ссылке можно перейти в репозиторий с документацией: [DOCS REPO](https://github.com/tkhmrv/Financial-Tracker-App-Documentation).
 
 ## Вклад в проект
